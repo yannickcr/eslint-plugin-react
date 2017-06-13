@@ -513,6 +513,289 @@ ruleTester.run('prefer-stateless-function', rule, {
       errors: [{
         message: 'Component should be written as a pure function'
       }]
+    }, {
+      // should just change stateful to stateless
+      code: [
+        'class Foo extends Component {',
+        '  render() {',
+        '    return false;',
+        '  }',
+        '}'
+      ].join('\n'),
+      output: [
+        'function Foo(props) {',
+        '  return false;',
+        '}'
+      ].join('\n'),
+      parser: 'babel-eslint',
+      errors: [{
+        message: 'Component should be written as a pure function'
+      }]
+    }, {
+      // should rename this.props into just props
+      code: [
+        'class Foo extends Component {',
+        '  render() {',
+        '    const { foo, bar } = this.props;',
+        '',
+        '    return <div>{this.props.test}</div>;',
+        '  }',
+        '}'
+      ].join('\n'),
+      output: [
+        'function Foo(props) {',
+        '  const { foo, bar } = props;',
+        '',
+        '  return <div>{props.test}</div>;',
+        '}'
+      ].join('\n'),
+      parser: 'babel-eslint',
+      errors: [{
+        message: 'Component should be written as a pure function'
+      }]
+    }, {
+      // should move every static prop to function props
+      code: [
+        'class Foo extends Component {',
+        '  static propTypes = {',
+        '    foo: PropTypes.func',
+        '  };',
+        '  static displayName = \'Bar\';',
+        '  static foo = \'Baz\';',
+        '  render() {',
+        '    const { foo, bar } = this.props;',
+        '    ',
+        '    return <div>{this.props.test}</div>;',
+        '  }',
+        '}'
+      ].join('\n'),
+      output: [
+        'function Foo(props) {',
+        '  const { foo, bar } = props;',
+        '  ',
+        '  return <div>{props.test}</div>;',
+        '}',
+        'Foo.propTypes = {',
+        '  foo: PropTypes.func',
+        '};',
+        'Foo.displayName = \'Bar\';',
+        'Foo.foo = \'Baz\';'
+      ].join('\n'),
+      parser: 'babel-eslint',
+      errors: [{
+        message: 'Component should be written as a pure function'
+      }]
+    }, {
+      // should keep formatting of source code
+      code: [
+        'class Foo extends Component {',
+        '  static propTypes={foo: PropTypes.func};',
+        '  static displayName=\'Bar\';',
+        '  static foo=\'Baz\';',
+        '  render() {',
+        '    const {foo, bar} = this.props;',
+        '    ',
+        '    return <div>{this.props.test}</div>;',
+        '  }',
+        '}'
+      ].join('\n'),
+      output: [
+        'function Foo(props) {',
+        '  const {foo, bar} = props;',
+        '  ',
+        '  return <div>{props.test}</div>;',
+        '}',
+        'Foo.propTypes={foo: PropTypes.func};',
+        'Foo.displayName=\'Bar\';',
+        'Foo.foo=\'Baz\';'
+      ].join('\n'),
+      parser: 'babel-eslint',
+      errors: [{
+        message: 'Component should be written as a pure function'
+      }]
+    }, {
+      // should keep formatting of source code 2
+      code: [
+        'class Foo extends Component {',
+        '  static propTypes={',
+        '      foo: PropTypes.func};',
+        '  static displayName=\'Bar\';',
+        '  static foo=\'Baz\';',
+        '  render() {',
+        '    const {foo, bar} = this.props;',
+        '    ',
+        '    return <div>{this.props.test}</div>;',
+        '  }',
+        '}'
+      ].join('\n'),
+      output: [
+        'function Foo(props) {',
+        '  const {foo, bar} = props;',
+        '  ',
+        '  return <div>{props.test}</div>;',
+        '}',
+        'Foo.propTypes={',
+        '    foo: PropTypes.func};',
+        'Foo.displayName=\'Bar\';',
+        'Foo.foo=\'Baz\';'
+      ].join('\n'),
+      parser: 'babel-eslint',
+      errors: [{
+        message: 'Component should be written as a pure function'
+      }]
+    }, {
+      // should keep formatting of source code while its in another block
+      code: [
+        '{',
+        '  class Foo extends Component {',
+        '    static propTypes={',
+        '        foo: PropTypes.func};',
+        '    static displayName=\'Bar\';',
+        '    static foo=\'Baz\';',
+        '    render() {',
+        '      const {foo, bar} = this.props;',
+        '      ',
+        '      return <div>{this.props.test}</div>;',
+        '    }',
+        '  }',
+        '}'
+      ].join('\n'),
+      output: [
+        '{',
+        '  function Foo(props) {',
+        '    const {foo, bar} = props;',
+        '    ',
+        '    return <div>{props.test}</div>;',
+        '  }',
+        '  Foo.propTypes={',
+        '      foo: PropTypes.func};',
+        '  Foo.displayName=\'Bar\';',
+        '  Foo.foo=\'Baz\';',
+        '}'
+      ].join('\n'),
+      parser: 'babel-eslint',
+      errors: [{
+        message: 'Component should be written as a pure function'
+      }]
+    }, {
+      // should work without render function
+      code: [
+        'class Foo extends Component {',
+        '}'
+      ].join('\n'),
+      output: [
+        'function Foo(props) {}'
+      ].join('\n'),
+      parser: 'babel-eslint',
+      errors: [{
+        message: 'Component should be written as a pure function'
+      }]
+    }, {
+      // should leave as it is when class is not named
+      code: [
+        'let x = class extends Component {',
+        '}'
+      ].join('\n'),
+      output: [
+        'let x = class extends Component {',
+        '}'
+      ].join('\n'),
+      parser: 'babel-eslint',
+      errors: [{
+        message: 'Component should be written as a pure function'
+      }]
+    }, {
+      // should just change stateful to stateless for default parser
+      code: [
+        'class Foo extends Component {',
+        '  render() {',
+        '    return false;',
+        '  }',
+        '}'
+      ].join('\n'),
+      output: [
+        'function Foo(props) {',
+        '  return false;',
+        '}'
+      ].join('\n'),
+      errors: [{
+        message: 'Component should be written as a pure function'
+      }]
+    }, {
+      // should rename this.props into just props for default parser
+      code: [
+        'class Foo extends Component {',
+        '  render() {',
+        '    const { foo, bar } = this.props;',
+        '',
+        '    return <div>{this.props.test}</div>;',
+        '  }',
+        '}'
+      ].join('\n'),
+      output: [
+        'function Foo(props) {',
+        '  const { foo, bar } = props;',
+        '',
+        '  return <div>{props.test}</div>;',
+        '}'
+      ].join('\n'),
+      errors: [{
+        message: 'Component should be written as a pure function'
+      }]
+    }, {
+      // should keep formatting of source code for default parser
+      code: [
+        'class Foo extends Component {',
+        '  render() {',
+        '    const {foo, bar} = this.props;',
+        '    ',
+        '    return <div>',
+        '       {this.props.test}</div>;',
+        '  }',
+        '}',
+        'Foo.propTypes={foo: PropTypes.func};',
+        'Foo.displayName=\'Bar\';',
+        'Foo.foo=\'Baz\';'
+      ].join('\n'),
+      output: [
+        'function Foo(props) {',
+        '  const {foo, bar} = props;',
+        '  ',
+        '  return <div>',
+        '     {props.test}</div>;',
+        '}',
+        'Foo.propTypes={foo: PropTypes.func};',
+        'Foo.displayName=\'Bar\';',
+        'Foo.foo=\'Baz\';'
+      ].join('\n'),
+      errors: [{
+        message: 'Component should be written as a pure function'
+      }]
+    }, {
+      // should work without render function for default parser
+      code: [
+        'class Foo extends Component {',
+        '}'
+      ].join('\n'),
+      output: [
+        'function Foo(props) {}'
+      ].join('\n'),
+      errors: [{
+        message: 'Component should be written as a pure function'
+      }]
+    }, {
+      // should leave as it is when class is not named for default parser
+      code: [
+        'let x = class extends Component {',
+        '}'
+      ].join('\n'),
+      output: [
+        'let x = class extends Component {',
+        '}'
+      ].join('\n'),
+      errors: [{
+        message: 'Component should be written as a pure function'
+      }]
     }
   ]
 });
