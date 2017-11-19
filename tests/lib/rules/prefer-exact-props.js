@@ -83,6 +83,34 @@ ruleTester.run('prefer-exact-props', rule, {
       }
     `,
     parser: 'babel-eslint'
+  }, {
+    code: `
+      const props = {};
+      function Component(props) {
+        return <div />;
+      }
+      Component.propTypes = props;
+    `
+  }, {
+    code: `
+      const props = {};
+      class Component extends React.Component {
+        render() {
+          return <div />;
+        }
+      }
+      Component.propTypes = props;
+    `
+  }, {
+    code: `
+      import props from 'foo';
+      class Component extends React.Component {
+        render() {
+          return <div />;
+        }
+      }
+      Component.propTypes = props;
+    `
   }],
   invalid: [{
     code: `
@@ -141,5 +169,29 @@ ruleTester.run('prefer-exact-props', rule, {
     `,
     parser: 'babel-eslint',
     errors: [{message: FLOW_MESSAGE}]
+  }, {
+    code: `
+      const props = {
+        foo: PropTypes.string
+      };
+      function Component(props) {
+        return <div />;
+      }
+      Component.propTypes = props;
+    `,
+    errors: [{message: PROP_TYPES_MESSAGE}]
+  }, {
+    code: `
+      const props = {
+        foo: PropTypes.string
+      };
+      class Component extends React.Component {
+        render() {
+          return <div />;
+        }
+      }
+      Component.propTypes = props;
+    `,
+    errors: [{message: PROP_TYPES_MESSAGE}]
   }]
 });
