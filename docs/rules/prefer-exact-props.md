@@ -48,6 +48,81 @@ class Foo extends React.Component {
 
 See the [Flow docs](https://flow.org/en/docs/types/objects/#toc-exact-object-types) on exact object types for more information.
 
+## Rule Details
+
+The following patterns are considered warnings:
+
+```jsx
+  class Component extends React.Component {
+    render() {
+      return <div />;
+    }
+  }
+  Component.propTypes = {
+    foo: PropTypes.string
+  };
+```
+
+```jsx
+  class Component extends React.Component {
+    static propTypes = {
+      foo: PropTypes.string
+    }
+    render() {
+      return <div />;
+    }
+  }
+```
+
+```jsx
+  class Component extends React.Component {
+    props: {
+      foo: string
+    }
+    render() {
+      return <div />;
+    }
+  }
+```
+
+```jsx
+  function Component(props: { foo: string }) {
+    return <div />;
+  }
+```
+
+```jsx
+  type Props = {
+    foo: string
+  }
+  function Component(props: Props) {
+    return <div />;
+  }
+```
+
+The following patterns are **not** considered warnings:
+
+```jsx
+  type Props = {|
+    foo: string
+  |}
+  function Component(props: Props) {
+    return <div />;
+  }
+```
+
+```jsx
+  import exact from 'prop-types-exact';
+  class Component extends React.Component {
+    render() {
+      return <div />;
+    }
+  }
+  Component.propTypes = exact({
+    foo: PropTypes.string
+  });
+```
+
 ## When Not To Use It
 
 If you aren't concerned about extra props being passed to a component or potential spelling errors for existing props aren't a common nuisance, then you can leave this rule off.
