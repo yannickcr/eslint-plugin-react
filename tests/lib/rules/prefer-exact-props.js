@@ -60,6 +60,29 @@ ruleTester.run('prefer-exact-props', rule, {
       }
       Component.propTypes = {};
     `
+  }, {
+    code: `
+      function Component(props: {}) {
+        return <div />;
+      }
+    `,
+    parser: 'babel-eslint'
+  }, {
+    code: `
+      type Props = {}
+      function Component(props: Props) {
+        return <div />;
+      }
+    `,
+    parser: 'babel-eslint'
+  }, {
+    code: `
+      import type Props from 'foo';
+      function Component(props: Props) {
+        return <div />;
+      }
+    `,
+    parser: 'babel-eslint'
   }],
   invalid: [{
     code: `
@@ -95,6 +118,25 @@ ruleTester.run('prefer-exact-props', rule, {
         render() {
           return <div />;
         }
+      }
+    `,
+    parser: 'babel-eslint',
+    errors: [{message: FLOW_MESSAGE}]
+  }, {
+    code: `
+      function Component(props: { foo: string }) {
+        return <div />;
+      }
+    `,
+    parser: 'babel-eslint',
+    errors: [{message: FLOW_MESSAGE}]
+  }, {
+    code: `
+      type Props = {
+        foo: string
+      }
+      function Component(props: Props) {
+        return <div />;
       }
     `,
     parser: 'babel-eslint',
