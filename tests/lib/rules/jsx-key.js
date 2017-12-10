@@ -37,7 +37,15 @@ ruleTester.run('jsx-key', rule, {
     {code: '[1, 2, 3].foo(x => <App />);'},
     {code: 'var App = () => <div />;'},
     {code: '[1, 2, 3].map(function(x) { return; });'},
-    {code: 'foo(() => <div />);'}
+    {code: 'foo(() => <div />);'},
+    // #1574
+    {code: 'React.Children.toArray([1, 2 ,3].map(x => <App />));'},
+    {
+      code: `
+      import { Children } from "react";
+      Children.toArray([1, 2 ,3].map(x => <App />));
+      `
+    }
   ],
   invalid: [{
     code: '[<App />];',
