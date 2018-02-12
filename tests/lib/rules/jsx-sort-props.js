@@ -60,6 +60,10 @@ const ignoreCaseAndCallbackLastArgs = [{
   callbacksLast: true,
   ignoreCase: true
 }];
+const reservedFirstAndCallbacksLastArgs = [{
+  callbacksLast: true,
+  reservedFirst: true
+}];
 const shorthandFirstArgs = [{
   shorthandFirst: true
 }];
@@ -307,6 +311,11 @@ ruleTester.run('jsx-sort-props', rule, {
       code: '<App key={5} />',
       options: reservedFirstAsInvalidArrayArgs,
       errors: [expectedInvalidReservedFirstError]
+    },
+    {
+      code: '<App onBar z />;',
+      options: reservedFirstAndCallbacksLastArgs,
+      errors: [expectedCallbackError]
     }
   ]
 });
