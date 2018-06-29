@@ -141,6 +141,7 @@ Enable the rules that you would like to use.
 * [react/require-render-return](docs/rules/require-render-return.md): Enforce ES5 or ES6 class for returning value in render function
 * [react/self-closing-comp](docs/rules/self-closing-comp.md): Prevent extra closing tags for components without children (fixable)
 * [react/sort-comp](docs/rules/sort-comp.md): Enforce component methods order (fixable)
+* [react/sort-default-props](docs/rules/sort-default-props.md): Enforce default props alphabetical sorting
 * [react/sort-prop-types](docs/rules/sort-prop-types.md): Enforce propTypes declarations alphabetical sorting
 * [react/state-in-constructor](docs/rules/state-in-constructor.md): Enforce the state initialization style to be either in a constructor or with a class property
 * [react/static-property-placement](docs/rules/static-property-placement.md): Enforces where React component static properties should be positioned.

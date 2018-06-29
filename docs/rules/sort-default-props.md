@@ -1,6 +1,4 @@
-# Enforce defaultProps declarations alphabetical sorting (react/jsx-sort-default-props)
-
-**Deprecation notice**: This rule is deprecated. It has been renamed to [sort-default-props](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/sort-default-props.md).
+# Enforce defaultProps declarations alphabetical sorting (react/sort-default-props)
 
 Some developers prefer to sort `defaultProps` declarations alphabetically to be able to find necessary declarations easier at a later time. Others feel that it adds complexity and becomes a burden to maintain.
 
@@ -172,7 +170,7 @@ export default class ClassWithSpreadInPropTypes extends BaseClass {
 
 ```js
 ...
-"react/jsx-sort-default-props": [<enabled>, {
+"react/sort-default-props": [<enabled>, {
   "ignoreCase": <boolean>,
 }]
 ...
