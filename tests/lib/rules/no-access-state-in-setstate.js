@@ -101,6 +101,15 @@ ruleTester.run('no-access-state-in-setstate', rule, {
       };
     `,
     parserOptions: parserOptions
+  }, {
+    code: [
+      'class StateContainer extends Container {',
+      '  anything() {',
+      '    return this.setState({value: this.state.value + 1})',
+      '  }',
+      '};'
+    ].join('\n'),
+    parserOptions: parserOptions
   }],
 
   invalid: [{
