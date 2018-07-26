@@ -34,3 +34,29 @@ The following patterns are **not** considered warnings:
 React.createElement("div", {}, 'Children')
 React.createElement("div", 'Child 1', 'Child 2')
 ```
+
+## Rule Options
+
+```js
+"react/no-children-prop": [<enabled>, {
+  "allowFunctions": <boolean> || false
+}]
+```
+
+### `allowFunctions`
+
+When `true`, passing a function in the children prop is preferred.
+
+The following patterns are considered warnings:
+
+```jsx
+<MyComponent>{data => data.value}</MyComponent>
+React.createElement(MyComponent, {}, data => data.value)
+```
+
+The following are **not** considered warnings:
+
+```jsx
+<MyComponent children={data => data.value} />
+React.createElement(MyComponent, { children: data => data.value })
+```

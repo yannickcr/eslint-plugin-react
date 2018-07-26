@@ -22,6 +22,8 @@ const parserOptions = {
 
 const JSX_ERROR = 'Do not pass children as props. Instead, nest children between the opening and closing tags.';
 const CREATE_ELEMENT_ERROR = 'Do not pass children as props. Instead, pass them as additional arguments to React.createElement.';
+const JSX_FUNCTION_ERROR = 'Do not nest a function between the opening and closing tags. Instead, pass it as a prop.';
+const CREATE_ELEMENT_FUNCTION_ERROR = 'Do not pass a function as an additional argument to React.createElement. Instead, pass it as a prop.';
 
 // -----------------------------------------------------------------------------
 // Tests
@@ -140,9 +142,37 @@ ruleTester.run('no-children-prop', rule, {
     },
     {
       code: 'React.createElement(MyComponent, {className: "class-name", ...props});'
+    },
+    {
+      code: '<MyComponent children={() => {}} />;',
+      options: [{
+        allowFunctions: true
+      }]
+    },
+    {
+      code: '<MyComponent children={function() {}} />;',
+      options: [{
+        allowFunctions: true
+      }]
+    },
+    {
+      code: 'React.createElement(MyComponent, {children: () => {}});',
+      options: [{
+        allowFunctions: true
+      }]
+    },
+    {
+      code: 'React.createElement(MyComponent, {children: function() {}});',
+      options: [{
+        allowFunctions: true
+      }]
     }
   ],
   invalid: [
+    {
+      code: '<div children />;', // not a valid use case but make sure we don't crash
+      errors: [{message: JSX_ERROR}]
+    },
     {
       code: '<div children="Children" />;',
       errors: [{message: JSX_ERROR}]
@@ -198,6 +228,34 @@ ruleTester.run('no-children-prop', rule, {
     {
       code: 'React.createElement(MyComponent, {...props, children: "Children"})',
       errors: [{message: CREATE_ELEMENT_ERROR}]
+    },
+    {
+      code: '<MyComponent>{() => {}}</MyComponent>;',
+      options: [{
+        allowFunctions: true
+      }],
+      errors: [{message: JSX_FUNCTION_ERROR}]
+    },
+    {
+      code: '<MyComponent>{function() {}}</MyComponent>;',
+      options: [{
+        allowFunctions: true
+      }],
+      errors: [{message: JSX_FUNCTION_ERROR}]
+    },
+    {
+      code: 'React.createElement(MyComponent, {}, () => {});',
+      options: [{
+        allowFunctions: true
+      }],
+      errors: [{message: CREATE_ELEMENT_FUNCTION_ERROR}]
+    },
+    {
+      code: 'React.createElement(MyComponent, {}, function() {});',
+      options: [{
+        allowFunctions: true
+      }],
+      errors: [{message: CREATE_ELEMENT_FUNCTION_ERROR}]
     }
   ]
 });
