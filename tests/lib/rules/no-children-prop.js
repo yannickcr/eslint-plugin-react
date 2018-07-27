@@ -156,6 +156,18 @@ ruleTester.run('no-children-prop', rule, {
       }]
     },
     {
+      code: '<MyComponent children={async function() {}} />;',
+      options: [{
+        allowFunctions: true
+      }]
+    },
+    {
+      code: '<MyComponent children={function* () {}} />;',
+      options: [{
+        allowFunctions: true
+      }]
+    },
+    {
       code: 'React.createElement(MyComponent, {children: () => {}});',
       options: [{
         allowFunctions: true
@@ -163,6 +175,18 @@ ruleTester.run('no-children-prop', rule, {
     },
     {
       code: 'React.createElement(MyComponent, {children: function() {}});',
+      options: [{
+        allowFunctions: true
+      }]
+    },
+    {
+      code: 'React.createElement(MyComponent, {children: async function() {}});',
+      options: [{
+        allowFunctions: true
+      }]
+    },
+    {
+      code: 'React.createElement(MyComponent, {children: function* () {}});',
       options: [{
         allowFunctions: true
       }]
@@ -244,6 +268,20 @@ ruleTester.run('no-children-prop', rule, {
       errors: [{message: JSX_FUNCTION_ERROR}]
     },
     {
+      code: '<MyComponent>{async function() {}}</MyComponent>;',
+      options: [{
+        allowFunctions: true
+      }],
+      errors: [{message: JSX_FUNCTION_ERROR}]
+    },
+    {
+      code: '<MyComponent>{function* () {}}</MyComponent>;',
+      options: [{
+        allowFunctions: true
+      }],
+      errors: [{message: JSX_FUNCTION_ERROR}]
+    },
+    {
       code: 'React.createElement(MyComponent, {}, () => {});',
       options: [{
         allowFunctions: true
@@ -252,6 +290,20 @@ ruleTester.run('no-children-prop', rule, {
     },
     {
       code: 'React.createElement(MyComponent, {}, function() {});',
+      options: [{
+        allowFunctions: true
+      }],
+      errors: [{message: CREATE_ELEMENT_FUNCTION_ERROR}]
+    },
+    {
+      code: 'React.createElement(MyComponent, {}, async function() {});',
+      options: [{
+        allowFunctions: true
+      }],
+      errors: [{message: CREATE_ELEMENT_FUNCTION_ERROR}]
+    },
+    {
+      code: 'React.createElement(MyComponent, {}, function* () {});',
       options: [{
         allowFunctions: true
       }],
