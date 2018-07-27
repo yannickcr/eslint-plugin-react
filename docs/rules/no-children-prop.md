@@ -45,7 +45,7 @@ React.createElement("div", 'Child 1', 'Child 2')
 
 ### `allowFunctions`
 
-When `true`, passing a function in the children prop is preferred.
+When `true`, and passing a function as `children`, it must be in prop position and not child position.
 
 The following patterns are considered warnings:
 
