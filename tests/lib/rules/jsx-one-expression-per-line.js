@@ -42,6 +42,18 @@ ruleTester.run('jsx-one-expression-per-line', rule, {
     code: [
       '<App>',
       '  <Foo />',
+      '</App>'
+    ].join('\r\n')
+  }, {
+    code: [
+      '<App>',
+      '  <Foo />',
+      '</App>'
+    ].join('\r')
+  }, {
+    code: [
+      '<App>',
+      '  <Foo />',
       '  <Bar />',
       '</App>'
     ].join('\n')
@@ -72,6 +84,22 @@ ruleTester.run('jsx-one-expression-per-line', rule, {
       '<Foo />',
       '</App>'
     ].join('\n')
+  }, {
+    code: [
+      '<App',
+      '  foo="bar"',
+      '>',
+      '<Foo />',
+      '</App>'
+    ].join('\r\n')
+  }, {
+    code: [
+      '<App',
+      '  foo="bar"',
+      '>',
+      '<Foo />',
+      '</App>'
+    ].join('\r')
   }, {
     code: [
       '<',
@@ -110,6 +138,40 @@ ruleTester.run('jsx-one-expression-per-line', rule, {
       '  foo {"bar"}',
       '</div>'
     ].join('\n'),
+    output: [
+      '<div>',
+      '  foo ',
+      '{\' \'}',
+      '{"bar"}',
+      '</div>'
+    ].join('\n'),
+    errors: [
+      {message: '`{"bar"}` must be placed on a new line'}
+    ],
+    parserOptions: parserOptions
+  }, {
+    code: [
+      '<div>',
+      '  foo {"bar"}',
+      '</div>'
+    ].join('\r\n'),
+    output: [
+      '<div>',
+      '  foo ',
+      '{\' \'}',
+      '{"bar"}',
+      '</div>'
+    ].join('\n'),
+    errors: [
+      {message: '`{"bar"}` must be placed on a new line'}
+    ],
+    parserOptions: parserOptions
+  }, {
+    code: [
+      '<div>',
+      '  foo {"bar"}',
+      '</div>'
+    ].join('\r'),
     output: [
       '<div>',
       '  foo ',
