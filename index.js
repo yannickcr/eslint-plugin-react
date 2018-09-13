@@ -52,6 +52,7 @@ const allRules = {
   'jsx-wrap-multilines': require('./lib/rules/jsx-wrap-multilines'),
   'no-access-state-in-setstate': require('./lib/rules/no-access-state-in-setstate'),
   'no-array-index-key': require('./lib/rules/no-array-index-key'),
+  'no-arrow-function-lifecycle': require('./lib/rules/no-arrow-function-lifecycle'),
   'no-children-prop': require('./lib/rules/no-children-prop'),
   'no-danger': require('./lib/rules/no-danger'),
   'no-danger-with-children': require('./lib/rules/no-danger-with-children'),
