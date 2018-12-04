@@ -50,6 +50,18 @@ See the [Flow docs](https://flow.org/en/docs/types/objects/#toc-exact-object-typ
 
 ## Rule Details
 
+This rule will only produce errors for prop types when combined with the appropriate entries in `propWrapperFunctions`. For example:
+
+```json
+{
+  "settings": {
+    "propWrapperFunctions": [
+      {"property": "exact", "exact": true}
+    ]
+  }
+}
+```
+
 The following patterns are considered warnings:
 
 ```jsx

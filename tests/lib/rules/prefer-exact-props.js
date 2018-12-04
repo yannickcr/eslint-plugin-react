@@ -19,7 +19,13 @@ const parserOptions = {
   }
 };
 
-const PROP_TYPES_MESSAGE = 'Component propTypes should be exact by using prop-types-exact.';
+const settings = {
+  propWrapperFunctions: [
+    {property: 'exact', exact: true}
+  ]
+};
+
+const PROP_TYPES_MESSAGE = 'Component propTypes should be exact by using \'exact\'.';
 const FLOW_MESSAGE = 'Component flow props should be set with exact objects.';
 
 const ruleTester = new RuleTester({parserOptions});
@@ -32,7 +38,8 @@ ruleTester.run('prefer-exact-props', rule, {
         }
       }
       Component.propTypes = {};
-    `
+    `,
+    settings: settings
   }, {
     code: `
       class Component extends React.Component {
@@ -42,7 +49,8 @@ ruleTester.run('prefer-exact-props', rule, {
         }
       }
     `,
-    parser: 'babel-eslint'
+    parser: 'babel-eslint',
+    settings: settings
   }, {
     code: `
       class Component extends React.Component {
@@ -52,14 +60,16 @@ ruleTester.run('prefer-exact-props', rule, {
         }
       }
     `,
-    parser: 'babel-eslint'
+    parser: 'babel-eslint',
+    settings: settings
   }, {
     code: `
       function Component(props) {
         return <div />;
       }
       Component.propTypes = {};
-    `
+    `,
+    settings: settings
   }, {
     code: `
       function Component(props: {}) {
@@ -107,7 +117,8 @@ ruleTester.run('prefer-exact-props', rule, {
         return <div />;
       }
       Component.propTypes = props;
-    `
+    `,
+    settings: settings
   }, {
     code: `
       const props = {};
@@ -117,7 +128,8 @@ ruleTester.run('prefer-exact-props', rule, {
         }
       }
       Component.propTypes = props;
-    `
+    `,
+    settings: settings
   }, {
     code: `
       import props from 'foo';
@@ -127,6 +139,52 @@ ruleTester.run('prefer-exact-props', rule, {
         }
       }
       Component.propTypes = props;
+    `,
+    settings: settings
+  }, {
+    code: `
+      class Component extends React.Component {
+        state = {hi: 'hi'}
+        render() {
+          return <div>{this.state.hi}</div>;
+        }
+      }
+    `,
+    parser: 'babel-eslint'
+  }, {
+    code: `
+      import exact from "prop-types-exact";
+      function Component({ foo, bar }) {
+        return <div>{foo}{bar}</div>;
+      }
+      Component.propTypes = exact({
+        foo: PropTypes.string,
+        bar: PropTypes.string,
+      });
+    `,
+    settings: settings
+  }, {
+    code: `
+      function Component({ foo, bar }) {
+        return <div>{foo}{bar}</div>;
+      }
+      Component.propTypes = {
+        foo: PropTypes.string,
+        bar: PropTypes.string,
+      };
+    `
+  }, {
+    code: `
+      class Component extends React.Component {
+        render() {
+          const { foo, bar } = this.props;
+          return <div>{foo}{bar}</div>;
+        }
+      }
+      Component.propTypes = {
+        foo: PropTypes.string,
+        bar: PropTypes.string,
+      };
     `
   }],
   invalid: [{
@@ -140,6 +198,7 @@ ruleTester.run('prefer-exact-props', rule, {
         foo: PropTypes.string
       };
     `,
+    settings: settings,
     errors: [{message: PROP_TYPES_MESSAGE}]
   }, {
     code: `
@@ -152,6 +211,7 @@ ruleTester.run('prefer-exact-props', rule, {
         }
       }
     `,
+    settings: settings,
     parser: 'babel-eslint',
     errors: [{message: PROP_TYPES_MESSAGE}]
   }, {
@@ -196,6 +256,7 @@ ruleTester.run('prefer-exact-props', rule, {
       }
       Component.propTypes = props;
     `,
+    settings: settings,
     errors: [{message: PROP_TYPES_MESSAGE}]
   }, {
     code: `
@@ -209,6 +270,26 @@ ruleTester.run('prefer-exact-props', rule, {
       }
       Component.propTypes = props;
     `,
+    settings: settings,
     errors: [{message: PROP_TYPES_MESSAGE}]
+  }, {
+    code: `
+      const props = {
+        foo: PropTypes.string
+      };
+      class Component extends React.Component {
+        render() {
+          return <div />;
+        }
+      }
+      Component.propTypes = props;
+    `,
+    settings: {
+      propWrapperFunctions: [
+        {property: 'exact', exact: true},
+        {property: 'forbidExtraProps', exact: true}
+      ]
+    },
+    errors: [{message: 'Component propTypes should be exact by using one of \'exact\', \'forbidExtraProps\'.'}]
   }]
 });
