@@ -186,6 +186,39 @@ ruleTester.run('prefer-exact-props', rule, {
         bar: PropTypes.string,
       };
     `
+  }, {
+    code: `
+      import somethingElse from "something-else";
+      const props = {
+        foo: PropTypes.string,
+        bar: PropTypes.shape({
+          baz: PropTypes.string
+        })
+      };
+      class Component extends React.Component {
+        render() {
+          return <div />;
+        }
+      }
+      Component.propTypes = somethingElse(props);
+    `
+  }, {
+    code: `
+      import somethingElse from "something-else";
+      const props =
+      class Component extends React.Component {
+        static propTypes = somethingElse({
+          foo: PropTypes.string,
+          bar: PropTypes.shape({
+            baz: PropTypes.string
+          })
+        });
+        render() {
+          return <div />;
+        }
+      }
+    `,
+    parser: 'babel-eslint'
   }],
   invalid: [{
     code: `
@@ -291,5 +324,77 @@ ruleTester.run('prefer-exact-props', rule, {
       ]
     },
     errors: [{message: 'Component propTypes should be exact by using one of \'exact\', \'forbidExtraProps\'.'}]
+  }, {
+    code: `
+      const props = {
+        foo: PropTypes.string,
+        bar: PropTypes.shape({
+          baz: PropTypes.string
+        })
+      };
+      class Component extends React.Component {
+        render() {
+          return <div />;
+        }
+      }
+      Component.propTypes = props;
+    `,
+    settings: {
+      propWrapperFunctions: [
+        {property: 'exact', exact: true},
+        {property: 'forbidExtraProps', exact: true}
+      ]
+    },
+    errors: [{message: 'Component propTypes should be exact by using one of \'exact\', \'forbidExtraProps\'.'}]
+  }, {
+    code: `
+      import somethingElse from "something-else";
+      function Component({ foo, bar }) {
+        return <div>{foo}{bar}</div>;
+      }
+      Component.propTypes = somethingElse({
+        foo: PropTypes.string,
+        bar: PropTypes.string,
+      });
+    `,
+    settings: settings,
+    errors: [{message: 'Component propTypes should be exact by using \'exact\'.'}]
+  }, {
+    code: `
+      import somethingElse from "something-else";
+      const props = {
+        foo: PropTypes.string,
+        bar: PropTypes.shape({
+          baz: PropTypes.string
+        })
+      };
+      class Component extends React.Component {
+        render() {
+          return <div />;
+        }
+      }
+      Component.propTypes = somethingElse(props);
+    `,
+    settings: settings,
+    errors: [{message: 'Component propTypes should be exact by using \'exact\'.'}]
+  }, {
+    code: `
+      import somethingElse from "something-else";
+      const props =
+      class Component extends React.Component {
+        static propTypes = somethingElse({
+          foo: PropTypes.string,
+          bar: PropTypes.shape({
+            baz: PropTypes.string
+          })
+        });
+        render() {
+          return <div />;
+        }
+      }
+    `,
+    settings: settings,
+    parser: 'babel-eslint',
+    errors: [{message: 'Component propTypes should be exact by using \'exact\'.'}]
   }]
 });
