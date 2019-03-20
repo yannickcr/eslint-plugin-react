@@ -201,6 +201,281 @@ ruleTester.run('forbid-prop-types', rule, {
     ].join('\n')
   }, {
     code: [
+      'var Hello = createReactClass({',
+      '  propTypes: {',
+      '    retailer: PropTypes.object({',
+      '      foo: PropTypes.string',
+      '    }),',
+      '  },',
+      '  render: function() {',
+      '    return <div />;',
+      '  }',
+      '});'
+    ].join('\n'),
+    options: [{
+      forbid: [],
+      forbidEmpty: true
+    }],
+    errors: 1
+  }, {
+    code: [
+      'var Hello = createReactClass({',
+      '  propTypes: {',
+      '    retailer: PropTypes.shape({',
+      '      foo: PropTypes.string',
+      '    }),',
+      '  },',
+      '  render: function() {',
+      '    return <div />;',
+      '  }',
+      '});'
+    ].join('\n'),
+    options: [{
+      forbid: [],
+      forbidEmpty: true
+    }],
+    errors: 1
+  }, {
+    code: [
+      'var Hello = createReactClass({',
+      '  propTypes: {',
+      '    retailer: PropTypes.instanceOf(Retailer),',
+      '  },',
+      '  render: function() {',
+      '    return <div />;',
+      '  }',
+      '});'
+    ].join('\n'),
+    options: [{
+      forbid: [],
+      forbidEmpty: true
+    }],
+    errors: 1
+  }, {
+    code: [
+      'var Hello = createReactClass({',
+      '  propTypes: {',
+      '    retailer: PropTypes.oneOf([',
+      '      "foo",',
+      '      "bar",',
+      '    ]),',
+      '  },',
+      '  render: function() {',
+      '    return <div />;',
+      '  }',
+      '});'
+    ].join('\n'),
+    options: [{
+      forbid: [],
+      forbidEmpty: true
+    }],
+    errors: 1
+  }, {
+    code: [
+      'var Hello = createReactClass({',
+      '  propTypes: {',
+      '    retailer: PropTypes.oneOfType([',
+      '      PropTypes.string,',
+      '      PropTypes.instanceOf(Retailer),',
+      '    ]),',
+      '  },',
+      '  render: function() {',
+      '    return <div />;',
+      '  }',
+      '});'
+    ].join('\n'),
+    options: [{
+      forbid: [],
+      forbidEmpty: true
+    }],
+    errors: 1
+  }, {
+    code: [
+      'var Hello = createReactClass({',
+      '  propTypes: {',
+      '    retailer: PropTypes.objectOf(PropTypes.string),',
+      '  },',
+      '  render: function() {',
+      '    return <div />;',
+      '  }',
+      '});'
+    ].join('\n'),
+    options: [{
+      forbid: [],
+      forbidEmpty: true
+    }],
+    errors: 1
+  }, {
+    code: [
+      'var Hello = createReactClass({',
+      '  propTypes: {',
+      '    retailer: PropTypes.arrayOf(PropTypes.string),',
+      '  },',
+      '  render: function() {',
+      '    return <div />;',
+      '  }',
+      '});'
+    ].join('\n'),
+    options: [{
+      forbid: [],
+      forbidEmpty: true
+    }],
+    errors: 1
+  }, {
+    code: [
+      'var Hello = createReactClass({',
+      '  propTypes: {',
+      '    retailer: PropTypes.exact({',
+      '      foo: PropTypes.string',
+      '    }),',
+      '  },',
+      '  render: function() {',
+      '    return <div />;',
+      '  }',
+      '});'
+    ].join('\n'),
+    options: [{
+      forbid: [],
+      forbidEmpty: true
+    }],
+    errors: 1
+  }, {
+    code: [
+      'import PropTypes from "prop-types";',
+      'var Hello = createReactClass({',
+      '  propTypes: {',
+      '    retailer: PropTypes.shape({ foo: PropTypes.string }),',
+      '  },',
+      '  render: function() {',
+      '    return <div />;',
+      '  }',
+      '});'
+    ].join('\n'),
+    options: [{
+      forbidEmpty: true
+    }]
+  }, {
+    code: [
+      'import importedPropTypes from "my-imported-prop-types-lib";',
+      'var Hello = createReactClass({',
+      '  propTypes: {',
+      '    retailer: importedPropTypes.shape,',
+      '  },',
+      '  render: function() {',
+      '    return <div />;',
+      '  }',
+      '});'
+    ].join('\n'),
+    options: [{
+      forbidEmpty: true
+    }]
+  }, {
+    code: [
+      'import { shape } from "my-imported-prop-types-lib";',
+      'var Hello = createReactClass({',
+      '  propTypes: {',
+      '    retailer: shape,',
+      '  },',
+      '  render: function() {',
+      '    return <div />;',
+      '  }',
+      '});'
+    ].join('\n'),
+    options: [{
+      forbidEmpty: true
+    }]
+  }, {
+    code: [
+      'var PropTypes = require("prop-types");',
+      'var Hello = createReactClass({',
+      '  propTypes: {',
+      '    retailer: PropTypes.shape({ foo: PropTypes.string }),',
+      '  },',
+      '  render: function() {',
+      '    return <div />;',
+      '  }',
+      '});'
+    ].join('\n'),
+    options: [{
+      forbidEmpty: true
+    }]
+  }, {
+    code: [
+      'var requiredPropTypes = require("my-required-prop-types-lib");',
+      'var Hello = createReactClass({',
+      '  propTypes: {',
+      '    retailer: requiredPropTypes.shape,',
+      '  },',
+      '  render: function() {',
+      '    return <div />;',
+      '  }',
+      '});'
+    ].join('\n'),
+    options: [{
+      forbidEmpty: true
+    }]
+  }, {
+    code: [
+      'var { shape } = require("my-imported-prop-types-lib");',
+      'var Hello = createReactClass({',
+      '  propTypes: {',
+      '    retailer: shape,',
+      '  },',
+      '  render: function() {',
+      '    return <div />;',
+      '  }',
+      '});'
+    ].join('\n'),
+    options: [{
+      forbidEmpty: true
+    }]
+  }, {
+    code: [
+      'var shape = require("my-imported-prop-types-lib").shape;',
+      'var Hello = createReactClass({',
+      '  propTypes: {',
+      '    retailer: shape,',
+      '  },',
+      '  render: function() {',
+      '    return <div />;',
+      '  }',
+      '});'
+    ].join('\n'),
+    options: [{
+      forbidEmpty: true
+    }]
+  }, {
+    code: [
+      'var React = require("react");',
+      'var Hello = createReactClass({',
+      '  propTypes: {',
+      '    retailer: React.PropTypes.shape({ foo: React.PropTypes.string }),',
+      '  },',
+      '  render: function() {',
+      '    return <div />;',
+      '  }',
+      '});'
+    ].join('\n'),
+    options: [{
+      forbidEmpty: true
+    }]
+  }, {
+    code: [
+      'import React from "react";',
+      'var Hello = createReactClass({',
+      '  propTypes: {',
+      '    retailer: React.PropTypes.shape({ foo: React.PropTypes.string }),',
+      '  },',
+      '  render: function() {',
+      '    return <div />;',
+      '  }',
+      '});'
+    ].join('\n'),
+    options: [{
+      forbidEmpty: true
+    }]
+  }, {
+    code: [
       'var First = createReactClass({',
       '  childContextTypes: externalPropTypes,',
       '  render: function() {',
@@ -890,6 +1165,362 @@ ruleTester.run('forbid-prop-types', rule, {
     ].join('\n'),
     options: [{
       forbid: ['object']
+    }],
+    errors: 1
+  }, {
+    code: [
+      'var Hello = createReactClass({',
+      '  propTypes: {',
+      '    retailer: PropTypes.object,',
+      '  },',
+      '  render: function() {',
+      '    return <div />;',
+      '  }',
+      '});'
+    ].join('\n'),
+    options: [{
+      forbid: [],
+      forbidEmpty: true
+    }],
+    errors: 1
+  }, {
+    code: [
+      'var Hello = createReactClass({',
+      '  propTypes: {',
+      '    retailer: PropTypes.object(),',
+      '  },',
+      '  render: function() {',
+      '    return <div />;',
+      '  }',
+      '});'
+    ].join('\n'),
+    options: [{
+      forbid: [],
+      forbidEmpty: true
+    }],
+    errors: 1
+  }, {
+    code: [
+      'var Hello = createReactClass({',
+      '  propTypes: {',
+      '    retailer: PropTypes.object({}),',
+      '  },',
+      '  render: function() {',
+      '    return <div />;',
+      '  }',
+      '});'
+    ].join('\n'),
+    options: [{
+      forbid: [],
+      forbidEmpty: true
+    }],
+    errors: 1
+  }, {
+    code: [
+      'var Hello = createReactClass({',
+      '  propTypes: {',
+      '    retailer: PropTypes.shape,',
+      '  },',
+      '  render: function() {',
+      '    return <div />;',
+      '  }',
+      '});'
+    ].join('\n'),
+    options: [{
+      forbid: [],
+      forbidEmpty: true
+    }],
+    errors: 1
+  }, {
+    code: [
+      'var Hello = createReactClass({',
+      '  propTypes: {',
+      '    retailer: PropTypes.shape(),',
+      '  },',
+      '  render: function() {',
+      '    return <div />;',
+      '  }',
+      '});'
+    ].join('\n'),
+    options: [{
+      forbid: [],
+      forbidEmpty: true
+    }],
+    errors: 1
+  }, {
+    code: [
+      'var Hello = createReactClass({',
+      '  propTypes: {',
+      '    retailer: PropTypes.shape({}),',
+      '  },',
+      '  render: function() {',
+      '    return <div />;',
+      '  }',
+      '});'
+    ].join('\n'),
+    options: [{
+      forbid: [],
+      forbidEmpty: true
+    }],
+    errors: 1
+  }, {
+    code: [
+      'var Hello = createReactClass({',
+      '  propTypes: {',
+      '    retailer: PropTypes.instanceOf(),',
+      '  },',
+      '  render: function() {',
+      '    return <div />;',
+      '  }',
+      '});'
+    ].join('\n'),
+    options: [{
+      forbid: [],
+      forbidEmpty: true
+    }],
+    errors: 1
+  }, {
+    code: [
+      'var Hello = createReactClass({',
+      '  propTypes: {',
+      '    retailer: PropTypes.oneOf(),',
+      '  },',
+      '  render: function() {',
+      '    return <div />;',
+      '  }',
+      '});'
+    ].join('\n'),
+    options: [{
+      forbid: [],
+      forbidEmpty: true
+    }],
+    errors: 1
+  }, {
+    code: [
+      'var Hello = createReactClass({',
+      '  propTypes: {',
+      '    retailer: PropTypes.oneOf([]),',
+      '  },',
+      '  render: function() {',
+      '    return <div />;',
+      '  }',
+      '});'
+    ].join('\n'),
+    options: [{
+      forbid: [],
+      forbidEmpty: true
+    }],
+    errors: 1
+  }, {
+    code: [
+      'var Hello = createReactClass({',
+      '  propTypes: {',
+      '    retailer: PropTypes.oneOfType(),',
+      '  },',
+      '  render: function() {',
+      '    return <div />;',
+      '  }',
+      '});'
+    ].join('\n'),
+    options: [{
+      forbid: [],
+      forbidEmpty: true
+    }],
+    errors: 1
+  }, {
+    code: [
+      'var Hello = createReactClass({',
+      '  propTypes: {',
+      '    retailer: PropTypes.oneOfType([]),',
+      '  },',
+      '  render: function() {',
+      '    return <div />;',
+      '  }',
+      '});'
+    ].join('\n'),
+    options: [{
+      forbid: [],
+      forbidEmpty: true
+    }],
+    errors: 1
+  }, {
+    code: [
+      'var Hello = createReactClass({',
+      '  propTypes: {',
+      '    retailer: PropTypes.objectOf(),',
+      '  },',
+      '  render: function() {',
+      '    return <div />;',
+      '  }',
+      '});'
+    ].join('\n'),
+    options: [{
+      forbid: [],
+      forbidEmpty: true
+    }],
+    errors: 1
+  }, {
+    code: [
+      'var Hello = createReactClass({',
+      '  propTypes: {',
+      '    retailer: PropTypes.arrayOf(),',
+      '  },',
+      '  render: function() {',
+      '    return <div />;',
+      '  }',
+      '});'
+    ].join('\n'),
+    options: [{
+      forbid: [],
+      forbidEmpty: true
+    }],
+    errors: 1
+  }, {
+    code: [
+      'var Hello = createReactClass({',
+      '  propTypes: {',
+      '    retailer: PropTypes.exact(),',
+      '  },',
+      '  render: function() {',
+      '    return <div />;',
+      '  }',
+      '});'
+    ].join('\n'),
+    options: [{
+      forbid: [],
+      forbidEmpty: true
+    }],
+    errors: 1
+  }, {
+    code: [
+      'var Hello = createReactClass({',
+      '  propTypes: {',
+      '    retailer: PropTypes.exact({}),',
+      '  },',
+      '  render: function() {',
+      '    return <div />;',
+      '  }',
+      '});'
+    ].join('\n'),
+    options: [{
+      forbid: [],
+      forbidEmpty: true
+    }],
+    errors: 1
+  }, {
+    code: [
+      'import PropTypes from "prop-types";',
+      '  propTypes: {',
+      '    retailer: PropTypes.shape,',
+      '  },',
+      '  render: function() {',
+      '    return <div />;',
+      '  }',
+      '});'
+    ].join('\n'),
+    options: [{
+      forbid: [],
+      forbidEmpty: true
+    }],
+    errors: 1
+  }, {
+    code: [
+      'import { shape } from "prop-types";',
+      'var Hello = createReactClass({',
+      '  propTypes: {',
+      '    retailer: shape,',
+      '  },',
+      '  render: function() {',
+      '    return <div />;',
+      '  }',
+      '});'
+    ].join('\n'),
+    options: [{
+      forbid: [],
+      forbidEmpty: true
+    }],
+    errors: 1
+  }, {
+    code: [
+      'var PropTypes = require("prop-types");',
+      '  propTypes: {',
+      '    retailer: PropTypes.shape,',
+      '  },',
+      '  render: function() {',
+      '    return <div />;',
+      '  }',
+      '});'
+    ].join('\n'),
+    options: [{
+      forbid: [],
+      forbidEmpty: true
+    }],
+    errors: 1
+  }, {
+    code: [
+      'var shape = require("prop-types").shape;',
+      '  propTypes: {',
+      '    retailer: shape,',
+      '  },',
+      '  render: function() {',
+      '    return <div />;',
+      '  }',
+      '});'
+    ].join('\n'),
+    options: [{
+      forbid: [],
+      forbidEmpty: true
+    }],
+    errors: 1
+  }, {
+    code: [
+      'var { shape } = require("prop-types");',
+      'var Hello = createReactClass({',
+      '  propTypes: {',
+      '    retailer: shape,',
+      '  },',
+      '  render: function() {',
+      '    return <div />;',
+      '  }',
+      '});'
+    ].join('\n'),
+    options: [{
+      forbid: [],
+      forbidEmpty: true
+    }],
+    errors: 1
+  }, {
+    code: [
+      'var React = require("react");',
+      'var Hello = createReactClass({',
+      '  propTypes: {',
+      '    retailer: React.PropTypes.shape,',
+      '  },',
+      '  render: function() {',
+      '    return <div />;',
+      '  }',
+      '});'
+    ].join('\n'),
+    options: [{
+      forbid: [],
+      forbidEmpty: true
+    }],
+    errors: 1
+  }, {
+    code: [
+      'import React from "react";',
+      'var Hello = createReactClass({',
+      '  propTypes: {',
+      '    retailer: React.PropTypes.shape,',
+      '  },',
+      '  render: function() {',
+      '    return <div />;',
+      '  }',
+      '});'
+    ].join('\n'),
+    options: [{
+      forbid: [],
+      forbidEmpty: true
     }],
     errors: 1
   }, {
