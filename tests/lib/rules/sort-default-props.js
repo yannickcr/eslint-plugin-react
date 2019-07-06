@@ -2,14 +2,17 @@
  * @fileoverview Tests for sort-default-props
  * @author Vladimir Kattsov
  */
+
 'use strict';
 
 // -----------------------------------------------------------------------------
 // Requirements
 // -----------------------------------------------------------------------------
 
-const rule = require('../../../lib/rules/sort-default-props');
 const RuleTester = require('eslint').RuleTester;
+const rule = require('../../../lib/rules/sort-default-props');
+
+const parsers = require('../../helpers/parsers');
 
 const parserOptions = {
   ecmaVersion: 2018,
@@ -18,8 +21,6 @@ const parserOptions = {
     jsx: true
   }
 };
-
-require('babel-eslint');
 
 // -----------------------------------------------------------------------------
 // Tests
@@ -176,7 +177,7 @@ ruleTester.run('sort-default-props', rule, {
       '  }',
       '}'
     ].join('\n'),
-    parser: 'babel-eslint'
+    parser: parsers.BABEL_ESLINT
   }, {
     code: [
       'class Hello extends React.Component {',
@@ -191,7 +192,7 @@ ruleTester.run('sort-default-props', rule, {
       '  "aria-controls": "aria-controls"',
       '};'
     ].join('\n'),
-    parser: 'babel-eslint',
+    parser: parsers.BABEL_ESLINT,
     options: [{
       ignoreCase: true
     }]
@@ -214,7 +215,7 @@ ruleTester.run('sort-default-props', rule, {
       '  }',
       '}'
     ].join('\n'),
-    parser: 'babel-eslint'
+    parser: parsers.BABEL_ESLINT
   }, {
     code: [
       'var Hello = createReactClass({',
@@ -260,7 +261,7 @@ ruleTester.run('sort-default-props', rule, {
       '  }',
       '}'
     ].join('\n'),
-    parser: 'babel-eslint'
+    parser: parsers.BABEL_ESLINT
   }, {
     code: [
       'export default class ClassWithSpreadInPropTypes extends BaseClass {',
@@ -282,7 +283,7 @@ ruleTester.run('sort-default-props', rule, {
       '  }',
       '}'
     ].join('\n'),
-    parser: 'babel-eslint'
+    parser: parsers.BABEL_ESLINT
   }, {
     code: [
       'const defaults = {',
@@ -303,7 +304,7 @@ ruleTester.run('sort-default-props', rule, {
       '  a: "a"',
       '};'
     ].join('\n'),
-    parser: 'babel-eslint'
+    parser: parsers.BABEL_ESLINT
   }, {
     code: [
       'const propTypes = require(\'./externalPropTypes\')',
@@ -367,7 +368,7 @@ ruleTester.run('sort-default-props', rule, {
       '  }',
       '}'
     ].join('\n'),
-    parser: 'babel-eslint',
+    parser: parsers.BABEL_ESLINT,
     errors: [{
       message: ERROR_MESSAGE,
       line: 10,
@@ -392,7 +393,7 @@ ruleTester.run('sort-default-props', rule, {
       '  }',
       '}'
     ].join('\n'),
-    parser: 'babel-eslint',
+    parser: parsers.BABEL_ESLINT,
     errors: 2
   }, {
     code: [
@@ -410,7 +411,7 @@ ruleTester.run('sort-default-props', rule, {
       '  }',
       '}'
     ].join('\n'),
-    parser: 'babel-eslint',
+    parser: parsers.BABEL_ESLINT,
     options: [{
       ignoreCase: true
     }],
@@ -436,7 +437,7 @@ ruleTester.run('sort-default-props', rule, {
       '  }',
       '}'
     ].join('\n'),
-    parser: 'babel-eslint',
+    parser: parsers.BABEL_ESLINT,
     errors: [{
       message: ERROR_MESSAGE,
       line: 8,
@@ -459,7 +460,7 @@ ruleTester.run('sort-default-props', rule, {
       '  "a": "a"',
       '};'
     ].join('\n'),
-    parser: 'babel-eslint',
+    parser: parsers.BABEL_ESLINT,
     errors: [{
       message: ERROR_MESSAGE,
       line: 12,
@@ -484,7 +485,7 @@ ruleTester.run('sort-default-props', rule, {
       '  "a": "a"',
       '};'
     ].join('\n'),
-    parser: 'babel-eslint',
+    parser: parsers.BABEL_ESLINT,
     errors: 2
   }, {
     code: [
@@ -502,7 +503,7 @@ ruleTester.run('sort-default-props', rule, {
       '  "B": "B",',
       '};'
     ].join('\n'),
-    parser: 'babel-eslint',
+    parser: parsers.BABEL_ESLINT,
     errors: [{
       message: ERROR_MESSAGE,
       line: 12,
@@ -525,7 +526,7 @@ ruleTester.run('sort-default-props', rule, {
       '  "a": "a",',
       '};'
     ].join('\n'),
-    parser: 'babel-eslint',
+    parser: parsers.BABEL_ESLINT,
     options: [{
       ignoreCase: true
     }],
@@ -570,7 +571,7 @@ ruleTester.run('sort-default-props', rule, {
       '  }',
       '}'
     ].join('\n'),
-    parser: 'babel-eslint',
+    parser: parsers.BABEL_ESLINT,
     errors: [{
       message: ERROR_MESSAGE,
       line: 9,
@@ -598,7 +599,7 @@ ruleTester.run('sort-default-props', rule, {
       '  }',
       '}'
     ].join('\n'),
-    parser: 'babel-eslint',
+    parser: parsers.BABEL_ESLINT,
     errors: 2
   }, {
     code: [
@@ -620,7 +621,7 @@ ruleTester.run('sort-default-props', rule, {
       '  ...defaults,',
       '};'
     ].join('\n'),
-    parser: 'babel-eslint',
+    parser: parsers.BABEL_ESLINT,
     errors: [{
       message: ERROR_MESSAGE,
       line: 15,
