@@ -109,6 +109,7 @@ Enable the rules that you would like to use.
 * [react/forbid-foreign-prop-types](docs/rules/forbid-foreign-prop-types.md): Forbid foreign propTypes
 * [react/no-access-state-in-setstate](docs/rules/no-access-state-in-setstate.md): Prevent using this.state inside this.setState
 * [react/no-array-index-key](docs/rules/no-array-index-key.md): Prevent using Array index in `key` props
+* [react/no-arrow-function-lifecycle](docs/rules/no-arrow-function-lifecycle.md): Don't use arrow function for lifecycle methods
 * [react/no-children-prop](docs/rules/no-children-prop.md): Prevent passing children as props
 * [react/no-danger](docs/rules/no-danger.md): Prevent usage of dangerous JSX properties
 * [react/no-danger-with-children](docs/rules/no-danger-with-children.md): Prevent problem with children and props.dangerouslySetInnerHTML
