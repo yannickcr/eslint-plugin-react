@@ -45,7 +45,7 @@
     "@types/node": "^12.12.14",
     "babel-eslint": "^8.2.6",
     "coveralls": "^3.0.9",
-    "eslint": "^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0",
+    "eslint": "^4.0.0 || ^5.0.0 || ^6.0.0",
     "eslint-config-airbnb-base": "^13.2.0",
     "eslint-plugin-eslint-plugin": "^2.1.0",
     "eslint-plugin-import": "^2.18.2",
@@ -57,7 +57,7 @@
     "typescript-eslint-parser": "^20.1.1"
   },
   "peerDependencies": {
-    "eslint": "^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0"
+    "eslint": "^4.0.0 || ^5.0.0 || ^6.0.0"
   },
   "engines": {
     "node": ">=4"
