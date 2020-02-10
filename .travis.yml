@@ -23,6 +23,7 @@ env:
     - ESLINT=6
     - ESLINT=5
     - ESLINT=4
+    - ESLINT=3
 after_success:
   - 'if [ -n "${TEST-}" ]; then npm run coveralls ; fi'
 matrix:
