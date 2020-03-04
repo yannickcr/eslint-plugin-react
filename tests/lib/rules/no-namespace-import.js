@@ -25,7 +25,7 @@ const parserOptions = {
 
 const ERROR_MESSAGE = 'Namespace import is not allowed on React.';
 
-const ruleTester = new RuleTester({ parserOptions });
+const ruleTester = new RuleTester({parserOptions});
 ruleTester.run('no-namespace-import', rule, {
   valid: [
     {

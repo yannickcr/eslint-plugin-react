@@ -23,68 +23,68 @@ const parserOptions = {
 // Tests
 // -----------------------------------------------------------------------------
 
-const ruleTester = new RuleTester({ parserOptions });
+const ruleTester = new RuleTester({parserOptions});
 ruleTester.run('no-named-import', rule, {
   valid: [
     {
-      code: `import React from 'react';`
+      code: 'import React from \'react\';'
     },
     {
-      code: `import { useEffect } from 'react';`,
-      options: [{ whitelist: ['useEffect'] }]
+      code: 'import { useEffect } from \'react\';',
+      options: [{whitelist: ['useEffect']}]
     },
     {
-      code: `import { useEffect } from 'react';`,
-      options: [{ blacklist: ['Component'] }]
+      code: 'import { useEffect } from \'react\';',
+      options: [{blacklist: ['Component']}]
     }
   ],
   invalid: [
     {
-      code: `import React, { Component } from 'react';`,
+      code: 'import React, { Component } from \'react\';',
       errors: [
         {
           messageId: 'dontImport',
-          data: { name: 'Component' }
+          data: {name: 'Component'}
         }
       ]
     },
     {
-      code: `import { useEffect } from 'react';`,
-      options: [{ whitelist: ['Component'] }],
+      code: 'import { useEffect } from \'react\';',
+      options: [{whitelist: ['Component']}],
       errors: [
         {
           messageId: 'dontImport',
-          data: { name: 'useEffect' }
+          data: {name: 'useEffect'}
         }
       ]
     },
     {
       code: "import React, { Component } from 'react';",
-      options: [{ blacklist: ['Component'] }],
+      options: [{blacklist: ['Component']}],
       errors: [
         {
           messageId: 'dontImport',
-          data: { name: 'Component' }
+          data: {name: 'Component'}
         }
       ]
     },
     {
       code: "import { Component } from 'react';",
-      options: [{ blacklist: ['Component'] }],
+      options: [{blacklist: ['Component']}],
       errors: [
         {
           messageId: 'dontImport',
-          data: { name: 'Component' }
+          data: {name: 'Component'}
         }
       ]
     },
     {
       code: "import { useEffect } from 'react';",
-      options: [{ whitelist: ['Component'] }],
+      options: [{whitelist: ['Component']}],
       errors: [
         {
           messageId: 'dontImport',
-          data: { name: 'useEffect' }
+          data: {name: 'useEffect'}
         }
       ]
     }
