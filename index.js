@@ -66,6 +66,7 @@ const allRules = {
   'no-is-mounted': require('./lib/rules/no-is-mounted'),
   'no-multi-comp': require('./lib/rules/no-multi-comp'),
   'no-named-import': require('./lib/rules/no-named-import'),
+  'no-namespace-import': require('./lib/rules/no-namespace-import'),
   'no-set-state': require('./lib/rules/no-set-state'),
   'no-string-refs': require('./lib/rules/no-string-refs'),
   'no-redundant-should-component-update': require('./lib/rules/no-redundant-should-component-update'),
