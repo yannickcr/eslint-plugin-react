@@ -27,50 +27,36 @@ const ruleTester = new RuleTester({parserOptions});
 ruleTester.run('no-named-import', rule, {
   valid: [
     {
-      code: 'import React from \'react\';'
+      code: "import React from 'react';"
     },
     {
-      code: 'import { useEffect } from \'react\';',
-      options: [{whitelist: ['useEffect']}]
+      code: "import { useEffect } from 'react';",
+      options: [{allow: ['useEffect']}]
     },
     {
-      code: 'import { useEffect } from \'react\';',
-      options: [{blacklist: ['Component']}]
+      code: "import { useEffect } from 'react';",
+      options: [{forbid: ['Component']}]
+    },
+    {
+      code: 'const [loading,setLoading] = React.useState(false);',
+      options: [{forbid: ['useState']}]
+    },
+    {
+      code: "import { useState } from 'react'; const [loading,setLoading] = useState(false);",
+      options: [{forbid: ['useEffect'], forceImport: true}]
+    },
+    {
+      code: 'const [loading,setLoading] = React.useState(false);',
+      options: [{allow: ['useState']}]
+    },
+    {
+      code: "import { useState } from 'react'; const [loading,setLoading] = useState(false);",
+      options: [{allow: ['useState'], forceImport: true}]
     }
   ],
   invalid: [
     {
-      code: 'import React, { Component } from \'react\';',
-      errors: [
-        {
-          messageId: 'dontImport',
-          data: {name: 'Component'}
-        }
-      ]
-    },
-    {
-      code: 'import { useEffect } from \'react\';',
-      options: [{whitelist: ['Component']}],
-      errors: [
-        {
-          messageId: 'dontImport',
-          data: {name: 'useEffect'}
-        }
-      ]
-    },
-    {
       code: "import React, { Component } from 'react';",
-      options: [{blacklist: ['Component']}],
-      errors: [
-        {
-          messageId: 'dontImport',
-          data: {name: 'Component'}
-        }
-      ]
-    },
-    {
-      code: "import { Component } from 'react';",
-      options: [{blacklist: ['Component']}],
       errors: [
         {
           messageId: 'dontImport',
@@ -80,11 +66,71 @@ ruleTester.run('no-named-import', rule, {
     },
     {
       code: "import { useEffect } from 'react';",
-      options: [{whitelist: ['Component']}],
+      options: [{allow: ['Component']}],
       errors: [
         {
           messageId: 'dontImport',
           data: {name: 'useEffect'}
+        }
+      ]
+    },
+    {
+      code: "import React, { Component } from 'react';",
+      options: [{forbid: ['Component']}],
+      errors: [
+        {
+          messageId: 'dontImport',
+          data: {name: 'Component'}
+        }
+      ]
+    },
+    {
+      code: "import { Component } from 'react';",
+      options: [{forbid: ['Component']}],
+      errors: [
+        {
+          messageId: 'dontImport',
+          data: {name: 'Component'}
+        }
+      ]
+    },
+    {
+      code: "import { useState } from 'react'; const [loading,setLoading] = useState(false);",
+      options: [{forbid: ['useState']}],
+      errors: [
+        {
+          messageId: 'dontImport',
+          data: {name: 'useState'}
+        }
+      ]
+    },
+    {
+      code: "import React from 'react'; const [loading,setLoading] = React.useState(false);",
+      options: [{forbid: ['useEffect'], forceImport: true}],
+      errors: [
+        {
+          messageId: 'shouldImport',
+          data: {name: 'useState'}
+        }
+      ]
+    },
+    {
+      code: "import React from 'react'; const [loading,setLoading] = React.useState(false);",
+      options: [{allow: ['useState'], forceImport: true}],
+      errors: [
+        {
+          messageId: 'shouldImport',
+          data: {name: 'useState'}
+        }
+      ]
+    },
+    {
+      code: 'const [loading,setLoading] = React.useState(false);',
+      options: [{forbid: [], forceImport: true}],
+      errors: [
+        {
+          messageId: 'shouldImport',
+          data: {name: 'useState'}
         }
       ]
     }

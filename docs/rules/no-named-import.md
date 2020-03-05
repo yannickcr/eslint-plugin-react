@@ -7,25 +7,25 @@ also creates consistency inside a codebase because some people use named imports
 
 ### Options
 
-This rule has two different properties that can be used (not at the same time): `whitelist` and `blacklist`. Both are an array of strings. By default this rule whitelists nothing, so every named import will error.
+This rule has two different properties that can be used (not at the same time): `allow` and `forbid`. Both are an array of strings. By default this rule allows nothing, so every named import will error.
 
 Example configurations:
 
 ```javascript
-// Blacklist
+// forbid
 {
   "rules": {
     "react/no-named-import": ["error", {
-      "blacklist": ["Component", "useEffect"]
+      "forbid": ["Component", "useEffect"]
     }]
   }
 }
 
-// Whitelist
+// allow
 {
   "rules": {
     "react/no-named-import": ["error", {
-      "whitelist": ["Component", "useEffect"]
+      "allow": ["Component", "useEffect"]
     }]
   }
 }
@@ -34,26 +34,48 @@ Example configurations:
 The following patterns are considered warnings:
 
 ```jsx
-// With { blacklist: ['Component']}
+// With { forbid: ['Component']}
 import React, { Component } from 'react';
 import { Component } from 'react';
 
-// With { whitelist: ['useEffect'] }
+// With { allow: ['useEffect'] }
 import React, { Component } from 'react';
 
-// With no options provided
+// With { allow: ['useState'], forceImport: true }
+import React from 'react';
+const [loading, setLoading] = React.useState(false);
+
+// With { allow: [], forceImport: true }
+import React, { useState } from 'react';
+const [loading, setLoading] = React.useState(false);
+
+// With no options provided (equals { allow: [], forceImport: false})
 import React, { Component, useEffect } from 'react';
 ```
 
 The following patterns are **not** considered warnings:
 
 ```jsx
-// With { blacklist: ['Component']}
-import React, { useEffect } from 'react';
-import { useEffect } from 'react';
+// With { forbid: ['Component']}
+import React, { useState } from 'react';
+import { useState } from 'react';
+const [loading, setLoading] = React.useState(false);
 
-// With { whitelist: ['useEffect'] }
+// With { forbid: ['Component'], forceImport: true }
+import React, { useState } from 'react';
+import { useState } from 'react';
+const [loading, setLoading] = useState(false);
+
+// With { forbid: [], forceImport: true }
+import React, { useState } from 'react';
+const [loading, setLoading] = useState(false);
+
+// With { allow: ['useEffect'] }
 import React, { useEffect } from 'react';
+
+// With { allow: ['useState'], forceImport: true }
+import React, { useState } from 'react';
+const [loading, setLoading] = useState(false);
 
 // With no options provided
 import React from 'react';
