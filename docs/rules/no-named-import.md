@@ -16,7 +16,9 @@ Example configurations:
 {
   "rules": {
     "react/no-named-import": ["error", {
-      "forbid": ["Component", "useEffect"]
+      "forbid": ["Component", "useEffect"],
+      // Optional
+      forceImport: true,
     }]
   }
 }
@@ -26,6 +28,8 @@ Example configurations:
   "rules": {
     "react/no-named-import": ["error", {
       "allow": ["Component", "useEffect"]
+      // Optional
+      forceImport: true,
     }]
   }
 }
