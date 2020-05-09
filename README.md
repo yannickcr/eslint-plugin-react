@@ -175,6 +175,7 @@ Enable the rules that you would like to use.
 * [react/jsx-no-comment-textnodes](docs/rules/jsx-no-comment-textnodes.md): Comments inside children section of tag should be placed inside braces
 * [react/jsx-no-duplicate-props](docs/rules/jsx-no-duplicate-props.md): Enforce no duplicate props
 * [react/jsx-no-literals](docs/rules/jsx-no-literals.md): Prevent using string literals in React component definition
+* [react/jsx-no-namespace](docs/rules/jsx-no-namespace.md): Enforce that namespaces are not used in JSX
 * [react/jsx-no-script-url](docs/rules/jsx-no-script-url.md): Forbid `javascript:` URLs
 * [react/jsx-no-target-blank](docs/rules/jsx-no-target-blank.md): Forbid `target="_blank"` attribute without `rel="noreferrer"`
 * [react/jsx-no-undef](docs/rules/jsx-no-undef.md): Disallow undeclared variables in JSX
