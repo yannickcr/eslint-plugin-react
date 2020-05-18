@@ -19,13 +19,13 @@ const parserOptions = {
 const eslintTester = new RuleTester({parserOptions});
 
 function getErrorMessages(unusedFields) {
-  return unusedFields.map(field => ({
+  return unusedFields.map((field) => ({
     message: `Unused state field: '${field}'`
   }));
 }
 
 eslintTester.run('no-unused-state', rule, {
-  valid: [
+  valid: [].concat(
     `function StatelessFnUnaffectedTest(props) {
        return <SomeComponent foo={props.foo} />;
     };`,
@@ -228,6 +228,28 @@ eslintTester.run('no-unused-state', rule, {
           state = { foo: 0 };
           render() {
             return <SomeComponent foo={this.state.foo} />;
+          }
+        }`,
+      parser: parsers.BABEL_ESLINT
+    }, parsers.TS([{
+      code: `
+        class OptionalChaining extends React.Component {
+          constructor() {
+            this.state = { foo: 0 };
+          }
+          render() {
+            return <SomeComponent foo={this.state?.foo} />;
+          }
+        }`,
+      parser: parsers['@TYPESCRIPT_ESLINT']
+    }]), {
+      code: `
+        class OptionalChaining extends React.Component {
+          constructor() {
+            this.state = { foo: 0 };
+          }
+          render() {
+            return <SomeComponent foo={this.state?.foo} />;
           }
         }`,
       parser: parsers.BABEL_ESLINT
@@ -795,7 +817,7 @@ eslintTester.run('no-unused-state', rule, {
       `,
       parser: parsers.TYPESCRIPT_ESLINT
     }
-  ],
+  ),
 
   invalid: [
     {

@@ -191,6 +191,13 @@ ruleTester.run('display-name', rule, {
     parser: parsers.BABEL_ESLINT
   }, {
     code: `
+      export const Hello = React.memo(function Hello() {
+        return <p />;
+      })
+    `,
+    parser: parsers.BABEL_ESLINT
+  }, {
+    code: `
       var Hello = function() {
         return <div>Hello {this.props.name}</div>;
       }
@@ -462,6 +469,14 @@ ruleTester.run('display-name', rule, {
       const ComponentWithMemo = React.memo(function Component({ world }) {
         return <div>Hello {world}</div>
       })
+    `
+  }, {
+    code: `
+      import React from 'react';
+
+      const Hello = React.memo(function Hello() {
+        return;
+      });
     `
   }, {
     code: `

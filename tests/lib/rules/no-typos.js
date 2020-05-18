@@ -28,7 +28,7 @@ const parserOptions = {
 const ERROR_MESSAGE = 'Typo in static class property declaration';
 const ERROR_MESSAGE_ES5 = 'Typo in property declaration';
 const ERROR_MESSAGE_LIFECYCLE_METHOD = (actual, expected) => `Typo in component lifecycle method declaration: ${actual} should be ${expected}`;
-const ERROR_MESSAGE_STATIC = method => `Lifecycle method should be static: ${method}`;
+const ERROR_MESSAGE_STATIC = (method) => `Lifecycle method should be static: ${method}`;
 
 const ruleTester = new RuleTester();
 ruleTester.run('no-typos', rule, {
@@ -944,7 +944,7 @@ ruleTester.run('no-typos', rule, {
       type: 'MethodDefinition'
     }, {
       message: ERROR_MESSAGE_LIFECYCLE_METHOD('Render', 'render'),
-      nodeType: 'MethodDefinition'
+      type: 'MethodDefinition'
     }]
   }, {
     code: `
@@ -1616,7 +1616,7 @@ ruleTester.run('no-typos', rule, {
     parserOptions,
     errors: [{
       message: ERROR_MESSAGE_STATIC('getDerivedStateFromProps'),
-      nodeType: 'MethodDefinition'
+      type: 'MethodDefinition'
     }]
   }, {
     code: `
@@ -1628,10 +1628,10 @@ ruleTester.run('no-typos', rule, {
     parserOptions,
     errors: [{
       message: ERROR_MESSAGE_STATIC('GetDerivedStateFromProps'),
-      nodeType: 'MethodDefinition'
+      type: 'MethodDefinition'
     }, {
       message: ERROR_MESSAGE_LIFECYCLE_METHOD('GetDerivedStateFromProps', 'getDerivedStateFromProps'),
-      nodeType: 'MethodDefinition'
+      type: 'MethodDefinition'
     }]
   }, {
     code: `
