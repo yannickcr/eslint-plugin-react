@@ -30,106 +30,99 @@ ruleTester.run('no-named-import', rule, {
       code: "import React from 'react';"
     },
     {
-      code: "import { useEffect } from 'react';",
-      options: [{allow: ['useEffect']}]
+      code: "import React, { useState } from 'react';"
+    },
+    {
+      code: "import React from 'react'; const [loading,setLoading] = React.useState(false);",
+      options: ['property', []]
+    },
+    {
+      code: "import React, { useState } from 'react'; const [loading,setLoading] = useState(false);",
+      options: ['import', []]
     },
     {
       code: "import { useEffect } from 'react';",
-      options: [{forbid: ['Component']}]
+      options: ['property', ['useState']]
+    },
+    {
+      code: "import { useEffect } from 'react';",
+      options: ['import', ['useEffect']]
     },
     {
       code: 'const [loading,setLoading] = React.useState(false);',
-      options: [{forbid: ['useState']}]
+      options: ['property', ['useState']]
     },
     {
       code: "import { useState } from 'react'; const [loading,setLoading] = useState(false);",
-      options: [{forbid: ['useEffect'], forceImport: true}]
-    },
-    {
-      code: 'const [loading,setLoading] = React.useState(false);',
-      options: [{allow: ['useState']}]
-    },
-    {
-      code: "import { useState } from 'react'; const [loading,setLoading] = useState(false);",
-      options: [{allow: ['useState'], forceImport: true}]
+      options: ['import', ['useState']]
     }
   ],
   invalid: [
     {
-      code: "import React, { Component } from 'react';",
+      code: 'const [loading, setLoading] = React.useState(false);',
       errors: [
         {
-          messageId: 'dontImport',
-          data: {name: 'Component'}
-        }
-      ]
-    },
-    {
-      code: "import { useEffect } from 'react';",
-      options: [{allow: ['Component']}],
-      errors: [
-        {
-          messageId: 'dontImport',
-          data: {name: 'useEffect'}
-        }
-      ]
-    },
-    {
-      code: "import React, { Component } from 'react';",
-      options: [{forbid: ['Component']}],
-      errors: [
-        {
-          messageId: 'dontImport',
-          data: {name: 'Component'}
-        }
-      ]
-    },
-    {
-      code: "import { Component } from 'react';",
-      options: [{forbid: ['Component']}],
-      errors: [
-        {
-          messageId: 'dontImport',
-          data: {name: 'Component'}
-        }
-      ]
-    },
-    {
-      code: "import { useState } from 'react'; const [loading,setLoading] = useState(false);",
-      options: [{forbid: ['useState']}],
-      errors: [
-        {
-          messageId: 'dontImport',
+          messageId: 'useImport',
           data: {name: 'useState'}
         }
       ]
     },
     {
-      code: "import React from 'react'; const [loading,setLoading] = React.useState(false);",
-      options: [{forbid: ['useEffect'], forceImport: true}],
+      code: "import React, { useState } from 'react'",
+      options: ['property', []],
       errors: [
         {
-          messageId: 'shouldImport',
+          messageId: 'useProperty',
           data: {name: 'useState'}
         }
       ]
     },
     {
-      code: "import React from 'react'; const [loading,setLoading] = React.useState(false);",
-      options: [{allow: ['useState'], forceImport: true}],
+      code: 'const [loading, setLoading] = React.useState(false);',
+      options: ['import', []],
       errors: [
         {
-          messageId: 'shouldImport',
+          messageId: 'useImport',
           data: {name: 'useState'}
         }
       ]
     },
     {
-      code: 'const [loading,setLoading] = React.useState(false);',
-      options: [{forbid: [], forceImport: true}],
+      code: "import React, { useState } from 'react'",
+      options: ['property', ['useState']],
       errors: [
         {
-          messageId: 'shouldImport',
+          messageId: 'useProperty',
+          data: {name: 'useState'}
+        }
+      ]
+    },
+    {
+      code: "import React, { useState } from 'react'",
+      options: ['import', ['useEffect']],
+      errors: [
+        {
+          messageId: 'useProperty',
+          data: {name: 'useState'}
+        }
+      ]
+    },
+    {
+      code: 'const [loading, setLoading] = React.useState(false);',
+      options: ['property', ['useEffect']],
+      errors: [
+        {
+          messageId: 'useImport',
+          data: {name: 'useState'}
+        }
+      ]
+    },
+    {
+      code: 'const [loading, setLoading] = React.useState(false);',
+      options: ['import', ['useState']],
+      errors: [
+        {
+          messageId: 'useImport',
           data: {name: 'useState'}
         }
       ]

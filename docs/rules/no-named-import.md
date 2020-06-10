@@ -7,30 +7,30 @@ also creates consistency inside a codebase because some people use named imports
 
 ### Options
 
-This rule has two different properties that can be used (not at the same time): `allow` and `forbid`. Both are an array of strings. By default this rule allows nothing, so every named import will error.
+This rule has two different modes: 'import' and 'property' which can be set using the first argument. The second arguments accepts an array of strings, which are the allowed modules to be imported or accessed via property.
+
+```
+"react/no-named-import": [<enabled>, 'import' | 'property', []]
+```
+
+By default the rule is set to `import` with an empty array, which means that all modules should be imported
+
+
 
 Example configurations:
 
 ```javascript
-// forbid
+// import
 {
   "rules": {
-    "react/no-named-import": ["error", {
-      "forbid": ["Component", "useEffect"],
-      // Optional
-      forceImport: true,
-    }]
+    "react/no-named-import": ["error", 'import', ['Component', 'useState']]
   }
 }
 
-// allow
+// property
 {
   "rules": {
-    "react/no-named-import": ["error", {
-      "allow": ["Component", "useEffect"]
-      // Optional
-      forceImport: true,
-    }]
+    "react/no-named-import": ["error", 'property', ['Component', 'useState']]
   }
 }
 ```
@@ -38,49 +38,50 @@ Example configurations:
 The following patterns are considered warnings:
 
 ```jsx
-// With { forbid: ['Component']}
-import React, { Component } from 'react';
-import { Component } from 'react';
-
-// With { allow: ['useEffect'] }
-import React, { Component } from 'react';
-
-// With { allow: ['useState'], forceImport: true }
-import React from 'react';
 const [loading, setLoading] = React.useState(false);
 
-// With { allow: [], forceImport: true }
+// ['property', []]
+import React, { Component } from 'react';
+
+// ['property', ['useState']]
 import React, { useState } from 'react';
+
+// ['property', ['useEffect']]
 const [loading, setLoading] = React.useState(false);
 
-// With no options provided (equals { allow: [], forceImport: false})
-import React, { Component, useEffect } from 'react';
+// ['import', []]
+const [loading, setLoading] = React.useState(false);
+
+// ['import', ['useEffect']]
+import React, { useState } from 'react';
+
+// ['import', ['useState']]
+const [loading, setLoading] = React.useState(false);
+
+
 ```
 
 The following patterns are **not** considered warnings:
 
 ```jsx
-// With { forbid: ['Component']}
 import React, { useState } from 'react';
-import { useState } from 'react';
-const [loading, setLoading] = React.useState(false);
 
-// With { forbid: ['Component'], forceImport: true }
-import React, { useState } from 'react';
-import { useState } from 'react';
-const [loading, setLoading] = useState(false);
+// ['property', []]
+import React from 'react'; const [loading,setLoading] = React.useState(false);
 
-// With { forbid: [], forceImport: true }
-import React, { useState } from 'react';
-const [loading, setLoading] = useState(false);
+// ['property', ['useState']]
+import { useEffect } from 'react';
 
-// With { allow: ['useEffect'] }
-import React, { useEffect } from 'react';
+// ['property', ['useState']]
+const [loading,setLoading] = React.useState(false);
 
-// With { allow: ['useState'], forceImport: true }
-import React, { useState } from 'react';
-const [loading, setLoading] = useState(false);
+// ['import', []]
+import React, { useState } from 'react'; const [loading,setLoading] = useState(false);
 
-// With no options provided
-import React from 'react';
+// ['import', ['useEffect']]
+import { useEffect } from 'react';
+
+// ['import', ['useState']]
+import { useState } from 'react'; const [loading,setLoading] = useState(false);
+
 ```
