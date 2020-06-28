@@ -72,14 +72,34 @@ ruleTester.run('jsx-pascal-case', rule, {
   }, {
     code: '<qualification.T3StComp0Nent />'
   }, {
-    code: '<Modal:Header />'
-  }, {
-    code: '<IGNORED />',
-    options: [{ignore: ['IGNORED']}]
+    code: '<__this.TestComponent />'
   }, {
     code: '<$ />'
   }, {
     code: '<_ />'
+  }, {
+    // The rule must not warn on components with a namespace
+    // because this pattern is handled by jsx-no-namespace
+    code: '<svg:path />'
+  }, {
+    code: '<ns:testComponent />'
+  }, {
+    code: '<Ns:testComponent />'
+  }, {
+    code: '<__ns:testComponent />'
+  }, {
+    code: '<ns:TestComponent />'
+  }, {
+    code: '<Ns:TestComponent />'
+  }, {
+    code: '<__ns:TestComponent />'
+  }, {
+    code: '<Modal:Header />'
+  }, {
+    code: '<layout:Header />'
+  }, {
+    code: '<IGNORED />',
+    options: [{ignore: ['IGNORED']}]
   }],
 
   invalid: [{
@@ -92,6 +112,21 @@ ruleTester.run('jsx-pascal-case', rule, {
     code: '<YMCA />',
     errors: [{message: 'Imported JSX component YMCA must be in PascalCase'}]
   }, {
+    code: '<$a />',
+    errors: [{message: 'Imported JSX component $a must be in PascalCase'}]
+  }, {
+    code: '<foo.bar />',
+    errors: [{message: 'Imported JSX component bar must be in PascalCase'}]
+  }, {
+    code: '<object.testComponent />',
+    errors: [{message: 'Imported JSX component testComponent must be in PascalCase'}]
+  }, {
+    code: '<Module.testComponent />',
+    errors: [{message: 'Imported JSX component testComponent must be in PascalCase'}]
+  }, {
+    code: '<__this.testComponent />',
+    errors: [{message: 'Imported JSX component testComponent must be in PascalCase'}]
+  }, {
     code: '<_TEST_COMPONENT />',
     options: [{allowAllCaps: true}],
     errors: [{message: 'Imported JSX component _TEST_COMPONENT must be in PascalCase or SCREAMING_SNAKE_CASE'}]
@@ -103,8 +138,5 @@ ruleTester.run('jsx-pascal-case', rule, {
     code: '<__ />',
     options: [{allowAllCaps: true}],
     errors: [{message: 'Imported JSX component __ must be in PascalCase or SCREAMING_SNAKE_CASE'}]
-  }, {
-    code: '<$a />',
-    errors: [{message: 'Imported JSX component $a must be in PascalCase'}]
   }]
 });
