@@ -34,27 +34,25 @@ ruleTester.run('no-named-import', rule, {
     },
     {
       code: "import React from 'react'; const [loading,setLoading] = React.useState(false);",
-      options: ['property', []]
+      options: ['property']
     },
     {
       code: "import React, { useState } from 'react'; const [loading,setLoading] = useState(false);",
-      options: ['import', []]
+      options: ['import']
     },
     {
-      code: "import { useEffect } from 'react';",
-      options: ['property', ['useState']]
+      code: "import { useEffect, Component } from 'react'; const [loading,setLoading] = React.useState(false);",
+      options: ['import', {
+        useEffect: 'import',
+        useState: 'property'
+      }]
     },
     {
-      code: "import { useEffect } from 'react';",
-      options: ['import', ['useEffect']]
-    },
-    {
-      code: 'const [loading,setLoading] = React.useState(false);',
-      options: ['property', ['useState']]
-    },
-    {
-      code: "import { useState } from 'react'; const [loading,setLoading] = useState(false);",
-      options: ['import', ['useState']]
+      code: "import { useEffect } from 'react'; const [loading,setLoading] = React.useState(false); const a = React.Component;",
+      options: ['property', {
+        useEffect: 'import',
+        useState: 'property'
+      }]
     }
   ],
   invalid: [
@@ -69,7 +67,7 @@ ruleTester.run('no-named-import', rule, {
     },
     {
       code: "import React, { useState } from 'react'",
-      options: ['property', []],
+      options: ['property'],
       errors: [
         {
           messageId: 'useProperty',
@@ -79,7 +77,19 @@ ruleTester.run('no-named-import', rule, {
     },
     {
       code: 'const [loading, setLoading] = React.useState(false);',
-      options: ['import', []],
+      options: ['import'],
+      errors: [
+        {
+          messageId: 'useImport',
+          data: {name: 'useState'}
+        }
+      ]
+    },
+    {
+      code: 'const [loading, setLoading] = React.useState(false);',
+      options: ['property', {
+        useState: 'import'
+      }],
       errors: [
         {
           messageId: 'useImport',
@@ -89,7 +99,7 @@ ruleTester.run('no-named-import', rule, {
     },
     {
       code: "import React, { useState } from 'react'",
-      options: ['property', ['useState']],
+      options: ['import', {useState: 'property'}],
       errors: [
         {
           messageId: 'useProperty',
@@ -98,32 +108,12 @@ ruleTester.run('no-named-import', rule, {
       ]
     },
     {
-      code: "import React, { useState } from 'react'",
-      options: ['import', ['useEffect']],
-      errors: [
-        {
-          messageId: 'useProperty',
-          data: {name: 'useState'}
-        }
-      ]
-    },
-    {
-      code: 'const [loading, setLoading] = React.useState(false);',
-      options: ['property', ['useEffect']],
+      code: 'const comp = React.Component;',
+      options: ['import', {useState: 'property'}],
       errors: [
         {
           messageId: 'useImport',
-          data: {name: 'useState'}
-        }
-      ]
-    },
-    {
-      code: 'const [loading, setLoading] = React.useState(false);',
-      options: ['import', ['useState']],
-      errors: [
-        {
-          messageId: 'useImport',
-          data: {name: 'useState'}
+          data: {name: 'Component'}
         }
       ]
     }
