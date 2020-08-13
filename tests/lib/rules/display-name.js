@@ -504,6 +504,20 @@ ruleTester.run('display-name', rule, {
       class Link extends Component<LinkProps> {}
     `,
     parser: parsers.BABEL_ESLINT
+  }, {
+    code: `
+    const x = {
+      title: "URL",
+      dataIndex: "url",
+      key: "url",
+      render: url => (
+        <a href={url} target="_blank" rel="noopener noreferrer">
+          <p>lol</p>
+        </a>
+      )
+    }
+    `,
+    parser: parsers.BABEL_ESLINT
   }],
 
   invalid: [{
