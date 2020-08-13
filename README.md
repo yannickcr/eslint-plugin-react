@@ -109,6 +109,7 @@ Enable the rules that you would like to use.
 * [react/forbid-foreign-prop-types](docs/rules/forbid-foreign-prop-types.md): Forbid using another component's propTypes
 * [react/forbid-prop-types](docs/rules/forbid-prop-types.md): Forbid certain propTypes
 * [react/function-component-definition](docs/rules/function-component-definition.md): Standardize the way function component get defined (fixable)
+* [react/iframe-missing-sandbox](docs/rules/iframe-missing-sandbox.md): Enforce sandbox attribute on iframe elements
 * [react/no-access-state-in-setstate](docs/rules/no-access-state-in-setstate.md): Reports when this.state is accessed within setState
 * [react/no-adjacent-inline-elements](docs/rules/no-adjacent-inline-elements.md): Prevent adjacent inline elements not separated by whitespace.
 * [react/no-array-index-key](docs/rules/no-array-index-key.md): Prevent usage of Array index in keys
