@@ -908,5 +908,21 @@ ruleTester.run('display-name', rule, {
     errors: [{
       message: 'Component definition is missing display name'
     }]
+  }, {
+    code: `
+      const x = {
+        title: "URL",
+        dataIndex: "url",
+        key: "url",
+        render: url => (
+          <a href={url} target="_blank" rel="noopener noreferrer">
+            <p>lol</p>
+          </a>
+        )
+      }
+    `,
+    options: [{ignoreTranspilerName: true}],
+    parser: parsers.BABEL_ESLINT,
+    errors: [{message: 'Component definition is missing display name'}]
   }]
 });
