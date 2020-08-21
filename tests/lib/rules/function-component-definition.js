@@ -146,15 +146,21 @@ ruleTester.run('function-component-definition', rule, {
     code: [
       'function Hello(props) {',
       '  return <div/>',
+      '}',
+      'function Hello2(props) {',
+      '  return <div/>',
       '}'
     ].join('\n'),
     output: [
       'var Hello = (props) => {',
       '  return <div/>',
+      '}',
+      'var Hello2 = (props) => {',
+      '  return <div/>',
       '}'
     ].join('\n'),
     options: [{namedComponents: 'arrow-function'}],
-    errors: [{message: 'Function component is not an arrow function'}],
+    errors: [{message: 'Function component is not an arrow function'}, {message: 'Function component is not an arrow function'}],
     parser: parsers.BABEL_ESLINT
   }, {
     code: [

@@ -33,7 +33,10 @@ ruleTester.run('no-named-import', rule, {
       code: "import React, { useState } from 'react';"
     },
     {
-      code: "import React from 'react'; const [loading,setLoading] = React.useState(false);",
+      code: [
+        'import React from \'react\';',
+        'const [loading,setLoading] = React.useState(false);'
+      ].join('\n'),
       options: ['property']
     },
     {
@@ -41,14 +44,21 @@ ruleTester.run('no-named-import', rule, {
       options: ['import']
     },
     {
-      code: "import { useEffect, Component } from 'react'; const [loading,setLoading] = React.useState(false);",
+      code: `
+        import React, { useEffect, Component } from 'react';
+        const [loading,setLoading] = React.useState(false);
+      `,
       options: ['import', {
         useEffect: 'import',
         useState: 'property'
       }]
     },
     {
-      code: "import { useEffect } from 'react'; const [loading,setLoading] = React.useState(false); const a = React.Component;",
+      code: `
+        import { useEffect } from 'react';
+        const [loading,setLoading] = React.useState(false);
+        const a = React.Component;
+      `,
       options: ['property', {
         useEffect: 'import',
         useState: 'property'
@@ -57,63 +67,105 @@ ruleTester.run('no-named-import', rule, {
   ],
   invalid: [
     {
-      code: 'const [loading, setLoading] = React.useState(false);',
+      code: `
+        import React from 'react';
+        const [value, setValue] = React.useState('');
+      `,
+      output: `
+        import React, { useState } from 'react';
+        const [value, setValue] = useState('');
+      `,
       errors: [
         {
-          messageId: 'useImport',
+          messageId: 'fixImportStatement'
+        },
+        {
+          messageId: 'useNamedImport',
           data: {name: 'useState'}
         }
       ]
     },
     {
-      code: "import React, { useState } from 'react'",
-      options: ['property'],
-      errors: [
-        {
-          messageId: 'useProperty',
-          data: {name: 'useState'}
-        }
-      ]
-    },
-    {
-      code: 'const [loading, setLoading] = React.useState(false);',
+      code: `
+        import React from 'react';
+        const [value, setValue] = React.useState('');
+      `,
+      output: `
+        import React, { useState } from 'react';
+        const [value, setValue] = useState('');
+      `,
       options: ['import'],
       errors: [
         {
-          messageId: 'useImport',
+          messageId: 'fixImportStatement'
+        },
+        {
+          messageId: 'useNamedImport',
           data: {name: 'useState'}
         }
       ]
     },
     {
-      code: 'const [loading, setLoading] = React.useState(false);',
-      options: ['property', {
-        useState: 'import'
-      }],
+      code: `
+        import React, { useState } from 'react';
+        const [value, setValue] = useState('');
+      `,
+      output: `
+        import React from 'react';
+        const [value, setValue] = React.useState('');
+      `,
+      options: ['property'],
       errors: [
         {
-          messageId: 'useImport',
+          messageId: 'fixImportStatement'
+        },
+        {
+          messageId: 'usePropertyAccessor',
           data: {name: 'useState'}
         }
       ]
     },
     {
-      code: "import React, { useState } from 'react'",
+      code: `
+        import React from 'react';
+        const [value, setValue] = React.useState('');
+        React.useEffect(() => {},[]);
+      `,
+      output: `
+        import React, { useEffect } from 'react';
+        const [value, setValue] = React.useState('');
+        useEffect(() => {},[]);
+      `,
+      options: ['property', {useEffect: 'import'}],
+      errors: [
+        {
+          messageId: 'fixImportStatement'
+        },
+        {
+          messageId: 'useNamedImport',
+          data: {name: 'useEffect'}
+        }
+      ]
+    },
+    {
+      code: `
+        import React from 'react';
+        const [value, setValue] = React.useState('');
+        React.useEffect(() => {},[]);
+      `,
+      output: `
+        import React, { useEffect } from 'react';
+        const [value, setValue] = React.useState('');
+        useEffect(() => {},[]);
+      `,
       options: ['import', {useState: 'property'}],
       errors: [
         {
-          messageId: 'useProperty',
-          data: {name: 'useState'}
-        }
-      ]
-    },
-    {
-      code: 'const comp = React.Component;',
-      options: ['import', {useState: 'property'}],
-      errors: [
+          messageId: 'fixImportStatement'
+        },
         {
-          messageId: 'useImport',
-          data: {name: 'Component'}
+          messageId: 'useNamedImport',
+          data: {name: 'useEffect'}
         }
       ]
     }
