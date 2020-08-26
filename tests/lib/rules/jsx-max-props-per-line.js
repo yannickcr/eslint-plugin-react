@@ -64,6 +64,7 @@ ruleTester.run('jsx-max-props-per-line', rule, {
   }, {
     code: [
       '<App',
+      '  boom',
       '  foo',
       '  bar',
       '/>'
@@ -276,5 +277,52 @@ ruleTester.run('jsx-max-props-per-line', rule, {
     ].join('\n'),
     options: [getConfigs(undefined, 2)],
     errors: [{message: 'Prop `box` must be placed on a new line'}]
+  }, {
+    code: [
+      '<App boom',
+      '  foo',
+      '  bar',
+      '/>'
+    ].join('\n'),
+    output: [
+      '<App',
+      'boom',
+      '  foo',
+      '  bar',
+      '/>'
+    ].join('\n'),
+    errors: [{message: 'Prop `boom` must be placed on a new line'}]
+  }, {
+    code: [
+      '<App boom foo',
+      '  bar',
+      '/>'
+    ].join('\n'),
+    output: [
+      '<App',
+      'boom foo',
+      '  bar',
+      '/>'
+    ].join('\n'),
+    options: [getConfigs(undefined, 2)],
+    errors: [{message: 'Prop `boom` must be placed on a new line'}]
+  }, {
+    code: [
+      '<App boom foo',
+      '  bar',
+      '/>'
+    ].join('\n'),
+    output: [
+      '<App',
+      'boom foo',
+      '  bar',
+      '/>'
+    ].join('\n'),
+    options: [getConfigs(undefined, 1)],
+    errors: [
+      {message: 'Prop `boom` must be placed on a new line'},
+      {message: 'Prop `foo` must be placed on a new line'}
+    ]
+
   }]
 });
