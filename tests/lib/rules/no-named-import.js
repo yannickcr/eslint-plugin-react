@@ -10,6 +10,7 @@
 
 const RuleTester = require('eslint').RuleTester;
 const rule = require('../../../lib/rules/no-named-import');
+const parsers = require('../../helpers/parsers');
 
 const parserOptions = {
   ecmaVersion: 2018,
@@ -169,5 +170,202 @@ ruleTester.run('no-named-import', rule, {
         }
       ]
     }
-  ]
+
+  ].concat(parsers.TS([
+    {
+      code: `
+        import React from 'react';
+        const Comp: React.AType = () => {}
+        const a = (p: React.BType) => {}
+
+        type A = {
+          b: React.CType;
+        }
+
+        type B<C> = {
+          d: C
+        }
+
+        type A = B<React.DType>;
+      `,
+      output: `
+        import React, { AType, BType, CType, DType } from 'react';
+        const Comp: AType = () => {}
+        const a = (p: BType) => {}
+
+        type A = {
+          b: CType;
+        }
+
+        type B<C> = {
+          d: C
+        }
+
+        type A = B<DType>;
+      `,
+      options: ['import'],
+      parser: parsers['@TYPESCRIPT_ESLINT'],
+      errors: [
+        {
+          messageId: 'fixImportStatement'
+        },
+        {
+          messageId: 'useNamedImport',
+          data: {name: 'AType'}
+        },
+        {
+          messageId: 'useNamedImport',
+          data: {name: 'BType'}
+        },
+        {
+          messageId: 'useNamedImport',
+          data: {name: 'CType'}
+        },
+        {
+          messageId: 'useNamedImport',
+          data: {name: 'DType'}
+        }
+      ]
+    },
+    {
+      code: `
+        import React, { AType, BType, CType, DType } from 'react';
+        const Comp: AType = () => {}
+        const a = (p: BType) => {}
+
+        type A = {
+          b: CType;
+        }
+
+        type B<C> = {
+          d: C
+        }
+
+        type A = B<DType>;
+      `,
+      output: `
+        import React from 'react';
+        const Comp: React.AType = () => {}
+        const a = (p: React.BType) => {}
+
+        type A = {
+          b: React.CType;
+        }
+
+        type B<C> = {
+          d: C
+        }
+
+        type A = B<React.DType>;
+      `,
+      options: ['property'],
+      parser: parsers['@TYPESCRIPT_ESLINT'],
+      errors: [
+        {
+          messageId: 'fixImportStatement'
+        },
+        {
+          messageId: 'usePropertyAccessor',
+          data: {name: 'AType'}
+        },
+        {
+          messageId: 'usePropertyAccessor',
+          data: {name: 'BType'}
+        },
+        {
+          messageId: 'usePropertyAccessor',
+          data: {name: 'CType'}
+        },
+        {
+          messageId: 'usePropertyAccessor',
+          data: {name: 'DType'}
+        }
+      ]
+    },
+    {
+      code: `
+        import React, { AType, BType } from 'react';
+        type Props = {
+          a: AType,
+          b: BType
+        }
+      `,
+      output: `
+        import React, { BType } from 'react';
+        type Props = {
+          a: React.AType,
+          b: BType
+        }
+      `,
+      options: ['property', {BType: 'import'}],
+      parser: parsers['@TYPESCRIPT_ESLINT'],
+      errors: [
+        {
+          messageId: 'fixImportStatement'
+        },
+        {
+          messageId: 'usePropertyAccessor',
+          data: {name: 'AType'}
+        }
+      ]
+    },
+    {
+      code: `
+        import React from 'react';
+        type Props = {
+          a: React.AType,
+          b: React.BType
+        }
+      `,
+      output: `
+        import React, { BType } from 'react';
+        type Props = {
+          a: React.AType,
+          b: BType
+        }
+      `,
+      options: ['import', {AType: 'property'}],
+      parser: parsers['@TYPESCRIPT_ESLINT'],
+      errors: [
+        {
+          messageId: 'fixImportStatement'
+        },
+        {
+          messageId: 'useNamedImport',
+          data: {name: 'BType'}
+        }
+      ]
+    },
+    {
+      code: `
+        import React, { AType } from 'react';
+        type Props = {
+          a: AType,
+          b: React.BType
+        }
+      `,
+      output: `
+        import React, { BType } from 'react';
+        type Props = {
+          a: React.AType,
+          b: BType
+        }
+      `,
+      options: ['property', {BType: 'import'}],
+      parser: parsers['@TYPESCRIPT_ESLINT'],
+      errors: [
+        {
+          messageId: 'fixImportStatement'
+        },
+        {
+          messageId: 'usePropertyAccessor',
+          data: {name: 'AType'}
+        },
+        {
+          messageId: 'useNamedImport',
+          data: {name: 'BType'}
+        }
+      ]
+    }
+  ]))
 });
