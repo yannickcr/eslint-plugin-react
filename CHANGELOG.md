@@ -7,6 +7,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ### Added
 * [`jsx-no-useless-fragments`]: add option to allow single expressions in fragments ([#3006][] @mattdarveniza)
+* [`no-invalid-html-attribute`]: add rule ([#2863][] @Nokel81)
 
 ### Fixed
 * component detection: use `estraverse` to improve component detection ([#2992][] @Wesitos)
@@ -19,6 +20,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 [#3001]: https://github.com/yannickcr/eslint-plugin-react/pull/3001
 [#2998]: https://github.com/yannickcr/eslint-plugin-react/pull/2998
 [#2992]: https://github.com/yannickcr/eslint-plugin-react/pull/2992
+[#2863]: https://github.com/yannickcr/eslint-plugin-react/pull/2863
 
 ## [7.24.0] - 2021.05.27
 
@@ -3387,3 +3389,4 @@ If you're still not using React 15 you can keep the old behavior by setting the 
 [`jsx-newline`]: docs/rules/jsx-newline.md
 [`jsx-no-constructed-context-values`]: docs/rules/jsx-no-constructed-context-values.md
 [`no-unstable-nested-components`]: docs/rules/no-unstable-nested-components.md
+[`no-invalid-html-attribute`]: docs/rules/no-invalid-html-attribute.md
