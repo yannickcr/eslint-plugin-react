@@ -66,15 +66,19 @@ The following patterns are **not** considered warnings:
 import React, { useState } from 'react';
 
 // ['property', {}]
-import React from 'react'; const [loading,setLoading] = React.useState(false);
+import React from 'react';
+
+const [loading, setLoading] = React.useState(false);
 
 // ['property', {'useState': 'import' }]
 import { useState } from 'react';
 
 // ['import', {}]
-import React, { useState } from 'react'; const [loading,setLoading] = useState(false);
+import React, { useState } from 'react';
+
+const [loading, setLoading] = useState(false);
 
 // ['import', {'useState': 'property' }]
-const [loading,setLoading] = React.useState(false);
+const [loading, setLoading] = React.useState(false);
 
 ```

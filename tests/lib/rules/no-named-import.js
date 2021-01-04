@@ -34,36 +34,45 @@ ruleTester.run('no-named-import', rule, {
       code: "import React, { useState } from 'react';"
     },
     {
-      code: [
-        'import React from \'react\';',
-        'const [loading,setLoading] = React.useState(false);'
-      ].join('\n'),
+      code: `
+        import React from 'react';
+        const [loading, setLoading] = React.useState(false);
+      `,
       options: ['property']
     },
     {
-      code: "import React, { useState } from 'react'; const [loading,setLoading] = useState(false);",
+      code: `
+        import React, { useState } from 'react';
+        const [loading, setLoading] = useState(false);
+      `,
       options: ['import']
     },
     {
       code: `
         import React, { useEffect, Component } from 'react';
-        const [loading,setLoading] = React.useState(false);
+        const [loading, setLoading] = React.useState(false);
       `,
-      options: ['import', {
-        useEffect: 'import',
-        useState: 'property'
-      }]
+      options: [
+        'import',
+        {
+          useEffect: 'import',
+          useState: 'property'
+        }
+      ]
     },
     {
       code: `
         import { useEffect } from 'react';
-        const [loading,setLoading] = React.useState(false);
+        const [loading, setLoading] = React.useState(false);
         const a = React.Component;
       `,
-      options: ['property', {
-        useEffect: 'import',
-        useState: 'property'
-      }]
+      options: [
+        'property',
+        {
+          useEffect: 'import',
+          useState: 'property'
+        }
+      ]
     }
   ],
   invalid: [
@@ -130,12 +139,12 @@ ruleTester.run('no-named-import', rule, {
       code: `
         import React from 'react';
         const [value, setValue] = React.useState('');
-        React.useEffect(() => {},[]);
+        React.useEffect(() => {}, []);
       `,
       output: `
         import React, { useEffect } from 'react';
         const [value, setValue] = React.useState('');
-        useEffect(() => {},[]);
+        useEffect(() => {}, []);
       `,
       options: ['property', {useEffect: 'import'}],
       errors: [
@@ -152,12 +161,12 @@ ruleTester.run('no-named-import', rule, {
       code: `
         import React from 'react';
         const [value, setValue] = React.useState('');
-        React.useEffect(() => {},[]);
+        React.useEffect(() => {}, []);
       `,
       output: `
         import React, { useEffect } from 'react';
         const [value, setValue] = React.useState('');
-        useEffect(() => {},[]);
+        useEffect(() => {}, []);
       `,
       options: ['import', {useState: 'property'}],
       errors: [
