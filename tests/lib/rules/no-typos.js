@@ -34,6 +34,22 @@ const ruleTester = new RuleTester();
 ruleTester.run('no-typos', rule, {
   valid: [{
     code: `
+        import createReactClass from 'create-react-class'
+        function hello (extra = {}) {
+          return createReactClass({
+            noteType: 'hello',
+            renderItem () {
+              return null
+            },
+            ...extra
+          })
+        }
+    `,
+    parser: parsers.TYPESCRIPT_ESLINT,
+    parserOptions
+  },
+  {
+    code: `
       class First {
         static PropTypes = {key: "myValue"};
         static ContextTypes = {key: "myValue"};
@@ -616,6 +632,19 @@ ruleTester.run('no-typos', rule, {
         title: string.isRequired,
         body: element.isRequired
       };
+    `,
+    parserOptions
+  }, {
+    code: `
+      import React from 'react';
+
+      const A = { B: 'C' };
+
+      export default class MyComponent extends React.Component {
+        [A.B] () {
+          return null
+        }
+      }
     `,
     parserOptions
   }],
@@ -1293,7 +1322,9 @@ ruleTester.run('no-typos', rule, {
    `,
     parser: parsers.BABEL_ESLINT,
     parserOptions,
-    errors: []
+    errors: [{
+      message: '`\'react\'` imported without a local `React` binding.'
+    }]
   }, {
     code: `
       import { PropTypes } from 'react';

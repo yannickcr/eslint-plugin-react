@@ -9,7 +9,7 @@ regardless of how you define them.
 
 ## Rule Details
 
-The following patterns are considered warnings:
+Examples of **incorrect** code for this rule:
 
 ```jsx
 function Hello({ name }) {
@@ -42,7 +42,7 @@ Hello.propTypes = {
 In TypeScript:
 
 ```tsx
-interface Props = {
+interface Props {
   age: number
 }
 function Hello({ name }: Props) {
@@ -51,7 +51,7 @@ function Hello({ name }: Props) {
 }
 ```
 
-Examples of correct usage without warnings:
+Examples of **correct** code for this rule:
 
 ```jsx
 function Hello({ name }) {
@@ -91,6 +91,20 @@ class HelloEs6WithPublicClassField extends React.Component {
 }
 ```
 
+In TypeScript:
+
+```tsx
+// destructured default prop values
+
+function Foo({ bar = "" }): JSX.Element {
+  return <div>{bar}</div>;
+}
+
+function Foo({ bar = "" as string }): JSX.Element {
+  return <div>{bar}</div>;
+}
+```
+
 In Flow:
 
 ```tsx
@@ -104,7 +118,7 @@ class Hello extends React.Component<Props> {
 }
 ```
 
-The following patterns are **not** considered warnings:
+Examples of **correct** code for this rule:
 
 ```jsx
 function Hello() {

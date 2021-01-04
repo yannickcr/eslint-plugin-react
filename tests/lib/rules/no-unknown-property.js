@@ -37,6 +37,7 @@ ruleTester.run('no-unknown-property', rule, {
     {code: '<App xlink:href="bar" />;'},
     {code: '<App clip-path="bar" />;'},
     {code: '<div className="bar"></div>;'},
+    {code: '<div onMouseDown={this._onMouseDown}></div>;'},
     {code: '<div data-foo="bar"></div>;'},
     {code: '<div class="foo" is="my-elem"></div>;'},
     {code: '<div {...this.props} class="foo" is="my-elem"></div>;'},
@@ -45,7 +46,8 @@ ruleTester.run('no-unknown-property', rule, {
       options: [{ignore: ['class']}]
     },
     {code: '<script crossOrigin />'},
-    {code: '<audio crossOrigin />'}
+    {code: '<audio crossOrigin />'},
+    {code: '<div hasOwnProperty="should not be allowed tag" />'}
   ],
   invalid: [{
     code: '<div class="bar"></div>;',
@@ -75,6 +77,10 @@ ruleTester.run('no-unknown-property', rule, {
     code: '<div onmousedown="bar"></div>;',
     output: '<div onMouseDown="bar"></div>;',
     errors: [{message: 'Unknown property \'onmousedown\' found, use \'onMouseDown\' instead'}]
+  }, {
+    code: '<div onMousedown="bar"></div>;',
+    output: '<div onMouseDown="bar"></div>;',
+    errors: [{message: 'Unknown property \'onMousedown\' found, use \'onMouseDown\' instead'}]
   }, {
     code: '<use xlink:href="bar" />;',
     output: '<use xlinkHref="bar" />;',

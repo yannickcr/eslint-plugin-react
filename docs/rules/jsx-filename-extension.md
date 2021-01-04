@@ -2,7 +2,7 @@
 
 ## Rule Details
 
-The following pattern is considered a warning:
+Examples of **incorrect** code for this rule:
 
 ```jsx
 // filename: MyComponent.js
@@ -11,7 +11,7 @@ function MyComponent() {
 }
 ```
 
-The following pattern is **not** considered a warning:
+Examples of **correct** code for this rule:
 
 ```jsx
 // filename: MyComponent.jsx
@@ -20,7 +20,21 @@ function MyComponent() {
 }
 ```
 
+Beware this rule **only** reports JSX syntax, **not** other non-standard syntax such as experimental features or type annotations.
+
 ## Rule Options
+
+### `allow` (default: `"always"`)
+
+When to allow a JSX filename extension. By default all files may have a JSX extension. Set this to `as-needed` to only allow JSX file extensions in files that contain JSX syntax.
+
+```js
+"rules": {
+  "react/jsx-filename-extension": [1, { "allow": "as-needed" }]
+}
+```
+
+### `extensions` (default: `[".jsx"]`)
 
 The set of allowed extensions is configurable. By default '.jsx' is allowed. If you wanted to allow both '.jsx' and '.js', the configuration would be:
 

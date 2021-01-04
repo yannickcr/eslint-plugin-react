@@ -574,18 +574,14 @@ ruleTester.run('forbid-prop-types', rule, {
     ].join('\n')
   }, {
     code: [
-      'var First = createReactClass({',
-      '  propTypes: {',
-      '    s: PropTypes.shape({',
-      '      o: PropTypes.object',
-      '    })',
-      '  },',
-      '  render: function() {',
-      '    return <div />;',
-      '  }',
-      '});'
-    ].join('\n'),
-    errors: 0 // TODO: fix #1673 and move this to "invalid"
+      'import PropTypes from "prop-types";',
+      'const Foo = {',
+      '  foo: PropTypes.string,',
+      '};',
+      'const Bar = {',
+      '  bar: PropTypes.shape(Foo),',
+      '};'
+    ].join('\n')
   }],
 
   invalid: [{
@@ -1459,6 +1455,87 @@ ruleTester.run('forbid-prop-types', rule, {
       forbid: ['instanceOf'],
       checkChildContextTypes: true
     }],
+    errors: 1
+  }, {
+    code: [
+      'import { object, string } from "prop-types";',
+      'function C({ a, b }) { return [a, b]; }',
+      'C.propTypes = {',
+      '  a: object,',
+      '  b: string',
+      '};'
+    ].join('\n'),
+    options: [{
+      forbid: ['object']
+    }],
+    errors: 1
+  }, {
+    code: [
+      'import { objectOf, any } from "prop-types";',
+      'function C({ a }) { return a; }',
+      'C.propTypes = {',
+      '  a: objectOf(any)',
+      '};'
+    ].join('\n'),
+    options: [{
+      forbid: ['any']
+    }],
+    errors: 1
+  }, {
+    code: [
+      'import { objectOf, any } from "prop-types";',
+      'function C({ a }) { return a; }',
+      'C.propTypes = {',
+      '  a: objectOf(any)',
+      '};'
+    ].join('\n'),
+    options: [{
+      forbid: ['objectOf']
+    }],
+    errors: 1
+  },
+  {
+    code: [
+      'import { shape, any } from "prop-types";',
+      'function C({ a }) { return a; }',
+      'C.propTypes = {',
+      '  a: shape({',
+      '    b: any',
+      '  })',
+      '};'
+    ].join('\n'),
+    options: [{
+      forbid: ['any']
+    }],
+    errors: 1
+  },
+  {
+    code: [
+      'import { any } from "prop-types";',
+      'function C({ a }) { return a; }',
+      'C.propTypes = {',
+      '  a: PropTypes.shape({',
+      '    b: any',
+      '  })',
+      '};'
+    ].join('\n'),
+    options: [{
+      forbid: ['any']
+    }],
+    errors: 1
+  }, {
+    code: [
+      'var First = createReactClass({',
+      '  propTypes: {',
+      '    s: PropTypes.shape({',
+      '      o: PropTypes.object',
+      '    })',
+      '  },',
+      '  render: function() {',
+      '    return <div />;',
+      '  }',
+      '});'
+    ].join('\n'),
     errors: 1
   }]
 });

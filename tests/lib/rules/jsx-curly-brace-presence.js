@@ -245,14 +245,6 @@ ruleTester.run('jsx-curly-brace-presence', rule, {
       options: ['never']
     },
     {
-      code: '<MyComponent prop={"{ style: true }"}>bar</MyComponent>',
-      options: ['never']
-    },
-    {
-      code: '<MyComponent prop={"< style: true >"}>foo</MyComponent>',
-      options: ['never']
-    },
-    {
       code: '<MyComponent prop={"Hello \\u1026 world"}>bar</MyComponent>',
       options: ['never']
     },
@@ -400,6 +392,31 @@ ruleTester.run('jsx-curly-brace-presence', rule, {
         </App>
       `,
       options: [{children: 'always'}]
+    },
+    {
+      code: `
+        const Component2 = () => {
+          return <span>/*</span>;
+        };
+      `
+    },
+    {
+      code: `
+        const Component2 = () => {
+          return <span>/*</span>;
+        };
+      `,
+      options: [{props: 'never', children: 'never'}]
+    },
+    {
+      code: `
+        import React from "react";
+
+        const Component = () => {
+          return <span>{"/*"}</span>;
+        };
+      `,
+      options: [{props: 'never', children: 'never'}]
     }
   ],
 
@@ -785,6 +802,40 @@ ruleTester.run('jsx-curly-brace-presence', rule, {
         {message: missingCurlyMessage}
       ],
       options: [{children: 'always'}]
+    },
+    {
+      code: `
+        <Box mb={'1rem'} />
+      `,
+      output: `
+        <Box mb="1rem" />
+      `,
+      errors: [
+        {message: unnecessaryCurlyMessage}
+      ],
+      options: [{props: 'never'}]
+    },
+    {
+      code: `
+        <Box mb={'1rem {}'} />
+      `,
+      output: `
+        <Box mb="1rem {}" />
+      `,
+      errors: [{message: unnecessaryCurlyMessage}],
+      options: ['never']
+    },
+    {
+      code: '<MyComponent prop={"{ style: true }"}>bar</MyComponent>',
+      output: '<MyComponent prop="{ style: true }">bar</MyComponent>',
+      errors: [{message: unnecessaryCurlyMessage}],
+      options: ['never']
+    },
+    {
+      code: '<MyComponent prop={"< style: true >"}>foo</MyComponent>',
+      output: '<MyComponent prop="< style: true >">foo</MyComponent>',
+      errors: [{message: unnecessaryCurlyMessage}],
+      options: ['never']
     }
   ]
 });

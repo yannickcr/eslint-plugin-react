@@ -34,8 +34,7 @@ const settings = {
 
 const ruleTester = new RuleTester({parserOptions});
 ruleTester.run('prop-types', rule, {
-
-  valid: [
+  valid: [].concat(
     {
       code: [
         'var Hello = createReactClass({',
@@ -2489,10 +2488,660 @@ ruleTester.run('prop-types', rule, {
           ordering: PropTypes.array
         };
       `
-    }
-  ],
+    },
+    // shouldn't trigger this rule since functions stating with a lowercase
+    // letter are not considered components
+    `
+      function noAComponent(props) {
+        return <div>{props.text}</div>
+      }
+    `,
+    {
+      code: `
+      export default function() {}
+      `
+    },
+    {
+      code: `
+        function Component(props) {
+          return 0,
+          <div>
+            Hello, { props.name }!
+          </div>
+        }
 
-  invalid: [
+        Component.propTypes = {
+          name: PropTypes.string.isRequired
+        }
+      `
+    },
+    parsers.TS([
+      {
+        code: `
+          interface Props {
+            'aria-label': string // 'undefined' PropType is defined but prop is never used eslint(react/no-unused-prop-types)
+            // 'undefined' PropType is defined but prop is never used eslint(react-redux/no-unused-prop-types)
+          }
+
+          export default function Component({
+            'aria-label': ariaLabel, // 'aria-label' is missing in props validation eslint(react/prop-types)
+          }: Props): JSX.Element {
+            return <div aria-label={ariaLabel} />
+          }
+        `,
+        parser: parsers.TYPESCRIPT_ESLINT
+      },
+      {
+        code: `
+          interface Props {
+            value?: string;
+          }
+
+          // without the | null, all ok, with it, it is broken
+          function Test ({ value }: Props): React.ReactElement<Props> | null {
+            if (!value) {
+              return null;
+            }
+
+            return <div>{value}</div>;
+          }
+        `,
+        parser: parsers.TYPESCRIPT_ESLINT
+      },
+      {
+        code: `
+          interface Props {
+            value?: string;
+          }
+
+          // without the | null, all ok, with it, it is broken
+          function Test ({ value }: Props): React.ReactElement<Props> | null {
+            if (!value) {
+              return <div>{value}</div>;;
+            }
+
+            return null;
+          }
+        `,
+        parser: parsers.TYPESCRIPT_ESLINT
+      },
+      {
+        code: `
+          interface Props {
+            value?: string;
+          }
+          const Hello = (props: Props) => {
+            if (props.value) {
+              return <div></div>;
+            }
+            return null;
+          }
+        `,
+        parser: parsers.TYPESCRIPT_ESLINT
+      },
+      {
+        code: `
+          interface Props {
+            'aria-label': string // 'undefined' PropType is defined but prop is never used eslint(react/no-unused-prop-types)
+            // 'undefined' PropType is defined but prop is never used eslint(react-redux/no-unused-prop-types)
+          }
+
+          export default function Component({
+            'aria-label': ariaLabel, // 'aria-label' is missing in props validation eslint(react/prop-types)
+          }: Props): JSX.Element {
+            return <div aria-label={ariaLabel} />
+          }
+        `,
+        parser: parsers['@TYPESCRIPT_ESLINT']
+      },
+      // shouldn't trigger this rule for 'render' since functions stating with a lowercase
+      // letter are not considered components
+      {
+        code: `
+        const MyComponent = (props) => {
+          const render = () => {
+            return <test>{props.hello}</test>;
+          }
+          return render();
+        };
+        MyComponent.propTypes = {
+          hello: PropTypes.string.isRequired,
+        };
+        `,
+        parser: parsers['@TYPESCRIPT_ESLINT']
+      },
+      {
+        code: `
+          interface Props {
+            value?: string;
+          }
+
+          // without the | null, all ok, with it, it is broken
+          function Test ({ value }: Props): React.ReactElement<Props> | null {
+            if (!value) {
+              return null;
+            }
+            return <div>{value}</div>;
+          }
+        `,
+        parser: parsers['@TYPESCRIPT_ESLINT']
+      },
+      {
+        code: `
+          interface Props {
+            value?: string;
+          }
+
+          // without the | null, all ok, with it, it is broken
+          function Test ({ value }: Props): React.ReactElement<Props> | null {
+            if (!value) {
+              return <div>{value}</div>;;
+            }
+
+            return null;
+          }
+        `,
+        parser: parsers['@TYPESCRIPT_ESLINT']
+      },
+      {
+        code: `
+          interface Props {
+            value?: string;
+          }
+          const Hello = (props: Props) => {
+            if (props.value) {
+              return <div></div>;
+            }
+            return null;
+          }
+        `,
+        parser: parsers.TYPESCRIPT_ESLINT
+      },
+      {
+        code: `
+          import * as React from 'react';
+
+          interface Props {
+            text: string;
+          }
+
+          export const Test: React.FC<Props> = (props: Props) => {
+            const createElement = (text: string) => {
+              return (
+                <div>
+                  {text}
+                </div>
+              );
+            };
+
+            return <>{createElement(props.text)}</>;
+          };
+        `,
+        parser: parsers.TYPESCRIPT_ESLINT
+      },
+      {
+        code: `
+          interface Props {
+            value?: string;
+          }
+          const Hello = (props: Props) => {
+            if (props.value) {
+              return <div></div>;
+            }
+            return null;
+          }
+        `,
+        parser: parsers['@TYPESCRIPT_ESLINT']
+      },
+      {
+        code: `
+          const mapStateToProps = state => ({
+            books: state.books
+          });
+
+          interface InfoLibTableProps extends ReturnType<typeof mapStateToProps> {
+          }
+
+          const App = (props: InfoLibTableProps) => {
+            props.books();
+            return <div></div>;
+          }
+        `,
+        parser: parsers['@TYPESCRIPT_ESLINT']
+      },
+      {
+        code: `
+          const mapStateToProps = state => ({
+            books: state.books
+          });
+
+          interface BooksTable extends ReturnType<typeof mapStateToProps> {
+            username: string;
+          }
+
+          const App = (props: BooksTable) => {
+            props.books();
+            return <div><span>{props.username}</span></div>;
+          }
+        `,
+        parser: parsers['@TYPESCRIPT_ESLINT']
+      },
+      {
+        code: `
+          interface infoLibTable {
+            removeCollection(): Array<string>;
+          }
+
+          interface InfoLibTableProps extends ReturnType<(dispatch: storeDispatch) => infoLibTable> {
+          }
+
+          const App = (props: InfoLibTableProps) => {
+            props.removeCollection();
+            return <div></div>;
+          }
+        `,
+        parser: parsers['@TYPESCRIPT_ESLINT']
+      },
+      {
+        code: `
+          interface addTable {
+            createCollection: () => Array<string>
+          }
+
+          type infoLibTable = addTable & {
+            removeCollection: () => Array<string>
+          }
+
+          interface InfoLibTableProps extends ReturnType<(dispatch: storeDispatch) => infoLibTable> {
+          }
+
+          const App = (props: InfoLibTableProps) => {
+            props.createCollection();
+            props.removeCollection();
+            return <div></div>;
+          }
+        `,
+        parser: parsers['@TYPESCRIPT_ESLINT']
+      },
+      {
+        code: `
+          interface InfoLibTableProps extends ReturnType<(dispatch: storeDispatch) => {
+            removeCollection:  () => Array<string>,
+          }> {
+          }
+
+          const App = (props: InfoLibTableProps) => {
+            props.removeCollection();
+            return <div></div>;
+          }
+        `,
+        parser: parsers['@TYPESCRIPT_ESLINT']
+      },
+      {
+        code: `
+          interface addTable {
+            createCollection: () => Array<string>;
+          }
+
+          type infoLibTable = {
+            removeCollection: () => Array<string>,
+          };
+
+          interface InfoLibTableProps extends  ReturnType<
+          (dispatch: storeDispatch) => infoLibTable & addTable,
+          >{}
+
+          const App = (props: InfoLibTableProps) => {
+            props.createCollection();
+            props.removeCollection();
+            return <div></div>;
+          };
+        `,
+        parser: parsers['@TYPESCRIPT_ESLINT']
+      },
+      {
+        code: `
+          interface addTable {
+            createCollection: () => Array<string>;
+          }
+
+          type infoLibTable = ReturnType<(dispatch: storeDispatch) => infoLibTable & addTable> & {
+            removeCollection: () => Array<string>,
+          };
+
+          interface InfoLibTableProps {}
+
+          const App = (props: infoLibTable) => {
+            props.createCollection();
+            props.removeCollection();
+            return <div></div>;
+          };
+        `,
+        parser: parsers['@TYPESCRIPT_ESLINT']
+      },
+      {
+        code: `
+          interface InfoLibTableProps extends ReturnType<(dispatch: storeDispatch) => ({
+            removeCollection:  () => Array<string>,
+          })> {
+          }
+
+          const App = (props: InfoLibTableProps) => {
+            props.removeCollection();
+            return <div></div>;
+          }
+        `,
+        parser: parsers['@TYPESCRIPT_ESLINT']
+      },
+      {
+        code: `
+          interface ThingProps extends React.HTMLAttributes<HTMLDivElement> {
+            thing?: number
+          }
+
+          export const Thing = ({ thing = 1, style, ...props }: ThingProps) => {
+            return <div />;
+          }
+        `,
+        parser: parsers['@TYPESCRIPT_ESLINT']
+      },
+      {
+        code: `
+          interface ThingProps {
+            thing?: number
+          }
+
+          export const Thing = ({ thing = 1, style, ...props }: ThingProps & React.HTMLAttributes<HTMLDivElement>) => {
+            return <div />;
+          }
+        `,
+        parser: parsers['@TYPESCRIPT_ESLINT']
+      },
+      {
+        code: `
+          type User = {
+            user: string;
+          }
+
+          type Props = User & UserProps;
+
+          export default (props: Props) => {
+            const { userId, user } = props;
+
+            if (userId === 0) {
+              return <p>userId is 0</p>;
+            }
+
+            return null;
+          };
+        `,
+        parser: parsers['@TYPESCRIPT_ESLINT']
+      },
+      {
+        code: `
+          type User = {
+          }
+
+          type Props = User & UserProps;
+
+          export default (props: Props) => {
+            const { user } = props;
+
+            if (user === 0) {
+              return <p>user is 0</p>;
+            }
+
+            return null;
+          };
+        `,
+        parser: parsers['@TYPESCRIPT_ESLINT']
+      },
+      {
+        code: `
+          interface GenericProps {
+            onClose: () => void
+          }
+
+          interface ImplementationProps extends GenericProps {
+            onClick: () => void
+          }
+
+          export const Implementation: FC<ImplementationProps> = (
+            {
+              onClick,
+              onClose,
+            }: ImplementationProps
+          ) => (<div />)
+        `,
+        parser: parsers['@TYPESCRIPT_ESLINT']
+      },
+      {
+        code: `
+          interface Props extends V2SocialLoginProps {
+            autoLoad: boolean;
+          }
+
+          export const DKFacebookButton = ({
+            autoLoad,
+            authAction,
+            errorHandler,
+            redirectUrl,
+            isSignup,
+          }: Props): JSX.Element | null => {
+            if (!APP_ID) {
+              rollbar.error('Missing Facebook OAuth App Id');
+              return null;
+            }
+
+            const fbButtonText = isSignup ? 'Sign up with Facebook' : 'Log in with Facebook';
+
+            const responseCallback = async ({
+              accessToken,
+              email = '',
+              name = '',
+            }: ReactFacebookLoginInfo) => {
+              const [firstName, lastName] = name.split(' ');
+
+              const requestData: DK.SocialLogin = {
+                accessToken,
+                email,
+                firstName,
+                lastName,
+                intercomUserId: intercomService.getVisitorId(),
+              };
+
+              try {
+                await authAction(requestData, redirectUrl);
+              } catch (err) {
+                errorHandler(err.message);
+              }
+            };
+
+            const FacebookIcon = () => (
+              <img
+                style={{ marginRight: '8px' }}
+                src={facebookIcon}
+                alt='Facebook Login'
+              />
+            );
+
+            return (
+              <FacebookLogin
+                cssClass='ant-btn dk-button dk-facebook-button dk-button--secondary ant-btn-primary ant-btn-lg'
+                autoLoad={autoLoad}
+                textButton={fbButtonText}
+                size='small'
+                icon={<FacebookIcon />}
+                appId={APP_ID}
+                fields='name,email'
+                callback={responseCallback}
+                data-testId='dk-facebook-button'
+              />
+            );
+          };
+        `,
+        parser: parsers['@TYPESCRIPT_ESLINT']
+      },
+      {
+        code: `
+          function Foo({ bar = "" }: { bar: string }): JSX.Element {
+            return <div>{bar}</div>;
+          }
+        `,
+        parser: parsers['@TYPESCRIPT_ESLINT']
+      },
+      // Issue: #2795
+      {
+        code: `
+        type ConnectedProps = DispatchProps &
+          StateProps
+
+        const Component = ({ prop1, prop2, prop3 }: ConnectedProps) => {
+          // Do stuff
+          return (
+            <StyledComponent>...</StyledComponent>
+          )
+        }
+
+        const mapDispatchToProps = (dispatch: ThunkDispatch<State, null, Action>) => ({
+          ...bindActionCreators<{prop1: ()=>void,prop2: ()=>string}>(
+            { prop1: importedAction, prop2: anotherImportedAction },
+            dispatch,
+          ),
+        })
+
+        const mapStateToProps = (state: State) => ({
+          prop3: Selector.value(state),
+        })
+
+        type StateProps = ReturnType<typeof mapStateToProps>
+        type DispatchProps = ReturnType<typeof mapDispatchToProps>`,
+        parser: parsers['@TYPESCRIPT_ESLINT']
+      },
+      // Issue: #2795
+      {
+        code: `
+        type ConnectedProps = DispatchProps &
+          StateProps
+
+        const Component = ({ prop1, prop2, prop3 }: ConnectedProps) => {
+          // Do stuff
+          return (
+            <StyledComponent>...</StyledComponent>
+          )
+        }
+
+        const mapDispatchToProps = (dispatch: ThunkDispatch<State, null, Action>) => ({
+          ...bindActionCreators<ActionCreatorsMapObject<Types.RootAction>>(
+            { prop1: importedAction, prop2: anotherImportedAction },
+            dispatch,
+          ),
+        })
+
+        const mapStateToProps = (state: State) => ({
+          prop3: Selector.value(state),
+        })
+
+        type StateProps = ReturnType<typeof mapStateToProps>
+        type DispatchProps = ReturnType<typeof mapDispatchToProps>`,
+        parser: parsers['@TYPESCRIPT_ESLINT']
+      },
+      // Issue: #2795
+      {
+        code: `
+        type ConnectedProps = DispatchProps &
+          StateProps
+
+        const Component = ({ prop1, prop2, prop3 }: ConnectedProps) => {
+          // Do stuff
+          return (
+            <StyledComponent>...</StyledComponent>
+          )
+        }
+
+        const mapDispatchToProps = (dispatch: ThunkDispatch<State, null, Action>) =>
+          bindActionCreators<{prop1: ()=>void,prop2: ()=>string}>(
+            { prop1: importedAction, prop2: anotherImportedAction },
+            dispatch,
+          )
+
+        const mapStateToProps = (state: State) => ({
+          prop3: Selector.value(state),
+        })
+
+        type StateProps = ReturnType<typeof mapStateToProps>
+        type DispatchProps = ReturnType<typeof mapDispatchToProps>`,
+        parser: parsers['@TYPESCRIPT_ESLINT']
+      },
+      {
+        code: `
+        import React from 'react'
+
+        interface Meta {
+          touched: boolean,
+          error: string;
+        }
+
+        interface Props {
+          input: string,
+          meta: Meta,
+          cssClasses: object
+        }
+        const InputField = ({ input, meta: { touched, error }, cssClasses = {}, ...restProps }: Props) => {
+          restProps.className = cssClasses.base
+
+          if (cssClasses.custom) {
+            restProps.className += 'cssClasses.custom'
+          }
+          if (touched && error) {
+            restProps.className += 'cssClasses.error'
+          }
+
+          return(
+            <input
+              {...input}
+              {...restProps}
+            />
+          )
+        }
+        export default InputField`,
+        parser: parsers['@TYPESCRIPT_ESLINT']
+      },
+      {
+        code: `
+          import React from 'react'
+
+          type ComponentProps = {
+            name: string
+          }
+
+          class Factory {
+            getComponent() {
+              return function Component({ name }: ComponentProps) {
+                return <div>Hello {name}</div>
+              }
+            }
+          }
+        `,
+        parser: parsers['@TYPESCRIPT_ESLINT']
+      }
+    ]),
+    {
+      code: `
+        import React from 'react'
+
+        class Factory {
+          getRenderFunction() {
+            return function renderFunction({ name }) {
+              return <div>Hello {name}</div>
+            }
+          }
+        }
+      `
+    }
+  ),
+
+  invalid: [].concat(
     {
       code: [
         'type Props = {',
@@ -3678,7 +4327,19 @@ ruleTester.run('prop-types', rule, {
       errors: [
         {message: '\'name.constructor.firstname\' is missing in props validation'}
       ]
-    }, {
+    },
+    {
+      code: `
+      function Hello({ foo = '' }) {
+        return <p>{foo}</p>
+      }
+    `,
+      errors: [
+        {message: '\'foo\' is missing in props validation'}
+      ],
+      parser: parsers.BABEL_ESLINT
+    },
+    {
       code: [
         'function SomeComponent({bar}) {',
         '  function f({foo}) {}',
@@ -4934,6 +5595,647 @@ ruleTester.run('prop-types', rule, {
       {
         message: '\'ordering\' is missing in props validation'
       }]
-    }
-  ]
+    },
+    {
+      code: `
+        const firstType = PropTypes.shape({
+          id: PropTypes.number,
+        });
+        class ComponentX extends React.Component {
+          static propTypes = {
+            first: firstType.isRequired,
+          };
+          render() {
+            return (
+              <div>
+                <div>Counter = {this.props.first.name}</div>
+              </div>
+            );
+          }
+        }
+      `,
+      parser: parsers.BABEL_ESLINT,
+      errors: [{
+        message: "'first.name' is missing in props validation"
+      }]
+    },
+    {
+      code: `
+        const firstType = PropTypes.shape({
+          id: PropTypes.number,
+        }).isRequired;
+        class ComponentX extends React.Component {
+          static propTypes = {
+            first: firstType,
+          };
+          render() {
+            return (
+              <div>
+                <div>Counter = {this.props.first.name}</div>
+              </div>
+            );
+          }
+        }
+      `,
+      parser: parsers.BABEL_ESLINT,
+      errors: [{
+        message: "'first.name' is missing in props validation"
+      }]
+    },
+    {
+      code: `
+        const firstType = PropTypes.shape({
+          id: PropTypes.number,
+        });
+        class ComponentX extends React.Component {
+          static propTypes = {
+            first: firstType,
+          };
+          render() {
+            return (
+              <div>
+                <div>Counter = {this.props.first.name}</div>
+              </div>
+            );
+          }
+        }
+      `,
+      parser: parsers.BABEL_ESLINT,
+      errors: [{
+        message: "'first.name' is missing in props validation"
+      }]
+    },
+    {
+      code: `
+        function Foo({
+          foo: {
+            bar: foo,
+            baz
+          },
+        }) {
+          return <p>{foo.reduce(() => 5)}</p>;
+        }
+        const fooType = PropTypes.shape({
+          bar: PropTypes.arrayOf(PropTypes.string).isRequired,
+        }).isRequired
+        Foo.propTypes = {
+          foo: fooType,
+        };
+      `,
+      errors: [{
+        message: '\'foo.baz\' is missing in props validation'
+      }]
+    },
+    {
+      code: `
+        function Foo({
+          foo: {
+            bar: foo,
+            baz
+          },
+        }) {
+          return <p>{foo.reduce(() => 5)}</p>;
+        }
+        const fooType = PropTypes.shape({
+          bar: PropTypes.arrayOf(PropTypes.string).isRequired,
+        })
+        Foo.propTypes = {
+          foo: fooType.isRequired,
+        };
+      `,
+      errors: [{
+        message: '\'foo.baz\' is missing in props validation'
+      }]
+    },
+    {
+      code: `
+        function Foo({
+          foo: {
+            bar: foo,
+            baz
+          },
+        }) {
+          return <p>{foo.reduce(() => 5)}</p>;
+        }
+        const fooType = PropTypes.shape({
+          bar: PropTypes.arrayOf(PropTypes.string).isRequired,
+        })
+        Foo.propTypes = {
+          foo: fooType,
+        };
+      `,
+      errors: [{
+        message: '\'foo.baz\' is missing in props validation'
+      }]
+    },
+    {
+      code: `
+        function Component(props) {
+          return 0,
+          <div>
+            Hello, { props.name }!
+          </div>
+        }
+      `,
+      errors: [{
+        message: '\'name\' is missing in props validation'
+      }]
+    },
+    parsers.TS([
+      {
+        code: `
+          interface Props {
+          }
+          const Hello = (props: Props) => {
+            if (props.value) {
+              return <div></div>;
+            }
+            return null;
+          }
+        `,
+        parser: parsers.TYPESCRIPT_ESLINT,
+        errors: [{
+          message: '\'value\' is missing in props validation'
+        }]
+      },
+      {
+        code: `
+          interface Props {
+          }
+          const Hello = (props: Props) => {
+            if (props.value) {
+              return <div></div>;
+            }
+            return null;
+          }
+        `,
+        parser: parsers['@TYPESCRIPT_ESLINT'],
+        errors: [{
+          message: '\'value\' is missing in props validation'
+        }]
+      },
+      {
+        code: `
+          type User = {
+            user: string;
+          }
+
+          type Props = User & {
+          };
+
+          export default (props: Props) => {
+            const { userId, user } = props;
+
+            if (userId === 0) {
+              return <p>userId is 0</p>;
+            }
+
+            return null;
+          };
+        `,
+        parser: parsers.TYPESCRIPT_ESLINT,
+        errors: [{
+          message: '\'userId\' is missing in props validation'
+        }]
+      },
+      {
+        code: `
+          type User = {
+            user: string;
+          }
+
+          type Props = User & {
+          };
+
+          export default (props: Props) => {
+            const { userId, user } = props;
+
+            if (userId === 0) {
+              return <p>userId is 0</p>;
+            }
+
+            return null;
+          };
+        `,
+        parser: parsers['@TYPESCRIPT_ESLINT'],
+        errors: [{
+          message: '\'userId\' is missing in props validation'
+        }]
+      },
+      {
+        code: `
+          type User = {
+          }
+
+          type Props = User & {
+            userId
+          };
+
+          export default (props: Props) => {
+            const { userId, user } = props;
+
+            if (userId === 0) {
+              return <p>userId is 0</p>;
+            }
+
+            return null;
+          };
+        `,
+        parser: parsers.TYPESCRIPT_ESLINT,
+        errors: [{
+          message: '\'user\' is missing in props validation'
+        }]
+      },
+      {
+        code: `
+          type User = {
+          }
+
+          type Props = User & {
+            userId
+          };
+
+          export default (props: Props) => {
+            const { userId, user } = props;
+
+            if (userId === 0) {
+              return <p>userId is 0</p>;
+            }
+
+            return null;
+          };
+        `,
+        parser: parsers['@TYPESCRIPT_ESLINT'],
+        errors: [{
+          message: '\'user\' is missing in props validation'
+        }]
+      },
+      {
+        code: `
+          type User = {
+            user: string;
+          }
+          type UserProps = {
+          }
+
+          type Props = User & UserProps;
+
+          export default (props: Props) => {
+            const { userId, user } = props;
+
+            if (userId === 0) {
+              return <p>userId is 0</p>;
+            }
+
+            return null;
+          };
+        `,
+        parser: parsers.TYPESCRIPT_ESLINT,
+        errors: [{
+          message: '\'userId\' is missing in props validation'
+        }]
+      },
+      {
+        code: `
+          type User = {
+            user: string;
+          }
+          type UserProps = {
+          }
+
+          type Props = User & UserProps;
+
+          export default (props: Props) => {
+            const { userId, user } = props;
+
+            if (userId === 0) {
+              return <p>userId is 0</p>;
+            }
+
+            return null;
+          };
+        `,
+        parser: parsers['@TYPESCRIPT_ESLINT'],
+        errors: [{
+          message: '\'userId\' is missing in props validation'
+        }]
+      },
+      {
+        code: `
+          interface GenericProps {
+            onClose: () => void
+          }
+
+          interface ImplementationProps extends GenericProps {
+          }
+
+          export const Implementation: FC<ImplementationProps> = (
+            {
+              onClick,
+              onClose,
+            }: ImplementationProps
+          ) => (<div />)
+        `,
+        parser: parsers.TYPESCRIPT_ESLINT,
+        errors: [{
+          message: '\'onClick\' is missing in props validation'
+        }]
+      },
+      {
+        code: `
+          interface GenericProps {
+            onClose: () => void
+          }
+
+          interface ImplementationProps extends GenericProps {
+          }
+
+          export const Implementation: FC<ImplementationProps> = (
+            {
+              onClick,
+              onClose,
+            }: ImplementationProps
+          ) => (<div />)
+        `,
+        parser: parsers['@TYPESCRIPT_ESLINT'],
+        errors: [{
+          message: '\'onClick\' is missing in props validation'
+        }]
+      },
+      {
+        code: `
+          const mapStateToProps = state => ({
+          });
+
+          interface BooksTable extends ReturnType<typeof mapStateToProps> {
+            username: string;
+          }
+
+          const App = (props: BooksTable) => {
+            props.books();
+            return <div><span>{props.username}</span></div>;
+          }
+        `,
+        parser: parsers.TYPESCRIPT_ESLINT,
+        errors: [{
+          message: '\'books\' is missing in props validation'
+        }]
+      },
+      {
+        code: `
+          const mapStateToProps = state => ({
+          });
+
+          interface BooksTable extends ReturnType<typeof mapStateToProps> {
+            username: string;
+          }
+
+          const App = (props: BooksTable) => {
+            props.books();
+            return <div><span>{props.username}</span></div>;
+          }
+        `,
+        parser: parsers['@TYPESCRIPT_ESLINT'],
+        errors: [{
+          message: '\'books\' is missing in props validation'
+        }]
+      },
+      {
+        code: `
+          const mapStateToProps = state => ({
+            books: state.books,
+          });
+
+          interface BooksTable extends ReturnType<typeof mapStateToProps> {
+          }
+
+          const App = (props: BooksTable) => {
+            props.books();
+            return <div><span>{props.username}</span></div>;
+          }
+        `,
+        parser: parsers.TYPESCRIPT_ESLINT,
+        errors: [{
+          message: '\'username\' is missing in props validation'
+        }]
+      },
+      {
+        code: `
+          const mapStateToProps = state => ({
+            books: state.books,
+          });
+
+          interface BooksTable extends ReturnType<typeof mapStateToProps> {
+          }
+
+          const App = (props: BooksTable) => {
+            props.books();
+            return <div><span>{props.username}</span></div>;
+          }
+        `,
+        parser: parsers['@TYPESCRIPT_ESLINT'],
+        errors: [{
+          message: '\'username\' is missing in props validation'
+        }]
+      },
+      {
+        code: `
+          type Event = {
+              name: string;
+              type: string;
+          }
+
+          interface UserEvent extends Event {
+              UserId: string;
+          }
+          const App = (props: UserEvent) => {
+            props.name();
+            props.type;
+            props.UserId;
+            return <div><span>{props.dateCreated}</span></div>;
+          }
+        `,
+        parser: parsers.TYPESCRIPT_ESLINT,
+        errors: [{
+          message: '\'dateCreated\' is missing in props validation'
+        }]
+      },
+      {
+        code: `
+          type Event = {
+              name: string;
+              type: string;
+          }
+
+          interface UserEvent extends Event {
+              UserId: string;
+          }
+          const App = (props: UserEvent) => {
+            props.name();
+            props.type;
+            props.UserId;
+            return <div><span>{props.dateCreated}</span></div>;
+          }
+        `,
+        parser: parsers['@TYPESCRIPT_ESLINT'],
+        errors: [{
+          message: '\'dateCreated\' is missing in props validation'
+        }]
+      },
+      {
+        code: `
+          function Zoo(props) {
+            return (
+              <>
+                {props.foo.c}
+              </>
+            );
+          }
+
+          Zoo.propTypes = {
+            foo: PropTypes.exact({
+              a: PropTypes.number,
+              b: PropTypes.number,
+            }),
+          };
+        `,
+        errors: [{
+          message: "'foo.c' is missing in props validation"
+        }]
+      },
+      {
+        code: `
+          function Zoo(props) {
+            return (
+              <>
+                {props.foo.c}
+              </>
+            );
+          }
+
+          Zoo.propTypes = {
+            foo: React.PropTypes.exact({
+              a: PropTypes.number,
+              b: PropTypes.number,
+            }),
+          };
+        `,
+        errors: [{
+          message: "'foo.c' is missing in props validation"
+        }]
+      },
+      {
+        code: `
+          function Zoo(props) {
+            return (
+              <>
+                {props.foo.c}
+              </>
+            );
+          }
+
+          Zoo.propTypes = {
+            foo: Foo.PropTypes.exact({
+              a: PropTypes.number,
+              b: PropTypes.number,
+            }),
+          };
+        `,
+        settings,
+        errors: [{
+          message: "'foo.c' is missing in props validation"
+        }]
+      },
+      {
+        code: `
+          const Foo: JSX.Element = ({ bar }) => {
+            return <div>{bar}</div>;
+          }
+        `,
+        settings,
+        parser: parsers['@TYPESCRIPT_ESLINT'],
+        errors: [{
+          message: "'bar' is missing in props validation"
+        }]
+      },
+      {
+        code: `
+          const Foo: JSX.Element = function foo ({ bar }) {
+            return <div>{bar}</div>;
+          }
+        `,
+        settings,
+        parser: parsers['@TYPESCRIPT_ESLINT'],
+        errors: [{
+          message: "'bar' is missing in props validation"
+        }]
+      },
+      // fix #2804
+      {
+        code: `
+        import React from 'react'
+
+        const InputField = ({ type, ...restProps }) => {
+
+          return(
+            <input
+              type={type}
+              {...restProps}
+            />
+          )
+        }
+
+        export default InputField;
+      `,
+        parser: parsers.BABEL_ESLINT,
+        errors: [{
+          message: "'type' is missing in props validation"
+        }]
+      },
+      {
+        code: `
+        const Foo: JSX.Element = ({ bar = "" }) => {
+          return <div>{bar}</div>;
+        }
+      `,
+        errors: [
+          {message: '\'bar\' is missing in props validation'}
+        ],
+        parser: parsers['@TYPESCRIPT_ESLINT']
+      },
+      {
+        code: `
+        function Foo({ foo = "" }): JSX.Element {
+          return <div>{foo}</div>;
+        }
+      `,
+        errors: [
+          {message: '\'foo\' is missing in props validation'}
+        ],
+        parser: parsers['@TYPESCRIPT_ESLINT']
+      },
+      {
+        code: `
+        const Foo: JSX.Element = function foo ({ bar = "" }) {
+          return <div>{bar}</div>;
+        }
+      `,
+        errors: [
+          {message: '\'bar\' is missing in props validation'}
+        ],
+        parser: parsers['@TYPESCRIPT_ESLINT']
+      },
+      {
+        code: `
+        function Foo({ bar = "" as string }): JSX.Element {
+          return <div>{bar}</div>;
+        }
+      `,
+        errors: [
+          {message: '\'bar\' is missing in props validation'}
+        ],
+        parser: parsers['@TYPESCRIPT_ESLINT']
+      }
+    ])
+  )
 });

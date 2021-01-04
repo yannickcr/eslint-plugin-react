@@ -1,15 +1,11 @@
 # Prevent usage of unsafe `target='_blank'` (react/jsx-no-target-blank)
 
-When creating a JSX element that has an `a` tag, it is often desired to have
-the link open in a new tab using the `target='_blank'` attribute. Using this
-attribute unaccompanied by `rel='noreferrer'`, however, is a severe
-security vulnerability ([see here for more details](https://html.spec.whatwg.org/multipage/links.html#link-type-noopener))
+When creating a JSX element that has an `a` tag, it is often desired to have the link open in a new tab using the `target='_blank'` attribute. Using this attribute unaccompanied by `rel='noreferrer'`, however, is a severe security vulnerability ([see here for more details](https://html.spec.whatwg.org/multipage/links.html#link-type-noopener))
 This rules requires that you accompany `target='_blank'` attributes with `rel='noreferrer'`.
 
 ## Rule Details
 
-This rule aims to prevent user generated links from creating security vulnerabilities by requiring
-`rel='noreferrer'` for external links, and optionally any dynamically generated links.
+This rule aims to prevent user generated links from creating security vulnerabilities by requiring `rel='noreferrer'` for external links, and optionally any dynamically generated links.
 
 ## Rule Options
 ```json
@@ -20,7 +16,8 @@ This rule aims to prevent user generated links from creating security vulnerabil
 
 * allow-referrer: optional boolean. If `true` does not require `noreferrer`. Defaults to `false`.
 * enabled: for enabling the rule. 0=off, 1=warn, 2=error. Defaults to 0.
-* enforce: optional string, 'always' or 'never'
+* enforceDynamicLinks: optional string, 'always' or 'never'
+* warnOnSpreadAttributes: optional boolean. Defaults to `false`.
 
 ### `enforceDynamicLinks`
 
@@ -28,14 +25,14 @@ This rule aims to prevent user generated links from creating security vulnerabil
 
 `{"enforceDynamicLinks": "always"}` enforces the rule if the href is a dynamic link (default)
 
-When {"enforceDynamicLinks": "always"} is set, the following patterns are considered errors:
+Examples of **incorrect** code for this rule, when configured with `{ "enforceDynamicLinks": "always" }`:
 
 ```jsx
 var Hello = <a target='_blank' href="http://example.com/"></a>
 var Hello = <a target='_blank' href={dynamicLink}></a>
 ```
 
-The following patterns are **not** considered errors:
+Examples of **correct** code for this rule:
 
 ```jsx
 var Hello = <p target="_blank"></p>
@@ -50,24 +47,45 @@ var Hello = <a></a>
 
 `{"enforceDynamicLinks": "never"}` does not enforce the rule if the href is a dynamic link
 
-When {"enforceDynamicLinks": "never"} is set, the following patterns are **not** considered errors:
+Examples of **correct** code for this rule, when configured with `{ "enforceDynamicLinks": "never" }`:
 
 ```jsx
 var Hello = <a target='_blank' href={dynamicLink}></a>
+```
+
+### `warnOnSpreadAttributes`
+
+Spread attributes are a handy way of passing programmatically-generated props to components, but may contain unsafe props e.g.
+
+```jsx
+const unsafeProps = {
+  href: "http://example.com",
+  target: "_blank",
+};
+
+<a {...unsafeProps}></a>
+```
+
+Defaults to false. If false, this rule will ignore all spread attributes. If true, this rule will treat all spread attributes as if they contain an unsafe combination of props, unless specifically overridden by props _after_ the last spread attribute prop e.g. the following would not be violations:
+
+```jsx
+<a {...unsafeProps} rel="noreferrer"></a>
+<a {...unsafeProps} target="_self"></a>
+<a {...unsafeProps} href="/some-page"></a>
 ```
 
 ### Custom link components
 
 This rule supports the ability to use custom components for links, such as `<Link />` which is popular in libraries like `react-router`, `next.js` and `gatsby`. To enable this, define your custom link components in the global [shared settings](https://github.com/yannickcr/eslint-plugin-react/blob/master/README.md#configuration) under the `linkComponents` configuration area. Once configured, this rule will check those components as if they were `<a />` elements.
 
-The following patterns are considered errors:
+Examples of **incorrect** code for this rule:
 
 ```jsx
 var Hello = <Link target="_blank" to="http://example.com/"></Link>
 var Hello = <Link target="_blank" to={dynamicLink}></Link>
 ```
 
-The following patterns are **not** considered errors:
+Examples of **correct** code for this rule:
 
 ```jsx
 var Hello = <Link target="_blank" rel="noopener noreferrer" to="http://example.com"></Link>

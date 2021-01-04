@@ -39,11 +39,70 @@ function invalidProp(str) {
   return `Invalid prop value: “${str}”`;
 }
 
+function attributeMessage(str) {
+  return `Strings not allowed in attributes: “${str}”`;
+}
+
 const ruleTester = new RuleTester({parserOptions});
 ruleTester.run('jsx-no-literals', rule, {
 
-  valid: [
+  valid: [].concat(
     {
+      code: `
+        class Comp1 extends Component {
+          render() {
+            return (
+              <div>
+                <button type="button"></button>
+              </div>
+            );
+          }
+        }
+      `,
+      options: [{noStrings: true, allowedStrings: ['button', 'submit']}]
+    }, {
+      code: `
+        class Comp1 extends Component {
+          render() {
+            return (
+              <div>
+                <button type="button"></button>
+              </div>
+            );
+          }
+        }
+      `,
+      options: [{noStrings: true, allowedStrings: ['button', 'submit']}],
+      parser: parsers.BABEL_ESLINT
+    }, parsers.TS([{
+      code: `
+        class Comp1 extends Component {
+          render() {
+            return (
+              <div>
+                <button type="button"></button>
+              </div>
+            );
+          }
+        }
+      `,
+      options: [{noStrings: true, allowedStrings: ['button', 'submit']}],
+      parser: parsers.TYPESCRIPT_ESLINT
+    }, {
+      code: `
+        class Comp1 extends Component {
+          render() {
+            return (
+              <div>
+                <button type="button"></button>
+              </div>
+            );
+          }
+        }
+      `,
+      options: [{noStrings: true, allowedStrings: ['button', 'submit']}],
+      parser: parsers['@TYPESCRIPT_ESLINT']
+    }]), {
       code: `
         class Comp1 extends Component {
           render() {
@@ -276,8 +335,13 @@ ruleTester.run('jsx-no-literals', rule, {
         }      `,
       parser: parsers.BABEL_ESLINT,
       options: [{noStrings: true, ignoreProps: false}]
+    },
+    {
+      code: `
+        <img alt='blank image'></img>
+      `
     }
-  ],
+  ),
 
   invalid: [
     {
@@ -472,6 +536,14 @@ ruleTester.run('jsx-no-literals', rule, {
       errors: [
         {message: stringsMessage('\'bar\'')}
       ]
+    },
+    {
+      code: `
+        <img alt='blank image'></img>
+      `,
+      options: [{noAttributeStrings: true}],
+      errors: [
+        {message: attributeMessage('\'blank image\'')}]
     }
   ]
 });

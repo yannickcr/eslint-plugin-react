@@ -3,6 +3,274 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
+## Unreleased
+
+### Added
+* [`jsx-key`]: added `checkKeyMustBeforeSpread` option for new jsx transform ([#2835][] @morlay)
+* [`jsx-newline`]: add new rule ([#2693][] @jzabala)
+* [`jsx-no-constructed-context-values`]: add new rule which checks when the value passed to a Context Provider will cause needless rerenders ([#2763][] @dylanOshima)
+* [`jsx-indent-props`]: add `ignoreTernaryOperator` option ([#2846][] @SebastianZimmer)
+* [`jsx-no-target-blank`]: Add `warnOnSpreadAttributes` option ([#2855][] @michael-yx-wu)
+
+### Fixed
+* [`display-name`]/component detection: avoid a crash on anonymous components ([#2840][] @ljharb)
+* [`prop-types`]: function in class that returns a component causes false warning in typescript ([#2843][] @SyMind)
+* [`jsx-no-target-blank`]: avoid a crash with a non-string literal ([#2851][] @ljharb)
+* [`jsx-no-script-url`]: avoid crash with boolean `href` ([#2871][] @ljharb, @AriPerkkio)
+* [`no-typos`]: avoid crash with computed method name ([#2870][] @ljharb, @AriPerkkio)
+* [`jsx-max-depth`]: avoid crash with childless jsx child ([#2869][] @ljharb, @AriPerkkio)
+* [`jsx-wrap-multilines`]: fix crash with `declaration`s that are on a new line after `=` ([#2875][] @ljharb)
+* [`no-unknown-property`]: avoid crash with prop named with Object.prototype key ([#2879][] @ljharb, @AriPerkkio)
+* [`prop-types`]: default argument does not count as props-types declaration ([#2877][] @golopot)
+* [`jsx-props-no-multi-spaces`]: fix a false positive for beside comments ([#2878][] @golopot)
+* [`jsx-no-undef`]: handle the TS parser combined with an invalid ecmaVersion ([#2882][] @ljharb)
+* [`no-unused-prop-types`]: apply `skipShapeProps` to exact types ([#2883][] @golopot)
+* [`no-danger-with-children`]/[`style-prop-object`]/[`no-adjacent-inline-elements`]: add category, URL ([#2891][] @thofmann)
+
+### Docs
+* [`no-unused-prop-types`]: Add new example to rule ([#2852][] @thehereward)
+* [`prop-types`]: fix example ([#2881][] @technote-space)
+
+[#2891]: https://github.com/yannickcr/eslint-plugin-react/pull/2891
+[#2883]: https://github.com/yannickcr/eslint-plugin-react/pull/2883
+[#2882]: https://github.com/yannickcr/eslint-plugin-react/issues/2882
+[#2881]: https://github.com/yannickcr/eslint-plugin-react/pull/2881
+[#2879]: https://github.com/yannickcr/eslint-plugin-react/issues/2879
+[#2878]: https://github.com/yannickcr/eslint-plugin-react/pull/2878
+[#2877]: https://github.com/yannickcr/eslint-plugin-react/pull/2877
+[#2875]: https://github.com/yannickcr/eslint-plugin-react/issues/2875
+[#2871]: https://github.com/yannickcr/eslint-plugin-react/issues/2871
+[#2870]: https://github.com/yannickcr/eslint-plugin-react/issues/2870
+[#2869]: https://github.com/yannickcr/eslint-plugin-react/issues/2869
+[#2855]: https://github.com/yannickcr/eslint-plugin-react/pull/2855
+[#2852]: https://github.com/yannickcr/eslint-plugin-react/pull/2852
+[#2851]: https://github.com/yannickcr/eslint-plugin-react/issues/2851
+[#2846]: https://github.com/yannickcr/eslint-plugin-react/pull/2846
+[#2843]: https://github.com/yannickcr/eslint-plugin-react/pull/2843
+[#2840]: https://github.com/yannickcr/eslint-plugin-react/issues/2840
+[#2835]: https://github.com/yannickcr/eslint-plugin-react/pull/2835
+[#2763]: https://github.com/yannickcr/eslint-plugin-react/pull/2763
+[#2693]: https://github.com/yannickcr/eslint-plugin-react/pull/2693
+
+## [7.21.5] - 2020.10.19
+
+### Fixed
+* [`jsx-indent-props`]: Apply indentation when using brackets ([#2826][] @Moong0122)
+* [`jsx-handler-names`]: Skip inline handlers when checkInlineFunction=false ([#2833][] @onigoetz)
+
+### Changed
+* [Tests] `jsx-indent-props`: Add passing test ([#2823][] @Hypnosphi)
+
+[7.21.5]: https://github.com/yannickcr/eslint-plugin-react/compare/v7.21.4...v7.21.5
+[#2833]: https://github.com/yannickcr/eslint-plugin-react/pull/2833
+[#2826]: https://github.com/yannickcr/eslint-plugin-react/pull/2826
+[#2823]: https://github.com/yannickcr/eslint-plugin-react/pull/2823
+
+## [7.21.4] - 2020.10.09
+
+### Fixed
+* [`no-unused-prop-types`]: Silence false positive on `never` type in TS ([#2815][] @pcorpet)
+* [`jsx-indent-props`]: Apply indentation when operator is used in front of the upper line ([#2808][], [#2820][] @Moong0122)
+* [Deps] update `jsx-ast-utils` ([#2822][] [jsx-eslint/jsx-ast-utils#102][] @ljharb)
+
+[7.21.4]: https://github.com/yannickcr/eslint-plugin-react/compare/v7.21.3...v7.21.4
+[#2822]: https://github.com/yannickcr/eslint-plugin-react/issues/2822
+[#2820]: https://github.com/yannickcr/eslint-plugin-react/pull/2820
+[#2815]: https://github.com/yannickcr/eslint-plugin-react/pull/2815
+[#2808]: https://github.com/yannickcr/eslint-plugin-react/pull/2808
+[jsx-eslint/jsx-ast-utils#102]: https://github.com/jsx-eslint/jsx-ast-utils/pull/102
+
+## [7.21.3] - 2020.10.02
+
+### Fixed
+* [`prop-types`]: fix Cannot read property 'type' of undefined error when destructured param ([#2807][] @minwe)
+* [`no-typos`]: avoid crash on spread syntax in createReactClass object ([#2816][] @ljharb @Songyu-Wang)
+
+[7.21.3]: https://github.com/yannickcr/eslint-plugin-react/compare/v7.21.2...v7.21.3
+[#2816]: https://github.com/yannickcr/eslint-plugin-react/issues/2816
+[#2807]: https://github.com/yannickcr/eslint-plugin-react/pull/2807
+
+## [7.21.2] - 2020.09.24
+
+### Fixed
+* [`prop-types`]: handle RestElement in destructured param ([#2805][] @hank121314)
+
+[7.21.2]: https://github.com/yannickcr/eslint-plugin-react/compare/v7.21.1...v7.21.2
+[#2805]: https://github.com/yannickcr/eslint-plugin-react/pull/2805
+
+## [7.21.1] - 2020.09.23
+
+### Fixed
+* [`jsx-handler-names`]: avoid a crash when an inline prop is not a MemberExpression ([#2803][] @willheslam)
+
+[7.21.1]: https://github.com/yannickcr/eslint-plugin-react/compare/v7.21.0...v7.21.1
+[#2803]: https://github.com/yannickcr/eslint-plugin-react/issues/2803
+
+## [7.21.0] - 2020.09.22
+
+### Added
+* [`button-has-type`]: support trivial ternary expressions ([#2748][] @Hypnosphi)
+* [`jsx-handler-names`]: add `checkInlineFunction` option ([#2761][] @dididy)
+* [`jsx-no-literals`]: add `noAttributeStrings` option ([#2782][] @TaLeaMonet)
+* [`prop-types`]: add support for `PropTypes.exact` ([#2740][] @jzabala)
+* [`jsx-filename-extension`]: Add allow option ([#2746][] @remcohaszing)
+
+### Fixed
+* [`function-component-definition`]: ignore object properties ([#2771][] @stefan-wullems)
+* [`forbid-component-props`]: Implemented support for "namespaced" components ([#2767][] @mnn)
+* [`prefer-read-only-props`]: support Flow `$ReadOnly` ([#2772][], [#2779][], [#2770][] @karolina-benitez)
+* [`jsx-handler-names`]: handle whitespace ([#2789][] @AriPerkkio)
+* [`prop-types`]: Detect TypeScript types for destructured default prop values ([#2780][] @sunghyunjo)
+* [`jsx-pascal-case`]: Handle single character namespaced component ([#2791][] @daviferreira)
+* [`jsx-closing-bracket-location`]: In `tag-aligned`, made a distinction between tabs and spaces ([#2796][] @Moong0122)
+* [`jsx-handler-names`]: false positive when handler name begins with number ([#1689][] @jsphstls)
+* [`prop-types`]: Detect JSX returned by sequential expression ([#2801][] @mikol)
+* [`jsx-props-no-multi-spaces`]: "Expected no line gap between" false positive ([#2792][] @karolina-benitez)
+* [`no-unknown-property`]: check attributes with any input case ([#2790][] @julienw)
+* [`prop-types`]/[`no-unused-prop-types`]: handle CallExpression in ReturnType ([#2802][] @hank121314)
+* [`jsx-uses-react`]: mark fragment variables as used ([#2775][] @remcohaszing)
+* [`no-unused-prop-types`]: improve component declared props detection ([#2755][] @jzabala)
+* [`jsx-props-no-multi-spaces`]: Show error in multi-line props ([#2756][] @iiison)
+
+### Changed
+* [Tests] [`jsx-one-expression-per-line`]: add passing tests ([#2799][] @TaLeaMonet)
+* [Tests] [`prop-types`]: add test ([#2757][] @jzabala)
+
+[7.21.0]: https://github.com/yannickcr/eslint-plugin-react/compare/v7.20.6...v7.21.0
+[#2802]: https://github.com/yannickcr/eslint-plugin-react/pull/2802
+[#2801]: https://github.com/yannickcr/eslint-plugin-react/pull/2801
+[#2799]: https://github.com/yannickcr/eslint-plugin-react/pull/2799
+[#2796]: https://github.com/yannickcr/eslint-plugin-react/pull/2796
+[#2792]: https://github.com/yannickcr/eslint-plugin-react/pull/2792
+[#2791]: https://github.com/yannickcr/eslint-plugin-react/pull/2791
+[#2790]: https://github.com/yannickcr/eslint-plugin-react/pull/2790
+[#2789]: https://github.com/yannickcr/eslint-plugin-react/pull/2789
+[#2782]: https://github.com/yannickcr/eslint-plugin-react/pull/2782
+[#2780]: https://github.com/yannickcr/eslint-plugin-react/pull/2780
+[#2779]: https://github.com/yannickcr/eslint-plugin-react/pull/2779
+[#2775]: https://github.com/yannickcr/eslint-plugin-react/pull/2775
+[#2772]: https://github.com/yannickcr/eslint-plugin-react/pull/2772
+[#2771]: https://github.com/yannickcr/eslint-plugin-react/pull/2771
+[#2770]: https://github.com/yannickcr/eslint-plugin-react/pull/2770
+[#2767]: https://github.com/yannickcr/eslint-plugin-react/pull/2767
+[#2761]: https://github.com/yannickcr/eslint-plugin-react/pull/2761
+[#2757]: https://github.com/yannickcr/eslint-plugin-react/pull/2757
+[#2756]: https://github.com/yannickcr/eslint-plugin-react/pull/2756
+[#2748]: https://github.com/yannickcr/eslint-plugin-react/pull/2748
+[#2746]: https://github.com/yannickcr/eslint-plugin-react/pull/2746
+[#2740]: https://github.com/yannickcr/eslint-plugin-react/pull/2740
+[#1689]: https://github.com/yannickcr/eslint-plugin-react/pull/1689
+
+## [7.20.6] - 2020.08.12
+
+### Fixed
+* [`jsx-curly-brace-presence`]: fix multiline comment case ([#2716][] @ljharb)
+* [`jsx-no-useless-fragment`]: accept fragments with call expressions ([#2744][] @hasparus)
+* [`jsx-no-literals`] with allowStrings doesn't work in props ([#2736][] @karolina-benitez)
+* [`no-find-dom-node`]: Improve error message ([#2741][] @ecraig12345)
+* [`no-typos`]/[`no-unused-prop-types`]/propType detection: Support typescript props interface extension and TSTypeAliasDeclaration ([#2721][] @hank121314)
+* [`no-this-in-sfc`]/component detection: add arrow function to list of allowed position for component ([#2708][] @jzabala)
+* [`no-access-state-in-setstate`]: add check for class component ([#2711][] @jzabala)
+* [`prop-types`]/component detection: avoid a crash when a local `createElement` identifier exists ([#2733][] @ljharb)
+
+### Changed
+* [`no-unused-prop-types`]: add test assigning this.props to a variable
+
+[7.20.6]: https://github.com/yannickcr/eslint-plugin-react/compare/v7.20.5...v7.20.6
+[#2744]: https://github.com/yannickcr/eslint-plugin-react/pull/2744
+[#2741]: https://github.com/yannickcr/eslint-plugin-react/pull/2741
+[#2737]: https://github.com/yannickcr/eslint-plugin-react/pull/2737
+[#2736]: https://github.com/yannickcr/eslint-plugin-react/pull/2736
+[#2733]: https://github.com/yannickcr/eslint-plugin-react/issues/2733
+[#2721]: https://github.com/yannickcr/eslint-plugin-react/pull/2721
+[#2716]: https://github.com/yannickcr/eslint-plugin-react/issues/2716
+[#2711]: https://github.com/yannickcr/eslint-plugin-react/pull/2711
+[#2708]: https://github.com/yannickcr/eslint-plugin-react/pull/2708
+
+## [7.20.5] - 2020.07.28
+
+### Fixed
+* [`jsx-curly-brace-presence`]: disable disallowed JSX text chars check in props ([#2710][] @jzabala)
+* [`no-unused-state`]: check for class expression ([#2712][] @jzabala)
+* [`prop-types`]: handle anonymous functions ([#2730][], [#2731][] @odinho @wKich @jzabala)
+
+### Docs
+* [Docs] [`no-access-state-in-setstate`]: fix example ([#2724][] @youngjuning)
+
+[7.20.5]: https://github.com/yannickcr/eslint-plugin-react/compare/v7.20.4...v7.20.5
+[#2731]: https://github.com/yannickcr/eslint-plugin-react/pull/2731
+[#2730]: https://github.com/yannickcr/eslint-plugin-react/pull/2730
+[#2724]: https://github.com/yannickcr/eslint-plugin-react/pull/2724
+[#2712]: https://github.com/yannickcr/eslint-plugin-react/pull/2712
+[#2710]: https://github.com/yannickcr/eslint-plugin-react/pull/2710
+
+## [7.20.4] - 2020.07.26
+
+### Fixed
+* improve algorithm to check if a variable is coming from the pragma ([#2706][] @jzabala)
+* [`prop-types`]: handle component returning null ([#2696][] @hank121314)
+* [`prop-types`]/[`function-component-definition`]: Add check for first letter capitalization in functional component detection ([#2699][] @jzabala)
+* [`prop-types`]: use variable value in prop type fields defined by variables ([#2704][] @jzabala)
+* [`no-typos`]: warn on a bindingless `react` import
+
+### Changed
+* [Tests] `boolean-prop-naming`: Added test for function invocation of bool ([#2697][] @ajkovar)
+* [Tests] `jsx-curly-brace-presence`, `jsx-no-comment-textnodes`: add passing tests
+* [Refactor] `no-unused-state`: avoid a loop
+
+[7.20.4]: https://github.com/yannickcr/eslint-plugin-react/compare/v7.20.3...v7.20.4
+[#2704]: https://github.com/yannickcr/eslint-plugin-react/pull/2704
+[#2699]: https://github.com/yannickcr/eslint-plugin-react/pull/2699
+[#2697]: https://github.com/yannickcr/eslint-plugin-react/pull/2697
+[#2696]: https://github.com/yannickcr/eslint-plugin-react/pull/2696
+
+## [7.20.3] - 2020-06-30
+
+### Fixed
+* [`no-unused-prop-types`]/[`prop-types`]: typescript interface support literal type and only FunctionComponent should have propTypes validation ([#2690][] @hank121314)
+* [`no-unused-prop-types`]/TypeScript: avoid crash on indexable interface ([#2687][] @ljharb)
+
+[7.20.3]: https://github.com/yannickcr/eslint-plugin-react/compare/v7.20.2...v7.20.3
+[#2690]: https://github.com/yannickcr/eslint-plugin-react/pull/2690
+[#2687]: https://github.com/yannickcr/eslint-plugin-react/issues/2687
+
+## [7.20.2] - 2020-06-29
+
+### Fixed
+* [`no-unused-prop-types`]: handle optional chaining ([#2679][] @hank121314)
+* [`jsx-pascal-case`]: fix a false positive with "H1" ([#2683][] @ljharb)
+* [`jsx-no-useless-fragment`]: avoid a crash when autofixing a self-closing React.Fragment ([#2680][] @ljharb)
+* [`forbid-prop-types`]: avoid crash ([#2682][] @ljharb)
+
+[7.20.2]: https://github.com/yannickcr/eslint-plugin-react/compare/v7.20.1...v7.20.2
+[#2683]: https://github.com/yannickcr/eslint-plugin-react/issues/2683
+[#2682]: https://github.com/yannickcr/eslint-plugin-react/issues/2682
+[#2680]: https://github.com/yannickcr/eslint-plugin-react/issues/2680
+[#2679]: https://github.com/yannickcr/eslint-plugin-react/pull/2679
+
+## [7.20.1] - 2020-06-28
+
+### Fixed
+* [`forbid-dom-props`], [`function-component-definition`]: fix schema typos ([#2667][] @mflorence99)
+* [`no-unused-prop-types`]: fix with typescript eslint parser ([#2661][] @eltonio450)
+
+### Changed
+* [`forbid-prop-types`]: warn on destructured values as well ([#2676][] @ajkovar)
+* relax JSX pragma regexp ([#2643][] @gfmio)
+* Cache detected React version ([#2673][] @lencioni)
+* [refactor] [`jsx-pascal-case`]: Remove xregexp ([#2636][] @yacinehmito))
+* [Tests] a [`no-typos`] test fails in eslint v7.3 ([#2678][] @toshi-toma)
+* [Deps] update `jsx-ast-utils`, `object.entries`, `resolve`
+* [Dev Deps] update `@types/eslint`, `@types/estree`, `@types/node`, `@typescript-eslint/parser`, `eslint-config-airbnb-base`, `eslint-plugin-eslint-plugin`, `eslint-plugin-import`, `typescript`
+
+[7.20.1]: https://github.com/yannickcr/eslint-plugin-react/compare/v7.20.0...v7.20.1
+[#2676]: https://github.com/yannickcr/eslint-plugin-react/pull/2676
+[#2673]: https://github.com/yannickcr/eslint-plugin-react/pull/2673
+[#2667]: https://github.com/yannickcr/eslint-plugin-react/pull/2667
+[#2661]: https://github.com/yannickcr/eslint-plugin-react/pull/2661
+[#2643]: https://github.com/yannickcr/eslint-plugin-react/pull/2643
+[#2636]: https://github.com/yannickcr/eslint-plugin-react/pull/2636
+
 ## [7.20.0] - 2020-05-12
 
 ### Added
@@ -2990,3 +3258,5 @@ If you're still not using React 15 you can keep the old behavior by setting the 
 [`jsx-no-script-url`]: docs/rules/jsx-no-script-url.md
 [`no-adjacent-inline-elements`]: docs/rules/no-adjacent-inline-elements.md
 [`function-component-definition`]: docs/rules/function-component-definition.md
+[`jsx-newline`]: docs/rules/jsx-newline.md
+[`jsx-no-constructed-context-values`]: docs/rules/jsx-no-constructed-context-values.md

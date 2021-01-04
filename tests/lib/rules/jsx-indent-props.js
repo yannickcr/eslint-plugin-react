@@ -40,6 +40,23 @@ ruleTester.run('jsx-indent-props', rule, {
     options: [2]
   }, {
     code: [
+      'const Test = () => ([',
+      '  (x',
+      '    ? <div key="1" />',
+      '    : <div key="2" />),',
+      '  <div',
+      '    key="3"',
+      '    align="left"',
+      '  />,',
+      '  <div',
+      '    key="4"',
+      '    align="left"',
+      '  />,',
+      ']);'
+    ].join('\n'),
+    options: [2]
+  }, {
+    code: [
       '<App',
       'foo',
       '/>'
@@ -136,6 +153,48 @@ ruleTester.run('jsx-indent-props', rule, {
       '/>'
     ].join('\n'),
     options: ['first']
+  }, {
+    code: [
+      '{this.props.ignoreTernaryOperatorFalse',
+      '  ? <span',
+      '      className="value"',
+      '      some={{aaa}}',
+      '    />',
+      '  : null}'
+    ].join('\n'),
+    output: [
+      '{this.props.ignoreTernaryOperatorFalse',
+      '  ? <span',
+      '    className="value"',
+      '    some={{aaa}}',
+      '  />',
+      '  : null}'
+    ].join('\n'),
+    options: [{
+      indentMode: 2,
+      ignoreTernaryOperator: false
+    }]
+  }, {
+    code: [
+      '{this.props.ignoreTernaryOperatorTrue',
+      '  ? <span',
+      '    className="value"',
+      '    some={{aaa}}',
+      '    />',
+      '  : null}'
+    ].join('\n'),
+    output: [
+      '{this.props.ignoreTernaryOperatorTrue',
+      '  ? <span',
+      '    className="value"',
+      '    some={{aaa}}',
+      '  />',
+      '  : null}'
+    ].join('\n'),
+    options: [{
+      indentMode: 2,
+      ignoreTernaryOperator: true
+    }]
   }],
 
   invalid: [{
@@ -163,6 +222,116 @@ ruleTester.run('jsx-indent-props', rule, {
     ].join('\n'),
     options: [2],
     errors: [{message: 'Expected indentation of 2 space characters but found 4.'}]
+  }, {
+    code: [
+      'const test = true',
+      '  ? <span',
+      '    attr="value"',
+      '    />',
+      '  : <span',
+      '    attr="otherValue"',
+      '    />'
+    ].join('\n'),
+    output: [
+      'const test = true',
+      '  ? <span',
+      '      attr="value"',
+      '    />',
+      '  : <span',
+      '      attr="otherValue"',
+      '    />'
+    ].join('\n'),
+    options: [2],
+    errors: [
+      {message: 'Expected indentation of 6 space characters but found 4.'},
+      {message: 'Expected indentation of 6 space characters but found 4.'}
+    ]
+  }, {
+    code: [
+      'const test = true',
+      '  ? <span attr="value" />',
+      '  : (',
+      '    <span',
+      '        attr="otherValue"',
+      '    />',
+      '  )'
+    ].join('\n'),
+    output: [
+      'const test = true',
+      '  ? <span attr="value" />',
+      '  : (',
+      '    <span',
+      '      attr="otherValue"',
+      '    />',
+      '  )'
+    ].join('\n'),
+    options: [2],
+    errors: [
+      {message: 'Expected indentation of 6 space characters but found 8.'}
+    ]
+  }, {
+    code: [
+      '{test.isLoading',
+      '  ? <Value/>',
+      '  : <OtherValue',
+      '    some={aaa}/>',
+      '}'
+    ].join('\n'),
+    output: [
+      '{test.isLoading',
+      '  ? <Value/>',
+      '  : <OtherValue',
+      '      some={aaa}/>',
+      '}'
+    ].join('\n'),
+    options: [2],
+    errors: [
+      {message: 'Expected indentation of 6 space characters but found 4.'}
+    ]
+  }, {
+    code: [
+      '{test.isLoading',
+      '  ? <Value/>',
+      '  : <OtherValue',
+      '    some={aaa}',
+      '    other={bbb}/>',
+      '}'
+    ].join('\n'),
+    output: [
+      '{test.isLoading',
+      '  ? <Value/>',
+      '  : <OtherValue',
+      '      some={aaa}',
+      '      other={bbb}/>',
+      '}'
+    ].join('\n'),
+    options: [2],
+    errors: [
+      {message: 'Expected indentation of 6 space characters but found 4.'},
+      {message: 'Expected indentation of 6 space characters but found 4.'}
+    ]
+  }, {
+    code: [
+      '{this.props.test',
+      '  ? <span',
+      '    className="value"',
+      '    some={{aaa}}',
+      '    />',
+      '  : null}'
+    ].join('\n'),
+    output: [
+      '{this.props.test',
+      '  ? <span',
+      '      className="value"',
+      '      some={{aaa}}',
+      '    />',
+      '  : null}'
+    ].join('\n'),
+    options: [2],
+    errors: [
+      {message: 'Expected indentation of 6 space characters but found 4.'},
+      {message: 'Expected indentation of 6 space characters but found 4.'}
+    ]
   }, {
     code: [
       '<App',

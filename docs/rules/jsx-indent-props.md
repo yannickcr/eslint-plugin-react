@@ -8,7 +8,7 @@ This option validates a specific indentation style for props.
 
 This rule is aimed to enforce consistent indentation style. The default style is `4 spaces`.
 
-The following patterns are considered warnings:
+Examples of **incorrect** code for this rule:
 
 ```jsx
 // 2 spaces indentation
@@ -29,16 +29,19 @@ firstName="John"
 
 ## Rule Options
 
-It takes an option as the second parameter which can be `"tab"` for tab-based indentation, a positive number for space indentations or `"first"` for aligning the first prop for each line with the tag's first prop.
+It takes an option as the second parameter which can either be the indent mode or an object to define further settings.
+The indent mode can be `"tab"` for tab-based indentation, a positive number for space indentations or `"first"` for aligning the first prop for each line with the tag's first prop.
 Note that using the `"first"` option allows very inconsistent indentation unless you also enable a rule that enforces the position of the first prop.
+If the second parameter is an object, it can be used to specify the indent mode as well as the option `ignoreTernaryOperator`, which causes the indent level not to be increased by a `?` or `:` operator (default is `false`).
+
 
 ```js
 ...
-"react/jsx-indent-props": [<enabled>, 'tab'|<number>|'first']
+"react/jsx-indent-props": [<enabled>, 'tab'|<number>|'first'|<object>]
 ...
 ```
 
-The following patterns are considered warnings:
+Examples of **incorrect** code for this rule:
 
 ```jsx
 // 2 spaces indentation
@@ -61,7 +64,7 @@ The following patterns are considered warnings:
 />
 ```
 
-The following patterns are **not** warnings:
+Examples of **correct** code for this rule:
 
 ```jsx
 
@@ -100,6 +103,20 @@ firstName="John"
 
 <Hello firstName="Jane"
        lastName="Doe" />
+
+// indent level increase on ternary operator (default setting)
+// [2, 2]
+? <Hello
+    firstName="John"
+    lastName="Doe"
+  />
+
+// no indent level increase on ternary operator
+// [2, { indentMode: 2, ignoreTernaryOperator: true} ]
+? <Hello
+  firstName="John"
+  lastName="Doe"
+/>
 ```
 
 ## When not to use

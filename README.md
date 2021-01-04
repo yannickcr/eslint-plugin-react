@@ -39,6 +39,7 @@ You should also specify settings that will be shared across all the plugin rules
       "createClass": "createReactClass", // Regex for Component Factory to use,
                                          // default to "createReactClass"
       "pragma": "React",  // Pragma to use, default to "React"
+      "fragment": "Fragment",  // Fragment to use (may be a property of <pragma>), default to "Fragment"
       "version": "detect", // React version. "detect" automatically picks the version you have installed.
                            // You can also use `16.0`, `16.3`, etc, if you want to override the detected value.
                            // default to latest and warns if missing
@@ -172,8 +173,10 @@ Enable the rules that you would like to use.
 * [react/jsx-key](docs/rules/jsx-key.md): Report missing `key` props in iterators/collection literals
 * [react/jsx-max-depth](docs/rules/jsx-max-depth.md): Validate JSX maximum depth
 * [react/jsx-max-props-per-line](docs/rules/jsx-max-props-per-line.md): Limit maximum of props on a single line in JSX (fixable)
+* [react/jsx-newline](docs/rules/jsx-newline.md): Enforce a new line after jsx elements and expressions (fixable)
 * [react/jsx-no-bind](docs/rules/jsx-no-bind.md): Prevents usage of Function.prototype.bind and arrow functions in React component props
 * [react/jsx-no-comment-textnodes](docs/rules/jsx-no-comment-textnodes.md): Comments inside children section of tag should be placed inside braces
+* [react/jsx-no-constructed-context-values](docs/rules/jsx-no-constructed-context-values.md): Prevents JSX context provider values from taking values that will cause needless rerenders.
 * [react/jsx-no-duplicate-props](docs/rules/jsx-no-duplicate-props.md): Enforce no duplicate props
 * [react/jsx-no-literals](docs/rules/jsx-no-literals.md): Prevent using string literals in React component definition
 * [react/jsx-no-script-url](docs/rules/jsx-no-script-url.md): Forbid `javascript:` URLs

@@ -26,12 +26,16 @@
         "consistent-return": 0,
 
         "prefer-destructuring": [2, { "array": false, "object": false }, { "enforceForRenamedProperties": false }],
-        "prefer-object-spread": 0,
+        "prefer-object-spread": 0, // until node 8 is required
+        "prefer-rest-params": 0, // until node 6 is required
+        "prefer-spread": 0, // until node 6 is required
         "function-paren-newline": 0,
         "no-plusplus": 1,
         "no-param-reassign": 1,
-        "no-mixed-operators": 1,
-        "no-restricted-syntax": 1,
+        "no-restricted-syntax": [2, {
+            "selector": "ObjectPattern",
+            "message": "Object destructuring is not compatible with Node v4"
+        }],
         "strict": [2, "safe"],
         "valid-jsdoc": [2, {
           "requireReturn": false,
