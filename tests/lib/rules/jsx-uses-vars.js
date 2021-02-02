@@ -208,6 +208,7 @@ ruleTester.run('no-unused-vars', ruleNoUnusedVars, {
         function Greetings(div) {
           return <div />;
         }
+        Greetings();
       `,
       errors: [{
         message: '\'div\' is defined but never used.',
