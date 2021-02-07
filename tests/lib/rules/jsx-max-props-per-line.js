@@ -20,6 +20,22 @@ const parserOptions = {
   }
 };
 
+const getConfigs = (single, multi, when) => {
+  const configs = {
+    maximum: {
+      single,
+      multi
+    },
+    when
+  };
+
+  if (!single && !multi) {
+    delete configs.maximum;
+  }
+
+  return configs;
+};
+
 // ------------------------------------------------------------------------------
 // Tests
 // ------------------------------------------------------------------------------
@@ -32,22 +48,23 @@ ruleTester.run('jsx-max-props-per-line', rule, {
     code: '<App foo />'
   }, {
     code: '<App foo bar />',
-    options: [{maximum: 2}]
+    options: [getConfigs(2)]
   }, {
     code: '<App foo bar />',
-    options: [{when: 'multiline'}]
+    options: [getConfigs(undefined, undefined, 'multiline')]
   }, {
     code: '<App foo {...this.props} />',
-    options: [{when: 'multiline'}]
+    options: [getConfigs(undefined, undefined, 'multiline')]
   }, {
     code: '<App foo bar baz />',
-    options: [{maximum: 2, when: 'multiline'}]
+    options: [getConfigs(2, undefined, 'multiline')]
   }, {
     code: '<App {...this.props} bar />',
-    options: [{maximum: 2}]
+    options: [getConfigs(2)]
   }, {
     code: [
       '<App',
+      '  boom',
       '  foo',
       '  bar',
       '/>'
@@ -59,7 +76,18 @@ ruleTester.run('jsx-max-props-per-line', rule, {
       '  baz',
       '/>'
     ].join('\n'),
-    options: [{maximum: 2}]
+    options: [getConfigs(undefined, 2)]
+  }, {
+    code: [
+      '<div>',
+      '  <App',
+      '    foo bar',
+      '    baz',
+      '  />',
+      '  <App2 bar baz />',
+      '</div>'
+    ].join('\n'),
+    options: [getConfigs(2, 2)]
   }],
 
   invalid: [{
@@ -77,7 +105,7 @@ ruleTester.run('jsx-max-props-per-line', rule, {
       '<App foo bar',
       'baz />;'
     ].join('\n'),
-    options: [{maximum: 2}],
+    options: [getConfigs(2)],
     errors: [{message: 'Prop `baz` must be placed on a new line'}]
   }, {
     code: '<App {...this.props} bar />;',
@@ -165,7 +193,7 @@ ruleTester.run('jsx-max-props-per-line', rule, {
       '}}',
       'baz />'
     ].join('\n'),
-    options: [{maximum: 2}],
+    options: [getConfigs(2)],
     errors: [{message: 'Prop `baz` must be placed on a new line'}]
   }, {
     code: [
@@ -225,7 +253,76 @@ ruleTester.run('jsx-max-props-per-line', rule, {
       'baz bor',
       '/>'
     ].join('\n'),
-    options: [{maximum: 2}],
+    options: [getConfigs(2)],
     errors: [{message: 'Prop `baz` must be placed on a new line'}]
+  }, {
+    code: [
+      '<div>',
+      '  <App',
+      '    foo bar',
+      '    baz',
+      '  />',
+      '  <App2 boom box />',
+      '</div>'
+    ].join('\n'),
+    output: [
+      '<div>',
+      '  <App',
+      '    foo bar',
+      '    baz',
+      '  />',
+      '  <App2 boom',
+      'box />',
+      '</div>'
+    ].join('\n'),
+    options: [getConfigs(undefined, 2)],
+    errors: [{message: 'Prop `box` must be placed on a new line'}]
+  }, {
+    code: [
+      '<App boom',
+      '  foo',
+      '  bar',
+      '/>'
+    ].join('\n'),
+    output: [
+      '<App',
+      'boom',
+      '  foo',
+      '  bar',
+      '/>'
+    ].join('\n'),
+    errors: [{message: 'Prop `boom` must be placed on a new line'}]
+  }, {
+    code: [
+      '<App boom foo',
+      '  bar',
+      '/>'
+    ].join('\n'),
+    output: [
+      '<App',
+      'boom foo',
+      '  bar',
+      '/>'
+    ].join('\n'),
+    options: [getConfigs(undefined, 2)],
+    errors: [{message: 'Prop `boom` must be placed on a new line'}]
+  }, {
+    code: [
+      '<App boom foo',
+      '  bar',
+      '/>'
+    ].join('\n'),
+    output: [
+      '<App',
+      'boom foo',
+      '  bar',
+      '/>'
+    ].join('\n'),
+    options: [getConfigs(undefined, 1)],
+    errors: [
+      {message: 'Prop `boom` must be placed on a new line'},
+      {message: 'Prop `foo` must be placed on a new line'}
+    ]
+
   }]
 });
