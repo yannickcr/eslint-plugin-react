@@ -5,6 +5,56 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## Unreleased
 
+## [7.23.0] - 2021.03.22
+
+### Added
+* [`jsx-no-target-blank`]: add fixer ([#2862][] @Nokel81)
+* [`jsx-pascal-case`]: support minimatch `ignore` option ([#2906][] @bcherny)
+* [`jsx-pascal-case`]: support `allowNamespace` option ([#2917][] @kev-y-huang)
+* [`jsx-newline`]: Add prevent option ([#2935][] @jsphstls)
+* [`no-unstable-nested-components`]: Prevent creating unstable components inside components ([#2750][] @AriPerkkio)
+* added `jsx-runtime` config, for the modern JSX runtime transform (@ljharb)
+
+### Fixed
+* [`jsx-no-constructed-context-values`]: avoid a crash with `as X` TS code ([#2894][] @ljharb)
+* [`jsx-no-constructed-context-values`]: avoid a crash with boolean shorthand ([#2895][] @ljharb)
+* [`static-property-placement`]: do not report non-components ([#2893][] @golopot)
+* [`no-array-index-key`]: support optional chaining ([#2897][] @SyMind)
+* [`no-typos`]: avoid a crash on bindingless `prop-types` import; add warning ([#2899][] @ljharb)
+* [`jsx-curly-brace-presence`]: ignore containers with comments ([#2900][] @golopot)
+* [`destructuring-assignment`]: fix a false positive for local prop named `context` in SFC ([#2929][] @SyMind)
+* [`jsx-no-target-blank`]: Allow rel="noreferrer" when `allowReferrer` is true ([#2925][] @edemaine)
+* [`boolean-prop-naming`]: add check for typescript "boolean" type ([#2930][] @vedadeepta)
+* version detection: Add tests that verify versioning works for sibling and child projects ([#2943][] @jcrosetto)
+* [`jsx-curly-newline`]: Update error messages ([#2933][] @jbrower2)
+
+### Changed
+* [Docs] [`jsx-no-constructed-context-values`][]: fix invalid example syntax ([#2910][] @kud)
+* [readme] Replace lists of rules with tables in readme ([#2908][] @motato1)
+* [Docs] added missing curly braces ([#2923][] @Muditxofficial)
+
+[#2943]: https://github.com/yannickcr/eslint-plugin-react/pull/2943
+[#2935]: https://github.com/yannickcr/eslint-plugin-react/pull/2935
+[#2933]: https://github.com/yannickcr/eslint-plugin-react/pull/2933
+[#2930]: https://github.com/yannickcr/eslint-plugin-react/pull/2930
+[#2929]: https://github.com/yannickcr/eslint-plugin-react/pull/2929
+[#2925]: https://github.com/yannickcr/eslint-plugin-react/pull/2925
+[#2923]: https://github.com/yannickcr/eslint-plugin-react/pull/2923
+[#2917]: https://github.com/yannickcr/eslint-plugin-react/pull/2917
+[#2910]: https://github.com/yannickcr/eslint-plugin-react/pull/2910
+[#2908]: https://github.com/yannickcr/eslint-plugin-react/pull/2908
+[#2906]: https://github.com/yannickcr/eslint-plugin-react/pull/2906
+[#2900]: https://github.com/yannickcr/eslint-plugin-react/pull/2900
+[#2899]: https://github.com/yannickcr/eslint-plugin-react/issues/2899
+[#2897]: https://github.com/yannickcr/eslint-plugin-react/pull/2897
+[#2895]: https://github.com/yannickcr/eslint-plugin-react/issues/2895
+[#2894]: https://github.com/yannickcr/eslint-plugin-react/issues/2894
+[#2893]: https://github.com/yannickcr/eslint-plugin-react/pull/2893
+[#2862]: https://github.com/yannickcr/eslint-plugin-react/pull/2862
+[#2750]: https://github.com/yannickcr/eslint-plugin-react/pull/2750
+
+## [7.22.0] - 2020.12.29
+
 ### Added
 * [`jsx-key`]: added `checkKeyMustBeforeSpread` option for new jsx transform ([#2835][] @morlay)
 * [`jsx-newline`]: add new rule ([#2693][] @jzabala)
@@ -31,6 +81,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 * [`no-unused-prop-types`]: Add new example to rule ([#2852][] @thehereward)
 * [`prop-types`]: fix example ([#2881][] @technote-space)
 
+[7.22.0]: https://github.com/yannickcr/eslint-plugin-react/compare/v7.21.5...v7.22.0
 [#2891]: https://github.com/yannickcr/eslint-plugin-react/pull/2891
 [#2883]: https://github.com/yannickcr/eslint-plugin-react/pull/2883
 [#2882]: https://github.com/yannickcr/eslint-plugin-react/issues/2882
@@ -3260,3 +3311,4 @@ If you're still not using React 15 you can keep the old behavior by setting the 
 [`function-component-definition`]: docs/rules/function-component-definition.md
 [`jsx-newline`]: docs/rules/jsx-newline.md
 [`jsx-no-constructed-context-values`]: docs/rules/jsx-no-constructed-context-values.md
+[`no-unstable-nested-components`]: docs/rules/no-unstable-nested-components.md

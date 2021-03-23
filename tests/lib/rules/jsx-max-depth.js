@@ -123,7 +123,10 @@ ruleTester.run('jsx-max-depth', rule, {
       '</App>'
     ].join('\n'),
     options: [{max: 0}],
-    errors: [{message: 'Expected the depth of nested jsx elements to be <= 0, but found 1.'}]
+    errors: [{
+      messageId: 'wrongDepth',
+      data: {needed: 0, found: 1}
+    }]
   }, {
     code: [
       '<App>',
@@ -131,7 +134,10 @@ ruleTester.run('jsx-max-depth', rule, {
       '</App>'
     ].join('\n'),
     options: [{max: 0}],
-    errors: [{message: 'Expected the depth of nested jsx elements to be <= 0, but found 1.'}]
+    errors: [{
+      messageId: 'wrongDepth',
+      data: {needed: 0, found: 1}
+    }]
   }, {
     code: [
       '<App>',
@@ -141,14 +147,20 @@ ruleTester.run('jsx-max-depth', rule, {
       '</App>'
     ].join('\n'),
     options: [{max: 1}],
-    errors: [{message: 'Expected the depth of nested jsx elements to be <= 1, but found 2.'}]
+    errors: [{
+      messageId: 'wrongDepth',
+      data: {needed: 1, found: 2}
+    }]
   }, {
     code: [
       'const x = <div><span /></div>;',
       '<div>{x}</div>'
     ].join('\n'),
     options: [{max: 1}],
-    errors: [{message: 'Expected the depth of nested jsx elements to be <= 1, but found 2.'}]
+    errors: [{
+      messageId: 'wrongDepth',
+      data: {needed: 1, found: 2}
+    }]
   }, {
     code: [
       'const x = <div><span /></div>;',
@@ -156,7 +168,10 @@ ruleTester.run('jsx-max-depth', rule, {
       '<div>{y}</div>'
     ].join('\n'),
     options: [{max: 1}],
-    errors: [{message: 'Expected the depth of nested jsx elements to be <= 1, but found 2.'}]
+    errors: [{
+      messageId: 'wrongDepth',
+      data: {needed: 1, found: 2}
+    }]
   }, {
     code: [
       'const x = <div><span /></div>;',
@@ -165,8 +180,14 @@ ruleTester.run('jsx-max-depth', rule, {
     ].join('\n'),
     options: [{max: 1}],
     errors: [
-      {message: 'Expected the depth of nested jsx elements to be <= 1, but found 2.'},
-      {message: 'Expected the depth of nested jsx elements to be <= 1, but found 2.'}
+      {
+        messageId: 'wrongDepth',
+        data: {needed: 1, found: 2}
+      },
+      {
+        messageId: 'wrongDepth',
+        data: {needed: 1, found: 2}
+      }
     ]
   }, {
     code: [
@@ -175,7 +196,10 @@ ruleTester.run('jsx-max-depth', rule, {
       '</div>'
     ].join('\n'),
     parser: parsers.BABEL_ESLINT,
-    errors: [{message: 'Expected the depth of nested jsx elements to be <= 2, but found 3.'}]
+    errors: [{
+      messageId: 'wrongDepth',
+      data: {needed: 2, found: 3}
+    }]
   }, {
     code: [
       '<>',
@@ -184,7 +208,10 @@ ruleTester.run('jsx-max-depth', rule, {
     ].join('\n'),
     parser: parsers.BABEL_ESLINT,
     options: [{max: 0}],
-    errors: [{message: 'Expected the depth of nested jsx elements to be <= 0, but found 1.'}]
+    errors: [{
+      messageId: 'wrongDepth',
+      data: {needed: 0, found: 1}
+    }]
   }, {
     code: [
       '<>',
@@ -195,7 +222,10 @@ ruleTester.run('jsx-max-depth', rule, {
     ].join('\n'),
     parser: parsers.BABEL_ESLINT,
     options: [{max: 1}],
-    errors: [{message: 'Expected the depth of nested jsx elements to be <= 1, but found 2.'}]
+    errors: [{
+      messageId: 'wrongDepth',
+      data: {needed: 1, found: 2}
+    }]
   }, {
     code: [
       'const x = <><span /></>;',
@@ -205,8 +235,14 @@ ruleTester.run('jsx-max-depth', rule, {
     parser: parsers.BABEL_ESLINT,
     options: [{max: 1}],
     errors: [
-      {message: 'Expected the depth of nested jsx elements to be <= 1, but found 2.'},
-      {message: 'Expected the depth of nested jsx elements to be <= 1, but found 2.'}
+      {
+        messageId: 'wrongDepth',
+        data: {needed: 1, found: 2}
+      },
+      {
+        messageId: 'wrongDepth',
+        data: {needed: 1, found: 2}
+      }
     ]
   }, {
     code: `
@@ -222,8 +258,39 @@ ruleTester.run('jsx-max-depth', rule, {
     `,
     options: [{max: 1}],
     errors: [
-      {message: 'Expected the depth of nested jsx elements to be <= 1, but found 2.'},
-      {message: 'Expected the depth of nested jsx elements to be <= 1, but found 2.'}
+      {
+        messageId: 'wrongDepth',
+        data: {needed: 1, found: 2}
+      },
+      {
+        messageId: 'wrongDepth',
+        data: {needed: 1, found: 2}
+      }
+    ]
+  }, {
+    code: `
+      <div className="custom_modal">
+        <Modal className={classes.modal} open={isOpen} closeAfterTransition>
+          <Fade in={isOpen}>
+            <DialogContent>
+              <Icon icon="cancel" onClick={onClose} popoverText="Close Modal" />
+              <div className="modal_content">{children}</div>
+              <div className={clxs('modal_buttons', classes.buttons)}>
+                <Button className="modal_buttons--cancel" onClick={onCancel}>
+                  {cancelMsg ? cancelMsg : 'Cancel'}
+                </Button>
+              </div>
+            </DialogContent>
+          </Fade>
+        </Modal>
+      </div>
+    `,
+    options: [{max: 4}],
+    errors: [
+      {
+        messageId: 'wrongDepth',
+        data: {needed: 4, found: 5}
+      }
     ]
   }]
 });

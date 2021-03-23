@@ -77,6 +77,12 @@ ruleTester.run('jsx-pascal-case', rule, {
     code: '<IGNORED />',
     options: [{ignore: ['IGNORED']}]
   }, {
+    code: '<Foo_DEPRECATED />',
+    options: [{ignore: ['*_D*D']}]
+  }, {
+    code: '<Foo_DEPRECATED />',
+    options: [{ignore: ['*_+(DEPRECATED|IGNORED)']}]
+  }, {
     code: '<$ />'
   }, {
     code: '<_ />'
@@ -84,31 +90,81 @@ ruleTester.run('jsx-pascal-case', rule, {
     code: '<H1>Hello!</H1>'
   }, {
     code: '<Typography.P />'
+  }, {
+    code: '<Styled.h1 />',
+    options: [{allowNamespace: true}]
   }],
 
   invalid: [{
     code: '<Test_component />',
-    errors: [{message: 'Imported JSX component Test_component must be in PascalCase'}]
+    errors: [{
+      messageId: 'usePascalCase',
+      data: {name: 'Test_component'}
+    }]
   }, {
     code: '<TEST_COMPONENT />',
-    errors: [{message: 'Imported JSX component TEST_COMPONENT must be in PascalCase'}]
+    errors: [{
+      messageId: 'usePascalCase',
+      data: {name: 'TEST_COMPONENT'}
+    }]
   }, {
     code: '<YMCA />',
-    errors: [{message: 'Imported JSX component YMCA must be in PascalCase'}]
+    errors: [{
+      messageId: 'usePascalCase',
+      data: {name: 'YMCA'}
+    }]
   }, {
     code: '<_TEST_COMPONENT />',
     options: [{allowAllCaps: true}],
-    errors: [{message: 'Imported JSX component _TEST_COMPONENT must be in PascalCase or SCREAMING_SNAKE_CASE'}]
+    errors: [{
+      messageId: 'usePascalOrSnakeCase',
+      data: {name: '_TEST_COMPONENT'}
+    }]
   }, {
     code: '<TEST_COMPONENT_ />',
     options: [{allowAllCaps: true}],
-    errors: [{message: 'Imported JSX component TEST_COMPONENT_ must be in PascalCase or SCREAMING_SNAKE_CASE'}]
+    errors: [{
+      messageId: 'usePascalOrSnakeCase',
+      data: {name: 'TEST_COMPONENT_'}
+    }]
   }, {
     code: '<__ />',
     options: [{allowAllCaps: true}],
-    errors: [{message: 'Imported JSX component __ must be in PascalCase or SCREAMING_SNAKE_CASE'}]
+    errors: [{
+      messageId: 'usePascalOrSnakeCase',
+      data: {name: '__'}
+    }]
   }, {
     code: '<$a />',
-    errors: [{message: 'Imported JSX component $a must be in PascalCase'}]
+    errors: [{
+      messageId: 'usePascalCase',
+      data: {name: '$a'}
+    }]
+  }, {
+    code: '<Foo_DEPRECATED />',
+    options: [{ignore: ['*_FOO']}],
+    errors: [{
+      messageId: 'usePascalCase',
+      data: {name: 'Foo_DEPRECATED'}
+    }]
+  }, {
+    code: '<Styled.h1 />',
+    errors: [{
+      messageId: 'usePascalCase',
+      data: {name: 'h1'}
+    }]
+  }, {
+    code: '<$Typography.P />',
+    errors: [{
+      messageId: 'usePascalCase',
+      data: {name: '$Typography'}
+    }]
+  }, {
+    code: '<STYLED.h1 />',
+    options: [{allowNamespace: true}],
+    errors: [{
+      messageId: 'usePascalCase',
+      data: {name: 'STYLED'}
+    }]
   }]
 });
