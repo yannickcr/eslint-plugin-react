@@ -1,7 +1,6 @@
-# Prevent named imports from react (react/no-named-import)
+# Prevent named imports from react (react/named-import)
 
-Prevent the use of named imports from React, so it's visible in code that it's React and not custom code. This rule
-also creates consistency inside a codebase because some people use named imports and some don't.
+Enforce the use of named imports from React, so it's visible in code that it's React and not custom code. This rule also creates consistency inside a codebase because it enforces or prohibits the use of specified named imports.
 
 ## Rule Details
 
@@ -10,7 +9,7 @@ also creates consistency inside a codebase because some people use named imports
 This rule has two different modes: 'import' and 'property' which can be set using the first argument. The second arguments accepts an object where the keys are equal to React exports and their value overrides the default mode
 
 ```
-"react/no-named-import": [<enabled>, 'import' | 'property', {}]
+"react/named-import": [<enabled>, 'import' | 'property', {}]
 ```
 
 By default the rule is set to `import` with an empty object, which means that all modules should be imported
@@ -23,7 +22,7 @@ Example configurations:
 // import
 {
   "rules": {
-    "react/no-named-import": ["error", 'import', {
+    "react/named-import": ["error", 'import', {
       'Component': 'property',
       'useState': 'property'
     }]
@@ -33,7 +32,7 @@ Example configurations:
 // property
 {
   "rules": {
-    "react/no-named-import": ["error", 'property', {
+    "react/named-import": ["error", 'property', {
       'Component': 'import',
       'useState': 'import'
     }]

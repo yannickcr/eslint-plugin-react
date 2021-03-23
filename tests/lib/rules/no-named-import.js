@@ -1,5 +1,5 @@
 /**
- * @fileoverview Tests for no-named-import
+ * @fileoverview Tests for named-import
  */
 
 'use strict';
@@ -9,7 +9,7 @@
 // -----------------------------------------------------------------------------
 
 const RuleTester = require('eslint').RuleTester;
-const rule = require('../../../lib/rules/no-named-import');
+const rule = require('../../../lib/rules/named-import');
 const parsers = require('../../helpers/parsers');
 
 const parserOptions = {
@@ -25,7 +25,7 @@ const parserOptions = {
 // -----------------------------------------------------------------------------
 
 const ruleTester = new RuleTester({parserOptions});
-ruleTester.run('no-named-import', rule, {
+ruleTester.run('named-import', rule, {
   valid: [
     {
       code: "import React from 'react';"
