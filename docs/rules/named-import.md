@@ -1,18 +1,18 @@
-# Prevent named imports from react (react/named-import)
+# Prevent named imports from React (react/named-import)
 
-Enforce the use of named imports from React, so it's visible in code that it's React and not custom code. This rule also creates consistency inside a codebase because it enforces or prohibits the use of specified named imports.
+Prohibit the use of named imports from React, so it's visible in code that it's React and not custom code; or enforce the use of named imports from React, to avoid needing the `React` default import. This rule also creates consistency inside a codebase because it enforces or prohibits the use of specified named imports.
 
 ## Rule Details
 
 ### Options
 
-This rule has two different modes: 'import' and 'property' which can be set using the first argument. The second arguments accepts an object where the keys are equal to React exports and their value overrides the default mode
+This rule has two different modes: 'import' and 'property', which can be set using the first argument. The second arguments accepts an object where the keys are equal to React named exports, and their value overrides the default mode
 
 ```
 "react/named-import": [<enabled>, 'import' | 'property', {}]
 ```
 
-By default the rule is set to `import` with an empty object, which means that all modules should be imported
+By default the rule is set to `import` with an empty object, which means that all of React's named exports will have the rule applied.
 
 
 
@@ -21,20 +21,19 @@ Example configurations:
 ```javascript
 // import
 {
-  "rules": {
-    "react/named-import": ["error", 'import', {
-      'Component': 'property',
-      'useState': 'property'
+   "rules": {
+    "react/named-import": ["error", "import", {
+      "Component": "property",
+      "useState": "property"
     }]
   }
 }
-
 // property
 {
   "rules": {
-    "react/named-import": ["error", 'property', {
-      'Component': 'import',
-      'useState': 'import'
+    "react/named-import": ["error", "property", {
+      "Component": "import",
+      "useState": "import"
     }]
   }
 }

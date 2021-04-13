@@ -20,6 +20,12 @@ const parserOptions = {
   }
 };
 
+const settings = {
+  react: {
+    pragma: 'Act'
+  }
+};
+
 // -----------------------------------------------------------------------------
 // Tests
 // -----------------------------------------------------------------------------
@@ -28,29 +34,33 @@ const ruleTester = new RuleTester({parserOptions});
 ruleTester.run('named-import', rule, {
   valid: [
     {
-      code: "import React from 'react';"
+      code: "import Act from 'react';",
+      settings
     },
     {
-      code: "import React, { useState } from 'react';"
+      code: "import Act, { useState } from 'react';",
+      settings
     },
     {
       code: `
-        import React from 'react';
-        const [loading, setLoading] = React.useState(false);
+        import Act from 'react';
+        const [loading, setLoading] = Act.useState(false);
       `,
-      options: ['property']
+      options: ['property'],
+      settings
     },
     {
       code: `
-        import React, { useState } from 'react';
+        import Act, { useState } from 'react';
         const [loading, setLoading] = useState(false);
       `,
-      options: ['import']
+      options: ['import'],
+      settings
     },
     {
       code: `
-        import React, { useEffect, Component } from 'react';
-        const [loading, setLoading] = React.useState(false);
+        import Act, { useEffect, Component } from 'react';
+        const [loading, setLoading] = Act.useState(false);
       `,
       options: [
         'import',
@@ -58,13 +68,14 @@ ruleTester.run('named-import', rule, {
           useEffect: 'import',
           useState: 'property'
         }
-      ]
+      ],
+      settings
     },
     {
       code: `
-        import { useEffect } from 'react';
-        const [loading, setLoading] = React.useState(false);
-        const a = React.Component;
+        import Act, { useEffect } from 'react';
+        const [loading, setLoading] = Act.useState(false);
+        const a = Act.Component;
       `,
       options: [
         'property',
@@ -72,17 +83,18 @@ ruleTester.run('named-import', rule, {
           useEffect: 'import',
           useState: 'property'
         }
-      ]
+      ],
+      settings
     }
   ],
   invalid: [
     {
       code: `
-        import React from 'react';
-        const [value, setValue] = React.useState('');
+        import Act from 'react';
+        const [value, setValue] = Act.useState('');
       `,
       output: `
-        import React, { useState } from 'react';
+        import Act, { useState } from 'react';
         const [value, setValue] = useState('');
       `,
       errors: [
@@ -91,17 +103,20 @@ ruleTester.run('named-import', rule, {
         },
         {
           messageId: 'useNamedImport',
-          data: {name: 'useState'}
+          data: {
+            name: 'useState'
+          }
         }
-      ]
+      ],
+      settings
     },
     {
       code: `
-        import React from 'react';
-        const [value, setValue] = React.useState('');
+        import Act from 'react';
+        const [value, setValue] = Act.useState('');
       `,
       output: `
-        import React, { useState } from 'react';
+        import Act, { useState } from 'react';
         const [value, setValue] = useState('');
       `,
       options: ['import'],
@@ -113,16 +128,17 @@ ruleTester.run('named-import', rule, {
           messageId: 'useNamedImport',
           data: {name: 'useState'}
         }
-      ]
+      ],
+      settings
     },
     {
       code: `
-        import React, { useState } from 'react';
+        import Act, { useState } from 'react';
         const [value, setValue] = useState('');
       `,
       output: `
-        import React from 'react';
-        const [value, setValue] = React.useState('');
+        import Act from 'react';
+        const [value, setValue] = Act.useState('');
       `,
       options: ['property'],
       errors: [
@@ -131,19 +147,23 @@ ruleTester.run('named-import', rule, {
         },
         {
           messageId: 'usePropertyAccessor',
-          data: {name: 'useState'}
+          data: {
+            name: 'useState',
+            react: 'Act'
+          }
         }
-      ]
+      ],
+      settings
     },
     {
       code: `
-        import React from 'react';
-        const [value, setValue] = React.useState('');
-        React.useEffect(() => {}, []);
+        import Act from 'react';
+        const [value, setValue] = Act.useState('');
+        Act.useEffect(() => {}, []);
       `,
       output: `
-        import React, { useEffect } from 'react';
-        const [value, setValue] = React.useState('');
+        import Act, { useEffect } from 'react';
+        const [value, setValue] = Act.useState('');
         useEffect(() => {}, []);
       `,
       options: ['property', {useEffect: 'import'}],
@@ -153,19 +173,22 @@ ruleTester.run('named-import', rule, {
         },
         {
           messageId: 'useNamedImport',
-          data: {name: 'useEffect'}
+          data: {
+            name: 'useEffect'
+          }
         }
-      ]
+      ],
+      settings
     },
     {
       code: `
-        import React from 'react';
-        const [value, setValue] = React.useState('');
-        React.useEffect(() => {}, []);
+        import Act from 'react';
+        const [value, setValue] = Act.useState('');
+        Act.useEffect(() => {}, []);
       `,
       output: `
-        import React, { useEffect } from 'react';
-        const [value, setValue] = React.useState('');
+        import Act, { useEffect } from 'react';
+        const [value, setValue] = Act.useState('');
         useEffect(() => {}, []);
       `,
       options: ['import', {useState: 'property'}],
@@ -177,28 +200,29 @@ ruleTester.run('named-import', rule, {
           messageId: 'useNamedImport',
           data: {name: 'useEffect'}
         }
-      ]
+      ],
+      settings
     }
 
   ].concat(parsers.TS([
     {
       code: `
-        import React from 'react';
-        const Comp: React.AType = () => {}
-        const a = (p: React.BType) => {}
+        import Act from 'react';
+        const Comp: Act.AType = () => {}
+        const a = (p: Act.BType) => {}
 
         type A = {
-          b: React.CType;
+          b: Act.CType;
         }
 
         type B<C> = {
           d: C
         }
 
-        type A = B<React.DType>;
+        type A = B<Act.DType>;
       `,
       output: `
-        import React, { AType, BType, CType, DType } from 'react';
+        import Act, { AType, BType, CType, DType } from 'react';
         const Comp: AType = () => {}
         const a = (p: BType) => {}
 
@@ -234,11 +258,12 @@ ruleTester.run('named-import', rule, {
           messageId: 'useNamedImport',
           data: {name: 'DType'}
         }
-      ]
+      ],
+      settings
     },
     {
       code: `
-        import React, { AType, BType, CType, DType } from 'react';
+        import Act, { AType, BType, CType, DType } from 'react';
         const Comp: AType = () => {}
         const a = (p: BType) => {}
 
@@ -253,19 +278,19 @@ ruleTester.run('named-import', rule, {
         type A = B<DType>;
       `,
       output: `
-        import React from 'react';
-        const Comp: React.AType = () => {}
-        const a = (p: React.BType) => {}
+        import Act from 'react';
+        const Comp: Act.AType = () => {}
+        const a = (p: Act.BType) => {}
 
         type A = {
-          b: React.CType;
+          b: Act.CType;
         }
 
         type B<C> = {
           d: C
         }
 
-        type A = B<React.DType>;
+        type A = B<Act.DType>;
       `,
       options: ['property'],
       parser: parsers['@TYPESCRIPT_ESLINT'],
@@ -275,34 +300,35 @@ ruleTester.run('named-import', rule, {
         },
         {
           messageId: 'usePropertyAccessor',
-          data: {name: 'AType'}
+          data: {name: 'AType', react: 'Act'}
         },
         {
           messageId: 'usePropertyAccessor',
-          data: {name: 'BType'}
+          data: {name: 'BType', react: 'Act'}
         },
         {
           messageId: 'usePropertyAccessor',
-          data: {name: 'CType'}
+          data: {name: 'CType', react: 'Act'}
         },
         {
           messageId: 'usePropertyAccessor',
-          data: {name: 'DType'}
+          data: {name: 'DType', react: 'Act'}
         }
-      ]
+      ],
+      settings
     },
     {
       code: `
-        import React, { AType, BType } from 'react';
+        import Act, { AType, BType } from 'react';
         type Props = {
           a: AType,
           b: BType
         }
       `,
       output: `
-        import React, { BType } from 'react';
+        import Act, { BType } from 'react';
         type Props = {
-          a: React.AType,
+          a: Act.AType,
           b: BType
         }
       `,
@@ -314,22 +340,23 @@ ruleTester.run('named-import', rule, {
         },
         {
           messageId: 'usePropertyAccessor',
-          data: {name: 'AType'}
+          data: {name: 'AType', react: 'Act'}
         }
-      ]
+      ],
+      settings
     },
     {
       code: `
-        import React from 'react';
+        import Act from 'react';
         type Props = {
-          a: React.AType,
-          b: React.BType
+          a: Act.AType,
+          b: Act.BType
         }
       `,
       output: `
-        import React, { BType } from 'react';
+        import Act, { BType } from 'react';
         type Props = {
-          a: React.AType,
+          a: Act.AType,
           b: BType
         }
       `,
@@ -343,20 +370,21 @@ ruleTester.run('named-import', rule, {
           messageId: 'useNamedImport',
           data: {name: 'BType'}
         }
-      ]
+      ],
+      settings
     },
     {
       code: `
-        import React, { AType } from 'react';
+        import Act, { AType } from 'react';
         type Props = {
           a: AType,
-          b: React.BType
+          b: Act.BType
         }
       `,
       output: `
-        import React, { BType } from 'react';
+        import Act, { BType } from 'react';
         type Props = {
-          a: React.AType,
+          a: Act.AType,
           b: BType
         }
       `,
@@ -368,13 +396,14 @@ ruleTester.run('named-import', rule, {
         },
         {
           messageId: 'usePropertyAccessor',
-          data: {name: 'AType'}
+          data: {name: 'AType', react: 'Act'}
         },
         {
           messageId: 'useNamedImport',
           data: {name: 'BType'}
         }
-      ]
+      ],
+      settings
     }
   ]))
 });
