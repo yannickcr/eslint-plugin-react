@@ -1,11 +1,10 @@
 {
   "name": "eslint-plugin-react",
-  "version": "7.23.0",
+  "version": "7.23.2",
   "author": "Yannick Croissant <yannick.croissant+npm@gmail.com>",
   "description": "React specific linting rules for ESLint",
   "main": "index.js",
   "scripts": {
-    "coveralls": "cat ./coverage/lcov.info | coveralls",
     "lint": "eslint ./",
     "postlint": "npm run type-check",
     "pretest": "npm run lint",
@@ -43,13 +42,12 @@
     "string.prototype.matchall": "^4.0.4"
   },
   "devDependencies": {
-    "@types/eslint": "^7.2.7",
-    "@types/estree": "^0.0.45",
-    "@types/node": "^14.14.35",
+    "@types/eslint": "^7.2.8",
+    "@types/estree": "^0.0.47",
+    "@types/node": "^14.14.37",
     "@typescript-eslint/parser": "^2.34.0",
     "aud": "^1.1.4",
     "babel-eslint": "^8.2.6",
-    "coveralls": "^3.1.0",
     "eslint": "^3 || ^4 || ^5 || ^6 || ^7",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-eslint-plugin": "^2.3.0",

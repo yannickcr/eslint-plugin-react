@@ -22,6 +22,7 @@ jobs:
     runs-on: ubuntu-latest
 
     strategy:
+      fail-fast: false
       matrix:
         node-version: ${{ fromJson(needs.matrix.outputs.latest) }}
         eslint:
@@ -57,14 +58,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: ljharb/actions/node/run@main
-        name: 'npm install && npm run tests-only'
+      - uses: ljharb/actions/node/install@main
+        name: 'nvm install ${{ matrix.node-version }} && npm install'
         with:
-          after_install: NPM_CONFIG_LEGACY_PEER_DEPS=true npm install --no-save "eslint@${{ matrix.eslint }}"
           node-version: ${{ matrix.node-version }}
-          command: 'unit-test'
-          after_success: 'npm run coveralls'
+          after_install: NPM_CONFIG_LEGACY_PEER_DEPS=true npm install --no-save "eslint@${{ matrix.eslint }}"
           skip-ls-check: true
+      - run: npm run unit-test
+      - uses: codecov/codecov-action@v1
 
   node:
     name: 'node 4+'
