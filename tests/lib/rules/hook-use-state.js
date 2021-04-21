@@ -91,15 +91,22 @@ const tests = {
       }]
     },
     {
-      code: `import { useState } from 'react';
-      const result = useState()`,
+      code: `import React from 'react';
+      const result = React.useState()`,
+      errors: [{
+        message: 'setState call is not destructured into value + setter pair'
+      }]
+    },
+    {
+      code: `import ReactAlternative from 'react';
+      ReactAlternative.useState()`,
       errors: [{
         message: 'setState call is not destructured into value + setter pair'
       }]
     },
     {
       code: `import { useState } from 'react';
-      const result = React.useState()`,
+      const result = useState()`,
       errors: [{
         message: 'setState call is not destructured into value + setter pair'
       }]
