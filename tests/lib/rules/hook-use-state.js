@@ -27,142 +27,190 @@ const ruleTester = new RuleTester({
 const tests = {
   valid: [
     {
-      code: 'const [color, setColor] = useState()'
+      code: `import { useState } from 'react';
+      const [color, setColor] = useState()`
     },
     {
-      code: 'const [color, setColor] = useState(\'#ffffff\')'
+      code: `import { useState } from 'react';
+      const [color, setColor] = useState('#ffffff')`
     },
     {
-      code: 'const [color, setColor] = React.useState()'
+      code: `import { useState } from 'react';
+      const [color, setColor] = React.useState()`
     },
     {
-      code: 'const [color1, setColor1] = useState()'
+      code: `import { useState } from 'react';
+      const [color1, setColor1] = useState()`
     },
     {
-      code: 'const [color, setColor] = useState<string>()',
+      code: 'const result = useState()'
+    },
+    {
+      code: `import { useRef } from 'react';
+      const result = useState()`
+    },
+    {
+      code: 'const result = React.useState()'
+    },
+    {
+      code: `import { useState } from 'react';
+      const [color, setColor] = useState<string>()`,
       parser: parsers.TYPESCRIPT_ESLINT
     },
     {
-      code: 'const [color, setColor] = useState<string>(\'#ffffff\')',
+      code: `import { useState } from 'react';
+      const [color, setColor] = useState<string>('#ffffff')`,
       parser: parsers.TYPESCRIPT_ESLINT
     }
   ].concat(parsers.TS([
     {
-      code: 'const [color, setColor] = useState<string>()',
+      code: `import { useState } from 'react';
+      const [color, setColor] = useState<string>()`,
       parser: parsers['@TYPESCRIPT_ESLINT']
     },
     {
-      code: 'const [color, setColor] = useState<string>(\'#ffffff\')',
+      code: `import { useState } from 'react';
+      const [color, setColor] = useState<string>('#ffffff')`,
       parser: parsers['@TYPESCRIPT_ESLINT']
     }
   ])
   ),
   invalid: [
     {
-      code: 'useState()',
+      code: `import { useState } from 'react';
+      useState()`,
       errors: [{
         message: 'setState call is not destructured into value + setter pair'
       }]
     },
     {
-      code: 'const result = useState()',
+      code: `import { useState as useStateAlternativeName } from 'react';
+      useStateAlternativeName()`,
       errors: [{
         message: 'setState call is not destructured into value + setter pair'
       }]
     },
     {
-      code: 'const result = React.useState()',
+      code: `import { useState } from 'react';
+      const result = useState()`,
       errors: [{
         message: 'setState call is not destructured into value + setter pair'
       }]
     },
     {
-      code: 'const [, , extra1] = useState()',
+      code: `import { useState } from 'react';
+      const result = React.useState()`,
       errors: [{
         message: 'setState call is not destructured into value + setter pair'
       }]
     },
     {
-      code: 'const [, setColor] = useState()',
+      code: `import { useState } from 'react';
+      const [, , extra1] = useState()`,
       errors: [{
         message: 'setState call is not destructured into value + setter pair'
       }]
     },
     {
-      code: 'const { color } = useState()',
+      code: `import { useState } from 'react';
+      const [, setColor] = useState()`,
       errors: [{
         message: 'setState call is not destructured into value + setter pair'
       }]
     },
     {
-      code: 'const [] = useState()',
+      code: `import { useState } from 'react';
+      const { color } = useState()`,
       errors: [{
         message: 'setState call is not destructured into value + setter pair'
       }]
     },
     {
-      code: 'const [, , , ,] = useState()',
+      code: `import { useState } from 'react';
+      const [] = useState()`,
       errors: [{
         message: 'setState call is not destructured into value + setter pair'
       }]
     },
     {
-      code: 'const [color] = useState()',
+      code: `import { useState } from 'react';
+      const [, , , ,] = useState()`,
+      errors: [{
+        message: 'setState call is not destructured into value + setter pair'
+      }]
+    },
+    {
+      code: `import { useState } from 'react';
+      const [color] = useState()`,
       errors: [{
         message: 'setState call is not destructured into value + setter pair'
       }],
-      output: 'const [color, setColor] = useState()'
+      output: `import { useState } from 'react';
+      const [color, setColor] = useState()`
     },
     {
-      code: 'const [color, , extra1] = useState()',
+      code: `import { useState } from 'react';
+      const [color, , extra1] = useState()`,
       errors: [{
         message: 'setState call is not destructured into value + setter pair'
       }],
-      output: 'const [color, setColor] = useState()'
+      output: `import { useState } from 'react';
+      const [color, setColor] = useState()`
     },
     {
-      code: 'const [color, setColor, extra1, extra2, extra3] = useState()',
+      code: `import { useState } from 'react';
+      const [color, setColor, extra1, extra2, extra3] = useState()`,
       errors: [{
         message: 'setState call is not destructured into value + setter pair'
       }],
-      output: 'const [color, setColor] = useState()'
+      output: `import { useState } from 'react';
+      const [color, setColor] = useState()`
     },
     {
-      code: 'const [, makeColor] = useState()',
+      code: `import { useState } from 'react';
+      const [, makeColor] = useState()`,
       errors: [{
         message: 'setState call is not destructured into value + setter pair'
       }]
     },
     {
-      code: 'const [color, setFlavor, extraneous] = useState()',
+      code: `import { useState } from 'react';
+      const [color, setFlavor, extraneous] = useState()`,
       errors: [{
         message: 'setState call is not destructured into value + setter pair'
       }],
-      output: 'const [color, setColor] = useState()'
+      output: `import { useState } from 'react';
+      const [color, setColor] = useState()`
     },
     {
-      code: 'const [color, setFlavor] = useState()',
+      code: `import { useState } from 'react';
+      const [color, setFlavor] = useState()`,
       errors: [{
         message: 'setState call is not destructured into value + setter pair'
       }],
-      output: 'const [color, setColor] = useState()'
+      output: `import { useState } from 'react';
+      const [color, setColor] = useState()`
     },
     {
-      code: 'const [color, setFlavor] = useState<string>()',
+      code: `import { useState } from 'react';
+      const [color, setFlavor] = useState<string>()`,
       errors: [{
         message: 'setState call is not destructured into value + setter pair'
       }],
-      output: 'const [color, setColor] = useState<string>()',
+      output: `import { useState } from 'react';
+      const [color, setColor] = useState<string>()`,
       parser: parsers.TYPESCRIPT_ESLINT
     }
   ].concat(
     parsers.TS([
       {
-        code: 'const [color, setFlavor] = useState<string>()',
+        code: `import { useState } from 'react';
+        const [color, setFlavor] = useState<string>()`,
         errors: [{
           message: 'setState call is not destructured into value + setter pair'
         }],
-        output: 'const [color, setColor] = useState<string>()',
+        output: `import { useState } from 'react';
+        const [color, setColor] = useState<string>()`,
         parser: parsers['@TYPESCRIPT_ESLINT']
       }
     ])
