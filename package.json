@@ -52,6 +52,8 @@
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-eslint-plugin": "^2.3.0",
     "eslint-plugin-import": "^2.22.1",
+    "eslint-remote-tester": "^1.2.0",
+    "eslint-remote-tester-repositories": "^0.0.2",
     "espree": "^3.5.4",
     "istanbul": "^0.4.5",
     "markdown-magic": "^1.0.0",
