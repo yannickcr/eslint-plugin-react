@@ -1201,6 +1201,44 @@ ruleTester.run('jsx-closing-bracket-location', rule, {
     }]
   }, {
     code: [
+      'var x = function() {',
+      '  return <App>',
+      '    foo',
+      '         </App>',
+      '}'
+    ].join('\n'),
+    output: [
+      'var x = function() {',
+      '  return <App',
+      '    foo',
+      '  </App>',
+      '}'
+    ].join('\n'),
+    options: [{location: 'line-aligned'}],
+    errors: [{
+      message: messageWithDetails(MESSAGE_LINE_ALIGNED, 3, false),
+      line: 4,
+      column: 10
+    }]
+  }, {
+    code: [
+      'var x = <App>',
+      '  foo',
+      '        </App>'
+    ].join('\n'),
+    output: [
+      'var x = <App>',
+      '  foo',
+      '</App>'
+    ].join('\n'),
+    options: [{location: 'line-aligned'}],
+    errors: [{
+      message: messageWithDetails(MESSAGE_LINE_ALIGNED, 1, false),
+      line: 3,
+      column: 9
+    }]
+  }, {
+    code: [
       'var x = (',
       '  <div',
       '    className="MyComponent"',
@@ -1798,6 +1836,44 @@ ruleTester.run('jsx-closing-bracket-location', rule, {
         location: MESSAGE_LINE_ALIGNED,
         details: details(1, false)
       },
+      line: 3,
+      column: 9
+    }]
+  }, {
+    code: [
+      'var x = function() {',
+      '\treturn <App>',
+      '\t\tfoo',
+      '\t\t\t\t </App>',
+      '}'
+    ].join('\n'),
+    output: [
+      'var x = function() {',
+      '\treturn <App>',
+      '\t\tfoo',
+      '\t</App>',
+      '}'
+    ].join('\n'),
+    options: [{location: 'line-aligned'}],
+    errors: [{
+      message: messageWithDetails(MESSAGE_LINE_ALIGNED, 2, false),
+      line: 4,
+      column: 6
+    }]
+  }, {
+    code: [
+      'var x = <App>',
+      '\tfoo',
+      '        </App>'
+    ].join('\n'),
+    output: [
+      'var x = <App>',
+      '\tfoo',
+      '</App>'
+    ].join('\n'),
+    options: [{location: 'line-aligned'}],
+    errors: [{
+      message: messageWithDetails(MESSAGE_LINE_ALIGNED, 1, false),
       line: 3,
       column: 9
     }]
