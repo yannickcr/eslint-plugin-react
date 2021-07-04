@@ -196,6 +196,19 @@ ruleTester.run('no-unused-vars', ruleNoUnusedVars, {
         line: 3
       }],
       parser: parsers.BABEL_ESLINT
+    }, {
+      code: `
+        /* eslint jsx-uses-vars: 1 */
+        function Greetings(div) {
+          return <div />;
+        }
+        Greetings();
+      `,
+      errors: [{
+        message: '\'div\' is defined but never used.',
+        line: 1
+      }],
+      parser: parsers.BABEL_ESLINT
     }
   ]
 });
