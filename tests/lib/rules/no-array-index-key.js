@@ -77,6 +77,22 @@ ruleTester.run('no-array-index-key', rule, {
     },
 
     {
+      code: 'foo.map((bar, i) => <Foo key={i.baz.toString()} />)'
+    },
+
+    {
+      code: 'foo.map((bar, i) => <Foo key={i.toString} />)'
+    },
+
+    {
+      code: 'foo.map((bar, i) => <Foo key={String()} />)'
+    },
+
+    {
+      code: 'foo.map((bar, i) => <Foo key={String(baz)} />)'
+    },
+
+    {
       code: 'foo.reduce((a, b) => a.concat(<Foo key={b.id} />), [])'
     },
 
@@ -134,6 +150,16 @@ ruleTester.run('no-array-index-key', rule, {
     {
       code: '[{}, {}].map((bar, i) => <Foo key={i} />)',
       errors: [{messageId: 'noArrayIndex'}]
+    },
+
+    {
+      code: 'foo.map((bar, i) => <Foo key={i.toString()} />)',
+      errors: [{message: 'Do not use Array index in keys'}]
+    },
+
+    {
+      code: 'foo.map((bar, i) => <Foo key={String(i)} />)',
+      errors: [{message: 'Do not use Array index in keys'}]
     },
 
     {
