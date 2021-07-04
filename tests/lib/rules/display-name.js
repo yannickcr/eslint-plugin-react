@@ -504,6 +504,20 @@ ruleTester.run('display-name', rule, {
       class Link extends Component<LinkProps> {}
     `,
     parser: parsers.BABEL_ESLINT
+  }, {
+    code: `
+    const x = {
+      title: "URL",
+      dataIndex: "url",
+      key: "url",
+      render: url => (
+        <a href={url} target="_blank" rel="noopener noreferrer">
+          <p>lol</p>
+        </a>
+      )
+    }
+    `,
+    parser: parsers.BABEL_ESLINT
   }],
 
   invalid: [{
@@ -921,5 +935,21 @@ ruleTester.run('display-name', rule, {
       endLine: 11,
       endColumn: 11
     }]
+  }, {
+    code: `
+      const x = {
+        title: "URL",
+        dataIndex: "url",
+        key: "url",
+        render: url => (
+          <a href={url} target="_blank" rel="noopener noreferrer">
+            <p>lol</p>
+          </a>
+        )
+      }
+    `,
+    options: [{ignoreTranspilerName: true}],
+    parser: parsers.BABEL_ESLINT,
+    errors: [{message: 'Component definition is missing display name'}]
   }]
 });
