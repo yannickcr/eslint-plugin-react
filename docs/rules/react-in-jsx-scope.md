@@ -43,4 +43,4 @@ var Hello = <div>Hello {this.props.name}</div>;
 
 ## When Not To Use It
 
-If you are setting `React` as a global variable you can disable this rule.
+If you are setting `React` as a global variable or using [new JSX transform from React 17](https://reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html#removing-unused-react-imports), you can disable this rule.
