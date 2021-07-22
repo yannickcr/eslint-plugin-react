@@ -37,6 +37,21 @@ ruleTester.run('no-unused-prop-types', rule, {
 
   valid: [].concat(
     {
+      code: `
+      interface SlideProps {
+        isActive: boolean;
+      }
+
+      function App(){
+        return (
+          <div>
+          {({ isActive }: SlideProps) => <button doo = {isActive} />}
+      </div>
+      )
+    }
+      `,
+      parser: parsers.TYPESCRIPT_ESLINT
+    }, {
       code: [
         'var Hello = createReactClass({',
         '  propTypes: {',
